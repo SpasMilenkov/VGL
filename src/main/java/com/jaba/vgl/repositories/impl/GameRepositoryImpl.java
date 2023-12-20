@@ -4,10 +4,17 @@ import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.GameRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Repository
+@Transactional(
+        rollbackFor = Exception.class,
+        propagation = Propagation.REQUIRED
+)
 public interface GameRepositoryImpl extends GameRepository {
 
     @Override
