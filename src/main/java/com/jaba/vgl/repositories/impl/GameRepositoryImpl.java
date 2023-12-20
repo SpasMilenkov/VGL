@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -29,6 +30,9 @@ public interface GameRepositoryImpl extends GameRepository {
     @Query("SELECT g FROM Game g WHERE g.name = ?1 AND g.company = ?2")
     Optional<Game> findGameByNameAndCompany(String name, String company);
 
+    @Query("SELECT g FROM Game g WHERE g.genre = ?1")
+    Optional<List<Game>> findGamesByGenre(String genre);
+
     @Transactional
     @Modifying
     @Query("UPDATE Game g SET " +
@@ -41,7 +45,8 @@ public interface GameRepositoryImpl extends GameRepository {
             "g.isFavourite = :isFavourite, " +
             "g.releaseDate = :releaseDate " +
             "WHERE g.id = :id")
-    void updateGame(Long id, String name, String description, Float rating, String genre, String company, String studio, Boolean isFavourite, String releaseDate);
+    void updateGame(Long id, String name, String description, Float rating,
+                    Integer genre, String company, String studio, Boolean isFavourite, String releaseDate);
 
     @Override
     @Modifying

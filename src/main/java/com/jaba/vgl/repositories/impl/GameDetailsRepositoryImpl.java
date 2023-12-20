@@ -41,7 +41,8 @@ public interface GameDetailsRepositoryImpl extends GameDetailsRepository {
             "g.isFavourite = :isFavourite, " +
             "g.releaseDate = :releaseDate " +
             "WHERE g.id = :id")
-    void updateGameDetails(Long id, String name, String description, Float rating, String genre, String company, String studio, Boolean isFavourite, String releaseDate);
+    void updateGameDetails(Long id, String name, String description, Float rating,
+                           String genre, String company, String studio, Boolean isFavourite, String releaseDate);
 
     @Override
     @Modifying
