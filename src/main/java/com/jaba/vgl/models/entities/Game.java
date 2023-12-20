@@ -15,13 +15,13 @@ public @Data class Game {
 
     @Id
     @SequenceGenerator(
-            name = "stock_sequence",
-            sequenceName = "stock_sequence",
+            name = "vgl_sequence",
+            sequenceName = "vgl_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "stock_sequence"
+            generator = "vgl_sequence"
     )
     @Column(name = "id")
     private Long id;
@@ -86,4 +86,6 @@ public @Data class Game {
     )
     @NotNull(message = "Release date must not be empty.")
     private String releaseDate; //TODO: change to date? (to discuss date format)
+
+
 }
