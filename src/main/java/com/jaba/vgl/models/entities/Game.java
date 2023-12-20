@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotNull;
 
 @Entity(name = "Game")
-@Table(name = "game")
+@Table(name = "game_table")
 @NoArgsConstructor
 @AllArgsConstructor
 public @Data class Game {
@@ -77,7 +77,7 @@ public @Data class Game {
             columnDefinition = "boolean default false"
     )
     @NotNull(message = "IsFavourite must not be empty.")
-    private String isFavourite;
+    private Boolean isFavourite;
 
     @Column(
             name = "release_date",

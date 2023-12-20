@@ -79,7 +79,7 @@ public @Data class GameDetails {
             columnDefinition = "boolean default false"
     )
     @NotNull(message = "IsFavourite must not be empty.")
-    private String isFavourite;
+    private Boolean isFavourite;
 
     @Column(
             name = "release_date",
