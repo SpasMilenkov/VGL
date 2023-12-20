@@ -2,12 +2,13 @@ package com.jaba.vgl.repositories;
 
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.models.entities.GameDetails;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface GameDetailsRepository {
+public interface GameDetailsRepository extends JpaRepository<GameDetails, Long> {
 
     Optional<GameDetails> findGameDetailsById(Long id);
 
