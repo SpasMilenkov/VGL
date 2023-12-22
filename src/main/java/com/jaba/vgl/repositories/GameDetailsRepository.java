@@ -18,4 +18,5 @@ public interface GameDetailsRepository extends JpaRepository<GameDetails, Long>,
     Optional<GameDetails> findGameDetailsByNameAndCompany(String name, String company);
 
     int deleteGameDetailsById(Long id);
+    int deleteGameDetailsByNameAndCompany(String name, String company);
 }

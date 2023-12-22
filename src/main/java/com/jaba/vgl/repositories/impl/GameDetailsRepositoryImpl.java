@@ -51,6 +51,12 @@ public interface GameDetailsRepositoryImpl extends GameDetailsRepository {
 
     @Override
     @Modifying
+    @Query("DELETE FROM GameDetails g WHERE g.name = ?1 AND g.company = ?2")
+    int deleteGameDetailsByNameAndCompany(String name, String company);
+
+
+    @Override
+    @Modifying
     @Query(value = "TRUNCATE TABLE game_details_table RESTART IDENTITY CASCADE", nativeQuery = true)
     void truncate();
 }
