@@ -23,10 +23,9 @@ public record GameDetailsDto(
 
         String releaseDate,
 
-        List<ReviewsDto> reviews,
+        List<ReviewDto> reviews
 
-        List<GameDto> moreLikeThisList
-        ) {
+//        List<GameDto> moreLikeThisList
 ) {
 
     public GameDetails toEntity() {
@@ -41,6 +40,11 @@ public record GameDetailsDto(
         gameDetails.setStudio(dto.studio());
         gameDetails.setIsFavourite(dto.isFavourite());
         gameDetails.setReleaseDate(dto.releaseDate());
+        gameDetails.setReviews(dto.reviews
+                .stream()
+                .map(ReviewDto::toEntity)
+                .toList()
+        );
 
         return gameDetails;
     }
