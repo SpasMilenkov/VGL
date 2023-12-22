@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface GameDetailsRepository extends JpaRepository<GameDetails, Long>, GameDetailsRepositoryCustom {
 
     Optional<GameDetails> findGameDetailsById(Long id);
