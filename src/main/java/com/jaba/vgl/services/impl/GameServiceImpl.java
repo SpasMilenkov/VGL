@@ -86,19 +86,19 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void updateGame(GameDto game) {
-        long gameId = -1; //TODO: find game id...
+    public void updateGame(GameDto gameDto) {
+        Game game = gameDto.toEntity();
 
         gameRepository.updateGame(
-                gameId,
-                game.name(),
-                game.description(),
-                game.rating(),
-                game.genre(),
-                game.company(),
-                game.studio(),
-                game.isFavourite(),
-                game.releaseDate()
+                game.getId(),
+                game.getName(),
+                game.getDescription(),
+                game.getRating(),
+                game.getGenre(),
+                game.getCompany(),
+                game.getStudio(),
+                game.getIsFavourite(),
+                game.getReleaseDate()
         );
     }
 
