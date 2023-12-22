@@ -26,6 +26,10 @@ public @Data class Review {
     @Column(name = "review_id")
     private Long id;
 
+    @Column(name = "game_id")
+    @NotNull(message = "Game id must not be empty.")
+    private Long gameId;
+
     @Column(
             name = "review_title",
             nullable = false,
@@ -44,15 +48,14 @@ public @Data class Review {
 
     @Column(
             name = "review_rating",
-            nullable = false,
-            columnDefinition = "TEXT"
+            nullable = false
     )
     @NotNull(message = "Review rating must not be empty.")
     private Float rating;
 
     @ManyToOne
     @JoinColumn(
-            name = "review_id",
+            name = "game_id",
             referencedColumnName = "id",
             nullable = false,
             insertable = false,
