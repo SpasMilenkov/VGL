@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-public interface GameRepository extends JpaRepository<Game, Long>, GameRepositoryCustom {
+public interface GameRepository extends JpaRepository<Game, Long>{
 
     Optional<Game> findGameById(Long id);
 

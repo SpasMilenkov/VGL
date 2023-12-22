@@ -18,7 +18,7 @@ import java.util.Optional;
         rollbackFor = Exception.class,
         propagation = Propagation.REQUIRED
 )
-public interface GameRepositoryImpl extends GameRepository {
+public interface GameRepositoryImpl extends GameRepository, GameRepositoryCustom {
 
     @Override
     @Query("SELECT g FROM Game g WHERE g.id = ?1")

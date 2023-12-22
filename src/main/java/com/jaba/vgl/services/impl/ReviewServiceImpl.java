@@ -6,6 +6,7 @@ import com.jaba.vgl.models.dto.ReviewDto;
 import com.jaba.vgl.models.dto.mapper.ReviewDtoMapper;
 import com.jaba.vgl.models.entities.Review;
 import com.jaba.vgl.repositories.ReviewRepository;
+import com.jaba.vgl.repositories.impl.ReviewRepositoryImpl;
 import com.jaba.vgl.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewRepositoryImpl reviewRepository;
     private final ReviewDtoMapper reviewDtoMapper;
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository,
+    public ReviewServiceImpl(ReviewRepositoryImpl reviewRepository,
                              ReviewDtoMapper reviewDtoMapper) {
         this.reviewRepository = reviewRepository;
         this.reviewDtoMapper = reviewDtoMapper;

@@ -1,7 +1,9 @@
 package com.jaba.vgl.repositories.impl;
 
+import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.entities.GameDetails;
 import com.jaba.vgl.repositories.GameDetailsRepository;
+import com.jaba.vgl.repositories.custom.GameDetailsRepositoryCustom;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,7 +17,7 @@ import java.util.Optional;
         rollbackFor = Exception.class,
         propagation = Propagation.REQUIRED
 )
-public interface GameDetailsRepositoryImpl extends GameDetailsRepository {
+public interface GameDetailsRepositoryImpl extends GameDetailsRepository, GameDetailsRepositoryCustom {
 
     @Override
     @Query("SELECT g FROM GameDetails g WHERE g.id = ?1")
@@ -31,6 +33,7 @@ public interface GameDetailsRepositoryImpl extends GameDetailsRepository {
 
     @Transactional
     @Modifying
+    @Override
     @Query("UPDATE GameDetails g SET " +
             "g.name = :name, " +
             "g.description = :description, " +
@@ -42,7 +45,7 @@ public interface GameDetailsRepositoryImpl extends GameDetailsRepository {
             "g.releaseDate = :releaseDate " +
             "WHERE g.id = :id")
     void updateGameDetails(Long id, String name, String description, Float rating,
-                           String genre, String company, String studio, Boolean isFavourite, String releaseDate);
+                           GameGenre genre, String company, String studio, Boolean isFavourite, String releaseDate);
 
     @Override
     @Modifying

@@ -5,6 +5,7 @@ import com.jaba.vgl.models.dto.GameDetailsDto;
 import com.jaba.vgl.models.dto.mapper.GameDetailsDtoMapper;
 import com.jaba.vgl.models.entities.GameDetails;
 import com.jaba.vgl.repositories.GameDetailsRepository;
+import com.jaba.vgl.repositories.impl.GameDetailsRepositoryImpl;
 import com.jaba.vgl.services.GameDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameDetailsServiceImpl implements GameDetailsService {
 
-    private final GameDetailsRepository gameDetailsRepository;
+    private final GameDetailsRepositoryImpl gameDetailsRepository;
     private final GameDetailsDtoMapper gameDetailsDtoMapper;
 
     @Autowired
-    public GameDetailsServiceImpl(GameDetailsRepository gameDetailsRepository,
+    public GameDetailsServiceImpl(GameDetailsRepositoryImpl gameDetailsRepository,
                                   GameDetailsDtoMapper gameDetailsDtoMapper) {
         this.gameDetailsRepository = gameDetailsRepository;
         this.gameDetailsDtoMapper = gameDetailsDtoMapper;

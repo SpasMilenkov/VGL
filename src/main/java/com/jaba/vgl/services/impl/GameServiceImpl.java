@@ -6,6 +6,7 @@ import com.jaba.vgl.models.dto.GameDto;
 import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.GameRepository;
+import com.jaba.vgl.repositories.impl.GameRepositoryImpl;
 import com.jaba.vgl.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class GameServiceImpl implements GameService {
-    private final GameRepository gameRepository;
+    private final GameRepositoryImpl gameRepository;
     private final GameDtoMapper gameDtoMapper;
 
     @Autowired
-    public GameServiceImpl(GameRepository gameRepository,
+    public GameServiceImpl(GameRepositoryImpl gameRepository,
                            GameDtoMapper gameDtoMapper) {
         this.gameRepository = gameRepository;
         this.gameDtoMapper = gameDtoMapper;
