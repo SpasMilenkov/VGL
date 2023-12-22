@@ -1,7 +1,9 @@
 package com.jaba.vgl.repositories.impl;
 
+import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.GameRepository;
+import com.jaba.vgl.repositories.custom.GameRepositoryCustom;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -30,8 +32,9 @@ public interface GameRepositoryImpl extends GameRepository {
     @Query("SELECT g FROM Game g WHERE g.name = ?1 AND g.company = ?2")
     Optional<Game> findGameByNameAndCompany(String name, String company);
 
+    @Override
     @Query("SELECT g FROM Game g WHERE g.genre = ?1")
-    Optional<List<Game>> findGamesByGenre(String genre);
+    Optional<List<Game>> findGamesByGenre(GameGenre genre);
 
     @Transactional
     @Modifying
@@ -46,12 +49,18 @@ public interface GameRepositoryImpl extends GameRepository {
             "g.releaseDate = :releaseDate " +
             "WHERE g.id = :id")
     void updateGame(Long id, String name, String description, Float rating,
-                    Integer genre, String company, String studio, Boolean isFavourite, String releaseDate);
+                    GameGenre genre, String company, String studio, Boolean isFavourite, String releaseDate);
 
     @Override
     @Modifying
     @Query("DELETE FROM Game g WHERE g.id = ?1")
     int deleteGameById(Long id);
+
+
+    @Override
+    @Modifying
+    @Query("DELETE FROM Game g WHERE g.name = ?1 AND g.company = ?2")
+    int deleteGameByNameAndCompany(String name, String company);
 
     @Override
     @Modifying

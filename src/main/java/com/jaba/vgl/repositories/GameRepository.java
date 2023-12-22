@@ -1,13 +1,16 @@
 package com.jaba.vgl.repositories;
 
+import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.entities.Game;
+import com.jaba.vgl.repositories.custom.GameRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface GameRepository extends JpaRepository<Game, Long> {
+public interface GameRepository extends JpaRepository<Game, Long>, GameRepositoryCustom {
 
     Optional<Game> findGameById(Long id);
 
@@ -15,11 +18,9 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     Optional<Game> findGameByNameAndCompany(String name, String company);
 
-    void updateGame(Long id, String name, String description, Float rating, String genre, String company, String studio, Boolean isFavourite, String releaseDate);
-
-    void createGame(Game game);
+    Optional<List<Game>> findGamesByGenre(GameGenre genre);
 
     int deleteGameById(Long id);
 
-    void truncate();
+    int deleteGameByNameAndCompany(String name, String company);
 }
