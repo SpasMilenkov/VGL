@@ -19,7 +19,8 @@ public record GameDetailsDto(
 
         String releaseDate,
 
-        List<GameDto> moreLikeThisList
+        List<ReviewsDto> reviews,
 
+        List<GameDto> moreLikeThisList
         ) {
 }

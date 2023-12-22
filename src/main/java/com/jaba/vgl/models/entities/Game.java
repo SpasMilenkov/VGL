@@ -1,6 +1,7 @@
 package com.jaba.vgl.models.entities;
 
 import com.jaba.vgl.models.GameGenre;
+import com.jaba.vgl.models.dto.GameDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -72,7 +73,7 @@ public @Data class Game {
     private String studio;
 
     @Column(
-            name = "isFavourite",
+            name = "is_favourite",
             nullable = false,
             columnDefinition = "boolean default false"
     )
@@ -86,6 +87,4 @@ public @Data class Game {
     )
     @NotNull(message = "Release date must not be empty.")
     private String releaseDate; //TODO: change to date? (to discuss date format)
-
-
 }
