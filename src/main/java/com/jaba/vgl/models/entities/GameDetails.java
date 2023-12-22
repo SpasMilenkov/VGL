@@ -90,5 +90,9 @@ public @Data class GameDetails {
     private String releaseDate; //TODO: change to date? (to discuss date format)
 
     //Reviews relation...
-    //More like this game relation...
+    @OneToMany(mappedBy = "gameDetails",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            fetch = FetchType.EAGER)
+    private List<Review> reviews;
 }
