@@ -12,6 +12,10 @@ public class GameDetailsDtoMapper implements Function<GameDetails, GameDetailsDt
 
     private final ReviewDtoMapper reviewDtoMapper;
 
+    @Autowired
+    public GameDetailsDtoMapper(ReviewDtoMapper reviewDtoMapper) {
+        this.reviewDtoMapper = reviewDtoMapper;
+    }
 
     @Override
     public GameDetailsDto apply(GameDetails game) {
@@ -24,5 +28,10 @@ public class GameDetailsDtoMapper implements Function<GameDetails, GameDetailsDt
                 game.getStudio(),
                 game.getIsFavourite(),
                 game.getReleaseDate(),
+                game.getReviews()
+                        .stream()
+                        .map(reviewDtoMapper)
+                        .toList()
+        );
     }
 }
