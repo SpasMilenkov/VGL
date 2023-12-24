@@ -2,8 +2,11 @@ package com.jaba.vgl.services.impl;
 
 import com.jaba.vgl.exceptions.GameNotFoundException;
 import com.jaba.vgl.models.GameGenre;
+import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.dto.GameDto;
+import com.jaba.vgl.models.dto.mapper.CompanyDtoMapper;
 import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
+import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.GameRepository;
 import com.jaba.vgl.repositories.impl.GameRepositoryImpl;
@@ -57,8 +60,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameDto getGame(String name, String company) {
-        return gameRepository.findGameByNameAndCompany(name, company)
+    public GameDto getGame(String name, CompanyDto companyDto) {
+        return gameRepository.findGameByNameAndCompany(name, companyDto.toEntity())
                 .stream()
                 .map(gameDtoMapper)
                 .findFirst()
@@ -66,7 +69,7 @@ public class GameServiceImpl implements GameService {
                         () -> new GameNotFoundException(
                                 String.format("Game with name %s and company %s not found.",
                                         name,
-                                        company
+                                        companyDto
                                 )
                         )
                 );
@@ -97,7 +100,6 @@ public class GameServiceImpl implements GameService {
                 game.getRating(),
                 game.getGenre(),
                 game.getCompany(),
-                game.getStudio(),
                 game.getIsFavourite(),
                 game.getReleaseDate()
         );
@@ -116,8 +118,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public int deleteGame(String name, String company) {
-        return gameRepository.deleteGameByNameAndCompany(name, company);
+    public int deleteGame(String name, CompanyDto companyDto) {
+        return gameRepository.deleteGameByNameAndCompany(name, companyDto.toEntity());
     }
 
     @Override

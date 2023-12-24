@@ -1,7 +1,9 @@
 package com.jaba.vgl.repositories.impl;
 
 import com.jaba.vgl.models.GameGenre;
+import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.GameDetails;
+import com.jaba.vgl.models.entities.Review;
 import com.jaba.vgl.repositories.GameDetailsRepository;
 import com.jaba.vgl.repositories.custom.GameDetailsRepositoryCustom;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -29,7 +32,7 @@ public interface GameDetailsRepositoryImpl extends GameDetailsRepository, GameDe
 
     @Override
     @Query("SELECT g FROM GameDetails g WHERE g.name = ?1 AND g.company = ?2")
-    Optional<GameDetails> findGameDetailsByNameAndCompany(String name, String company);
+    Optional<GameDetails> findGameDetailsByNameAndCompany(String name, Company company);
 
     @Transactional
     @Modifying
@@ -40,12 +43,12 @@ public interface GameDetailsRepositoryImpl extends GameDetailsRepository, GameDe
             "g.rating = :rating, " +
             "g.genre = :genre, " +
             "g.company = :company, " +
-            "g.studio = :studio, " +
             "g.isFavourite = :isFavourite, " +
-            "g.releaseDate = :releaseDate " +
+            "g.releaseDate = :releaseDate, " +
+            "g.reviews = :reviews " +
             "WHERE g.id = :id")
     void updateGameDetails(Long id, String name, String description, Float rating,
-                           GameGenre genre, String company, String studio, Boolean isFavourite, String releaseDate);
+                           GameGenre genre, Company company, Boolean isFavourite, String releaseDate, List<Review> reviews);
 
     @Override
     @Modifying
@@ -55,7 +58,7 @@ public interface GameDetailsRepositoryImpl extends GameDetailsRepository, GameDe
     @Override
     @Modifying
     @Query("DELETE FROM GameDetails g WHERE g.name = ?1 AND g.company = ?2")
-    int deleteGameDetailsByNameAndCompany(String name, String company);
+    int deleteGameDetailsByNameAndCompany(String name, Company company);
 
 
     @Override

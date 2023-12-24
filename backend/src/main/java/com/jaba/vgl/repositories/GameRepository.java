@@ -1,6 +1,7 @@
 package com.jaba.vgl.repositories;
 
 import com.jaba.vgl.models.GameGenre;
+import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.custom.GameRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,11 +16,11 @@ public interface GameRepository extends JpaRepository<Game, Long>{
 
     Optional<Game> findGameByName(String name);
 
-    Optional<Game> findGameByNameAndCompany(String name, String company);
+    Optional<Game> findGameByNameAndCompany(String name, Company company);
 
     Optional<List<Game>> findGamesByGenre(GameGenre genre);
 
     int deleteGameById(Long id);
 
-    int deleteGameByNameAndCompany(String name, String company);
+    int deleteGameByNameAndCompany(String name, Company company);
 }

@@ -1,6 +1,8 @@
 package com.jaba.vgl.services;
 
+import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.dto.GameDetailsDto;
+import com.jaba.vgl.models.entities.Company;
 
 public interface GameDetailsService {
 
@@ -8,7 +10,7 @@ public interface GameDetailsService {
 
     GameDetailsDto getGameDetails(String name);
 
-    GameDetailsDto getGameDetails(String name, String company);
+    GameDetailsDto getGameDetails(String name, CompanyDto companyDto);
 
     void updateGameDetails(GameDetailsDto gameDetailsDto);
 
@@ -16,7 +18,7 @@ public interface GameDetailsService {
 
     int deleteGameDetails(Long id);
 
-    int deleteGameDetails(String name, String company);
+    int deleteGameDetails(String name, CompanyDto companyDto);
 
     void truncateTable();
 }
