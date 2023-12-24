@@ -60,8 +60,7 @@ public @Data class GameDetails {
 
     @Column(
             name = "company_id",
-            nullable = false,
-            columnDefinition = "TEXT"
+            nullable = false
     )
     @NotNull(message = "Company id must not be empty.")
     private Long companyId;
