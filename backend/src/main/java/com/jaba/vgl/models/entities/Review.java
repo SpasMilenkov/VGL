@@ -30,6 +30,10 @@ public @Data class Review {
     @NotNull(message = "Game id must not be empty.")
     private Long gameId;
 
+    @Column(name = "user_id")
+    @NotNull(message = "Game id must not be empty.")
+    private Long userId;
+
     @Column(
             name = "review_title",
             nullable = false,
@@ -65,4 +69,17 @@ public @Data class Review {
             )
     )
     private GameDetails gameDetails;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "user_id",
+            referencedColumnName = "id",
+            nullable = false,
+            insertable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(
+                    name = "user_id_fk"
+            )
+    )
+    private User user;
 }
