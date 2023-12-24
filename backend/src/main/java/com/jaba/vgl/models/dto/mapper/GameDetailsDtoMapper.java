@@ -11,10 +11,13 @@ import java.util.function.Function;
 public class GameDetailsDtoMapper implements Function<GameDetails, GameDetailsDto> {
 
     private final ReviewDtoMapper reviewDtoMapper;
+    private final CompanyDtoMapper companyDtoMapper;
 
     @Autowired
-    public GameDetailsDtoMapper(ReviewDtoMapper reviewDtoMapper) {
+    public GameDetailsDtoMapper(ReviewDtoMapper reviewDtoMapper,
+                                CompanyDtoMapper companyDtoMapper) {
         this.reviewDtoMapper = reviewDtoMapper;
+        this.companyDtoMapper = companyDtoMapper;
     }
 
     @Override
@@ -24,8 +27,7 @@ public class GameDetailsDtoMapper implements Function<GameDetails, GameDetailsDt
                 game.getDescription(),
                 game.getRating(),
                 game.getGenre(),
-                game.getCompany(),
-                game.getStudio(),
+                companyDtoMapper.apply(game.getCompany()),
                 game.getIsFavourite(),
                 game.getReleaseDate(),
                 game.getReviews()
