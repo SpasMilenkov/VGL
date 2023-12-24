@@ -20,10 +20,4 @@ public interface UserRepositoryImpl extends UserRepository, UserRepositoryCustom
     @Override
     @Query("SELECT r FROM Review r WHERE r.user.id = :userId")
     List<Review> getUserReviews(@Param("userId") Long userId);
-
-    @Override
-    int deleteUserReview(Long reviewId);
-
-    @Override
-    void updateUserReview(Review review);
 }

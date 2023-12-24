@@ -9,8 +9,4 @@ import java.util.Optional;
 public interface UserRepositoryCustom {
 
     List<Review> getUserReviews(@Param("userId") Long userId);
-
-    void updateUserReview(Review review);
-
-    int deleteUserReview(Long reviewId);
 }
