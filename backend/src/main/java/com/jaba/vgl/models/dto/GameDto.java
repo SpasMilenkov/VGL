@@ -5,17 +5,11 @@ import com.jaba.vgl.models.entities.Game;
 
 public record GameDto(
         String name,
-
         String description,
-
         Float rating,
-
         GameGenre genre,
-
         CompanyDto company,
-
         Boolean isFavourite,
-
         String releaseDate
 ) {
     public Game toEntity() {
