@@ -58,19 +58,12 @@ public @Data class Game {
     private GameGenre genre;
 
     @Column(
-            name = "company",
+            name = "company_id",
             nullable = false,
             columnDefinition = "TEXT"
     )
-    @NotNull(message = "Company must not be empty.")
-    private String company;
-
-    @Column(
-            name = "studio",
-            nullable = true,
-            columnDefinition = "TEXT"
-    )
-    private String studio;
+    @NotNull(message = "Company id must not be empty.")
+    private Long companyId;
 
     @Column(
             name = "is_favourite",
@@ -87,4 +80,18 @@ public @Data class Game {
     )
     @NotNull(message = "Release date must not be empty.")
     private String releaseDate; //TODO: change to date? (to discuss date format)
+
+    //Bi-directional
+    @ManyToOne
+    @JoinColumn(
+            name = "company_id",
+            referencedColumnName = "id",
+            nullable = false,
+            insertable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(
+                    name = "company_id_fk"
+            )
+    )
+    private Company company;
 }
