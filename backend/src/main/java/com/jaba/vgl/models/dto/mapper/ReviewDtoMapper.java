@@ -11,6 +11,8 @@ public class ReviewDtoMapper implements Function<Review, ReviewDto> {
     @Override
     public ReviewDto apply(Review review) {
         return new ReviewDto(
+                review.getId(),
+                review.getGameId(),
                 review.getTitle(),
                 review.getText(),
                 review.getRating()
