@@ -2,24 +2,22 @@ package com.jaba.vgl.services;
 
 import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.dto.CompanyDto;
-import com.jaba.vgl.models.dto.GameDto;
-import com.jaba.vgl.models.entities.Game;
+import com.jaba.vgl.models.dto.GameWithCompanyDto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface GameService {
 
-    GameDto getGame(Long id);
+    GameWithCompanyDto getGame(Long id);
 
-    GameDto getGame(String name);
+    GameWithCompanyDto getGame(String name);
 
-    GameDto getGame(String name, CompanyDto companyDto);
-    List<GameDto> getGamesByGenre(GameGenre genre);
+    GameWithCompanyDto getGame(String name, CompanyDto companyDto);
+    List<GameWithCompanyDto> getGamesByGenre(GameGenre genre);
 
-    void updateGame(GameDto game);
+    void updateGame(GameWithCompanyDto game);
 
-    void createGame(GameDto game);
+    void createGame(GameWithCompanyDto game);
 
     int deleteGame(Long id);
 

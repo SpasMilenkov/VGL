@@ -1,13 +1,11 @@
 package com.jaba.vgl.services.impl;
 
 
-import com.jaba.vgl.models.dto.GameDto;
+import com.jaba.vgl.models.dto.GameWithCompanyDto;
 import com.jaba.vgl.models.dto.ReviewDto;
-import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
-import com.jaba.vgl.models.dto.mapper.MapperFacade;
+import com.jaba.vgl.models.dto.mapper.GameWithCompanyDtoMapper;
 import com.jaba.vgl.models.dto.mapper.ReviewDtoMapper;
 import com.jaba.vgl.models.entities.Review;
-import com.jaba.vgl.repositories.UserRepository;
 import com.jaba.vgl.repositories.impl.ReviewRepositoryImpl;
 import com.jaba.vgl.repositories.impl.UserRepositoryImpl;
 import com.jaba.vgl.services.UserService;
@@ -28,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepositoryImpl userRepository;
     private final ReviewRepositoryImpl reviewRepository;
     private final ReviewDtoMapper reviewDtoMapper;
-    private final MapperFacade mapperFacade;
+    private final GameWithCompanyDtoMapper gameWithCompanyDtoMapper;
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -55,10 +53,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GameDto> getUserGames(Long userId) {
+    public List<GameWithCompanyDto> getUserGames(Long userId) {
         return userRepository.getUserGames(userId)
                 .stream()
-                .map(mapperFacade::mapGame)
+                .map(gameWithCompanyDtoMapper)
                 .toList();
     }
 

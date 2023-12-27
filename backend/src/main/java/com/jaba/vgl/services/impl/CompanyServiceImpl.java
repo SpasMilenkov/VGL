@@ -1,14 +1,9 @@
 package com.jaba.vgl.services.impl;
 
 import com.jaba.vgl.exceptions.CompanyNotFoundException;
-import com.jaba.vgl.exceptions.ReviewNotFoundException;
 import com.jaba.vgl.models.dto.CompanyDto;
-import com.jaba.vgl.models.dto.ReviewDto;
 import com.jaba.vgl.models.dto.mapper.CompanyDtoMapper;
-import com.jaba.vgl.models.dto.mapper.MapperFacade;
 import com.jaba.vgl.models.entities.Company;
-import com.jaba.vgl.models.entities.Review;
-import com.jaba.vgl.repositories.CompanyRepository;
 import com.jaba.vgl.repositories.impl.CompanyRepositoryImpl;
 import com.jaba.vgl.services.CompanyService;
 import org.springframework.stereotype.Service;
