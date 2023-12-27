@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Set;
+
 @Entity(name = "Game")
 @Table(name = "game_table")
 @NoArgsConstructor
@@ -93,4 +95,7 @@ public @Data class Game {
             )
     )
     private Company company;
+
+    @ManyToMany(mappedBy = "games")
+    Set<User> users;
 }
