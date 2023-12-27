@@ -6,6 +6,7 @@ import com.jaba.vgl.models.dto.mapper.CompanyDtoMapper;
 import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.repositories.impl.CompanyRepositoryImpl;
 import com.jaba.vgl.services.CompanyService;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,11 +14,15 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepositoryImpl companyRepository;
     private final CompanyDtoMapper companyDtoMapper;
+    private final JdbcTemplate jdbcTemplate;
+
 
     public CompanyServiceImpl(CompanyRepositoryImpl companyRepository,
-                              CompanyDtoMapper companyDtoMapper) {
+                              CompanyDtoMapper companyDtoMapper,
+                              JdbcTemplate jdbcTemplate) {
         this.companyRepository = companyRepository;
         this.companyDtoMapper = companyDtoMapper;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -54,5 +59,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void truncateTable() {
         companyRepository.truncate();
+
+        String sqlStatement = "ALTER SEQUENCE vgl_sequence RESTART WITH 1";
+        jdbcTemplate.execute(sqlStatement);
     }
 }

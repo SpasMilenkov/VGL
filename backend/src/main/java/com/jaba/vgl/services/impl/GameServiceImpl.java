@@ -10,6 +10,7 @@ import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.impl.GameRepositoryImpl;
 import com.jaba.vgl.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,14 +22,18 @@ public class GameServiceImpl implements GameService {
     private final GameRepositoryImpl gameRepository;
     private final GameDtoMapper gameDtoMapper;
     private final GameWithCompanyDtoMapper gameWithCompanyDtoMapper;
+    private final JdbcTemplate jdbcTemplate;
+
 
     @Autowired
     public GameServiceImpl(GameRepositoryImpl gameRepository,
                            GameDtoMapper gameDtoMapper,
-                           GameWithCompanyDtoMapper gameWithCompanyDtoMapper) {
+                           GameWithCompanyDtoMapper gameWithCompanyDtoMapper,
+                           JdbcTemplate jdbcTemplate) {
         this.gameRepository = gameRepository;
         this.gameDtoMapper = gameDtoMapper;
         this.gameWithCompanyDtoMapper = gameWithCompanyDtoMapper;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -129,5 +134,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public void truncateTable() {
         gameRepository.truncate();
+
+        String sqlStatement = "ALTER SEQUENCE vgl_sequence RESTART WITH 1";
+        jdbcTemplate.execute(sqlStatement);
     }
 }

@@ -5,7 +5,7 @@ import com.jaba.vgl.models.entities.Review;
 
 public interface ReviewService {
 
-    Review getReview(Long id);
+    ReviewDto getReview(Long id);
 
     void saveReview(ReviewDto reviewDto);
 

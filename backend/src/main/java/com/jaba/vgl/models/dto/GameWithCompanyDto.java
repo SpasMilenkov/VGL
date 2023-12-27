@@ -8,7 +8,7 @@ public record GameWithCompanyDto(
         GameDto gameDto,
         CompanyDto companyDto
 ) {
-    public Game toEntity() {
+    public Game toEntity() { //TODO: add find by name and company -> get id... (default -> null)
         Game game = new Game();
         GameDto gameDto = this.gameDto;
         CompanyDto companyDto = this.companyDto;

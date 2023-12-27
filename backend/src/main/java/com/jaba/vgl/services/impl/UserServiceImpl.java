@@ -10,6 +10,7 @@ import com.jaba.vgl.repositories.impl.ReviewRepositoryImpl;
 import com.jaba.vgl.repositories.impl.UserRepositoryImpl;
 import com.jaba.vgl.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final ReviewRepositoryImpl reviewRepository;
     private final ReviewDtoMapper reviewDtoMapper;
     private final GameWithCompanyDtoMapper gameWithCompanyDtoMapper;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -75,5 +77,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void truncateTable() {
         userRepository.truncate();
+
+        String sqlStatement = "ALTER SEQUENCE vgl_sequence RESTART WITH 1";
+        jdbcTemplate.execute(sqlStatement);
     }
 }
