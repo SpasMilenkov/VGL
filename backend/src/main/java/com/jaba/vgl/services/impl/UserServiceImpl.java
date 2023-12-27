@@ -1,7 +1,9 @@
 package com.jaba.vgl.services.impl;
 
 
+import com.jaba.vgl.models.dto.GameDto;
 import com.jaba.vgl.models.dto.ReviewDto;
+import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
 import com.jaba.vgl.models.dto.mapper.ReviewDtoMapper;
 import com.jaba.vgl.models.entities.Review;
 import com.jaba.vgl.repositories.UserRepository;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepositoryImpl userRepository;
     private final ReviewRepositoryImpl reviewRepository;
     private final ReviewDtoMapper reviewDtoMapper;
+    private final GameDtoMapper gameDtoMapper;
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -47,6 +50,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserReviews(userId)
                 .stream()
                 .map(reviewDtoMapper)
+                .toList();
+    }
+
+    @Override
+    public List<GameDto> getUserGames(Long userId) {
+        return userRepository.getUserGames(userId)
+                .stream()
+                .map(gameDtoMapper)
                 .toList();
     }
 
