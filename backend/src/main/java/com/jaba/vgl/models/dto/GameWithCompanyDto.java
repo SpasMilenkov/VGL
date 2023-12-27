@@ -3,15 +3,21 @@ package com.jaba.vgl.models.dto;
 import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.dto.mapper.CompanyDtoMapper;
 import com.jaba.vgl.models.entities.Game;
+import com.jaba.vgl.services.impl.GameServiceImpl;
+
+import java.util.Optional;
 
 public record GameWithCompanyDto(
         GameDto gameDto,
         CompanyDto companyDto
 ) {
-    public Game toEntity() { //TODO: add find by name and company -> get id... (default -> null)
-        Game game = new Game();
+    public Game toEntity(GameServiceImpl gameService) {
         GameDto gameDto = this.gameDto;
         CompanyDto companyDto = this.companyDto;
+        Game game = new Game();
+
+        Optional<Long> id = gameService.getGameId(gameDto.name());
+        id.ifPresent(game::setId);
 
         game.setCompanyId(companyDto.id());
         game.setCompany(companyDto.toEntity());

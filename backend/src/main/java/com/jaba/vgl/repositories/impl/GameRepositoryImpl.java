@@ -38,6 +38,10 @@ public interface GameRepositoryImpl extends GameRepository, GameRepositoryCustom
     @Query("SELECT g FROM Game g WHERE g.genre = ?1")
     Optional<List<Game>> findGamesByGenre(GameGenre genre);
 
+    @Override
+    @Query("SELECT g.id FROM Game g WHERE g.name = ?1")
+    Optional<Long> getGameId(String name);
+
     @Transactional
     @Modifying
     @Query("UPDATE Game g SET " +

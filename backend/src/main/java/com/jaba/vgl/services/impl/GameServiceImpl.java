@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,6 +68,20 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public Game getGameEntity(String name) {
+        return gameRepository.findGameByName(name)
+                .stream()
+                .findFirst()
+                .orElseThrow(
+                        () -> new GameNotFoundException(
+                                String.format("Game with name %s not found.",
+                                        name
+                                )
+                        )
+                );
+    }
+
+    @Override
     public GameWithCompanyDto getGame(String name, CompanyDto companyDto) {
         return gameRepository.findGameByNameAndCompany(name, companyDto.toEntity())
                 .stream()
@@ -80,6 +95,11 @@ public class GameServiceImpl implements GameService {
                                 )
                         )
                 );
+    }
+
+    @Override
+    public Optional<Long> getGameId(String name) {
+        return gameRepository.getGameId(name);
     }
 
     @Override
@@ -98,7 +118,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void updateGame(GameWithCompanyDto gameWithCompanyDto) {
-        Game game = gameWithCompanyDto.toEntity();
+        Game game = gameWithCompanyDto.toEntity(this);
 
         gameRepository.updateGame(
                 game.getId(),
@@ -115,7 +135,7 @@ public class GameServiceImpl implements GameService {
     @Override
     @Transactional
     public void createGame(GameWithCompanyDto gameDto) {
-        Game game = gameDto.toEntity();
+        Game game = gameDto.toEntity(this);
         game.setCompany(game.getCompany());
 
         gameRepository.save(game);
