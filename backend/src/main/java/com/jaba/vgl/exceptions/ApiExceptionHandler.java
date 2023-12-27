@@ -37,6 +37,7 @@ public class ApiExceptionHandler {
             GameNotFoundException.class,
             GameDetailsNotFoundException.class,
             ReviewNotFoundException.class,
+            CompanyNotFoundException.class
     })
     public ResponseEntity<Object> handleNotFoundException(RuntimeException e) {
 
