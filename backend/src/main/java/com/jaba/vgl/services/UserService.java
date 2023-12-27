@@ -17,4 +17,6 @@ public interface UserService {
     void updateUserReview(ReviewDto reviewDto);
 
     void deleteUserReview(Long reviewId);
+
+    void truncateTable();
 }

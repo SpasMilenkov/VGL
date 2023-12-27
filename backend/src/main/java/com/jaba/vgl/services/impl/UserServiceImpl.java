@@ -4,6 +4,7 @@ package com.jaba.vgl.services.impl;
 import com.jaba.vgl.models.dto.GameDto;
 import com.jaba.vgl.models.dto.ReviewDto;
 import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
+import com.jaba.vgl.models.dto.mapper.MapperFacade;
 import com.jaba.vgl.models.dto.mapper.ReviewDtoMapper;
 import com.jaba.vgl.models.entities.Review;
 import com.jaba.vgl.repositories.UserRepository;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepositoryImpl userRepository;
     private final ReviewRepositoryImpl reviewRepository;
     private final ReviewDtoMapper reviewDtoMapper;
-    private final GameDtoMapper gameDtoMapper;
+    private final MapperFacade mapperFacade;
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
     public List<GameDto> getUserGames(Long userId) {
         return userRepository.getUserGames(userId)
                 .stream()
-                .map(gameDtoMapper)
+                .map(mapperFacade::mapGame)
                 .toList();
     }
 
@@ -71,5 +72,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserReview(Long reviewId) {
         reviewRepository.deleteReviewById(reviewId);
+    }
+
+    @Override
+    public void truncateTable() {
+        userRepository.truncate();
     }
 }
