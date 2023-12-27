@@ -1,6 +1,7 @@
 package com.jaba.vgl.services;
 
 import com.jaba.vgl.models.GameGenre;
+import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.dto.GameDto;
 import com.jaba.vgl.models.entities.Game;
 
@@ -13,7 +14,7 @@ public interface GameService {
 
     GameDto getGame(String name);
 
-    GameDto getGame(String name, String company);
+    GameDto getGame(String name, CompanyDto companyDto);
     List<GameDto> getGamesByGenre(GameGenre genre);
 
     void updateGame(GameDto game);
@@ -22,7 +23,7 @@ public interface GameService {
 
     int deleteGame(Long id);
 
-    int deleteGame(String name, String company);
+    int deleteGame(String name, CompanyDto companyDto);
 
     void truncateTable();
 }

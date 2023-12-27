@@ -1,8 +1,10 @@
 package com.jaba.vgl.services.impl;
 
 import com.jaba.vgl.exceptions.GameDetailsNotFoundException;
+import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.dto.GameDetailsDto;
 import com.jaba.vgl.models.dto.mapper.GameDetailsDtoMapper;
+import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.GameDetails;
 import com.jaba.vgl.repositories.GameDetailsRepository;
 import com.jaba.vgl.repositories.impl.GameDetailsRepositoryImpl;
@@ -54,8 +56,8 @@ public class GameDetailsServiceImpl implements GameDetailsService {
     }
 
     @Override
-    public GameDetailsDto getGameDetails(String name, String company) {
-        return gameDetailsRepository.findGameDetailsByNameAndCompany(name, company)
+    public GameDetailsDto getGameDetails(String name, CompanyDto companyDto) {
+        return gameDetailsRepository.findGameDetailsByNameAndCompany(name, companyDto.toEntity())
                 .stream()
                 .map(gameDetailsDtoMapper)
                 .findFirst()
@@ -63,7 +65,7 @@ public class GameDetailsServiceImpl implements GameDetailsService {
                         () -> new GameDetailsNotFoundException(
                                 String.format("Game details for game with name %s and company %s not found.",
                                         name,
-                                        company
+                                        companyDto
                                 )
                         )
                 );
@@ -80,10 +82,10 @@ public class GameDetailsServiceImpl implements GameDetailsService {
                 gameDetails.getRating(),
                 gameDetails.getGenre(),
                 gameDetails.getCompany(),
-                gameDetails.getStudio(),
                 gameDetails.getIsFavourite(),
-                gameDetails.getReleaseDate()
-        ); //gameDetails.getReviews()
+                gameDetails.getReleaseDate(),
+                gameDetails.getReviews()
+        );
     }
 
     @Override
@@ -99,8 +101,8 @@ public class GameDetailsServiceImpl implements GameDetailsService {
     }
 
     @Override
-    public int deleteGameDetails(String name, String company) {
-        return gameDetailsRepository.deleteGameDetailsByNameAndCompany(name, company);
+    public int deleteGameDetails(String name, CompanyDto companyDto) {
+        return gameDetailsRepository.deleteGameDetailsByNameAndCompany(name, companyDto.toEntity());
     }
 
     @Override

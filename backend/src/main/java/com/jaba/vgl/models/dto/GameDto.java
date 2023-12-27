@@ -5,19 +5,11 @@ import com.jaba.vgl.models.entities.Game;
 
 public record GameDto(
         String name,
-
         String description,
-
         Float rating,
-
         GameGenre genre,
-
-        String company,
-
-        String studio,
-
+        CompanyDto company,
         Boolean isFavourite,
-
         String releaseDate
 ) {
     public Game toEntity() {
@@ -28,8 +20,7 @@ public record GameDto(
         game.setDescription(dto.description());
         game.setRating(dto.rating());
         game.setGenre(dto.genre());
-        game.setCompany(dto.company());
-        game.setStudio(dto.studio());
+        game.setCompany(dto.company().toEntity());
         game.setIsFavourite(dto.isFavourite());
         game.setReleaseDate(dto.releaseDate());
         return game;

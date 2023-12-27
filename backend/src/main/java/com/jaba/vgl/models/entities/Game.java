@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Set;
+
 @Entity(name = "Game")
 @Table(name = "game_table")
 @NoArgsConstructor
@@ -58,19 +60,11 @@ public @Data class Game {
     private GameGenre genre;
 
     @Column(
-            name = "company",
-            nullable = false,
-            columnDefinition = "TEXT"
+            name = "company_id",
+            nullable = false
     )
-    @NotNull(message = "Company must not be empty.")
-    private String company;
-
-    @Column(
-            name = "studio",
-            nullable = true,
-            columnDefinition = "TEXT"
-    )
-    private String studio;
+    @NotNull(message = "Company id must not be empty.")
+    private Long companyId;
 
     @Column(
             name = "is_favourite",
@@ -87,4 +81,21 @@ public @Data class Game {
     )
     @NotNull(message = "Release date must not be empty.")
     private String releaseDate; //TODO: change to date? (to discuss date format)
+
+    //Bi-directional
+    @ManyToOne
+    @JoinColumn(
+            name = "company_id",
+            referencedColumnName = "id",
+            nullable = false,
+            insertable = false,
+            updatable = false,
+            foreignKey = @ForeignKey(
+                    name = "company_id_fk"
+            )
+    )
+    private Company company;
+
+    @ManyToMany(mappedBy = "games")
+    Set<User> users;
 }

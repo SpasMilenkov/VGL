@@ -15,9 +15,7 @@ public record GameDetailsDto(
 
         GameGenre genre,
 
-        String company,
-
-        String studio,
+        CompanyDto company,
 
         Boolean isFavourite,
 
@@ -36,8 +34,7 @@ public record GameDetailsDto(
         gameDetails.setDescription(dto.description());
         gameDetails.setRating(dto.rating());
         gameDetails.setGenre(dto.genre());
-        gameDetails.setCompany(dto.company());
-        gameDetails.setStudio(dto.studio());
+        gameDetails.setCompany(dto.company().toEntity());
         gameDetails.setIsFavourite(dto.isFavourite());
         gameDetails.setReleaseDate(dto.releaseDate());
         gameDetails.setReviews(dto.reviews
