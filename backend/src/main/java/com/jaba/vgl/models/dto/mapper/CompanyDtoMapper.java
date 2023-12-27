@@ -12,12 +12,17 @@ import java.util.function.Function;
 public class CompanyDtoMapper implements Function<Company, CompanyDto> {
 
     @Lazy
+    private final GameDtoMapper gameDtoMapper;
+
     @Autowired
-    private GameDtoMapper gameDtoMapper;
+    public CompanyDtoMapper(GameDtoMapper gameDtoMapper) {
+        this.gameDtoMapper = gameDtoMapper;
+    }
 
     @Override
     public CompanyDto apply(Company company) {
         return new CompanyDto(
+                company.getId(),
                 company.getName(),
                 company.getStudio(),
                 company.getGames()
