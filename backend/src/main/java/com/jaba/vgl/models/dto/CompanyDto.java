@@ -1,6 +1,5 @@
 package com.jaba.vgl.models.dto;
 
-import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
 import com.jaba.vgl.models.entities.Company;
 
 import java.util.List;
