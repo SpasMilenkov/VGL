@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @EnableJpaRepositories(
-		basePackages = "com.jaba.vgl.repositories",
+		basePackages = {"com.jaba.vgl.repositories", "com.jaba.vgl.repositories.impl"},
 		queryLookupStrategy = QueryLookupStrategy.Key.CREATE_IF_NOT_FOUND
 )
 @EnableFeignClients(
