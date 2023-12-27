@@ -80,6 +80,8 @@ public class GameTests {
     @Order(1)
     @DisplayName("Add game to DB and fetch from DB.")
     void addGameTest() {
+
+        //Create entry...
         GameDto gameDto = new GameDto(
                 "World of Warcraft - Wrath of Lich King.",
                 "best game ever made.",
@@ -101,12 +103,76 @@ public class GameTests {
                 companyDto
         );
 
+        //Save entry...
         gameService.createGame(gameWithCompanyDto);
 
         //Fetch from DB...
         GameWithCompanyDto data = gameService.getGame("World of Warcraft - Wrath of Lich King.");
 
-        logger.info(gameWithCompanyDto.toString());
+        logger.info(data.toString());
         assertNotNull(data);
     }
+
+    @Test
+    @Order(2)
+    @DisplayName("Add game to DB, update it and fetch from DB.")
+    void updateGameTest() {
+        boolean isFavourite = true;
+        Float rating = 3.0f;
+
+        //Create entry...
+        GameDto gameDto = new GameDto(
+                "World of Warcraft - Wrath of Lich King.",
+                "best game ever made.",
+                5.0f,
+                GameGenre.RPG,
+                false,
+                "02.04.2000"
+        );
+
+        CompanyDto companyDto = new CompanyDto(
+                1l,
+                "Blizzard",
+                "",
+                Collections.emptyList()
+        );
+
+        GameWithCompanyDto gameWithCompanyDto = new GameWithCompanyDto(
+                gameDto,
+                companyDto
+        );
+
+        //Save entry...
+        gameService.createGame(gameWithCompanyDto);
+
+        //Update entry (Name and company shouldn't change to count as the same game)
+        GameDto gameDto2 = new GameDto(
+                "World of Warcraft - Wrath of Lich King.",
+                "meh game.",
+                rating,
+                GameGenre.RPG,
+                isFavourite,
+                "02.04.2000"
+        );
+
+        GameWithCompanyDto gameWithCompanyDto2 = new GameWithCompanyDto(
+                gameDto2,
+                companyDto
+        );
+
+        gameService.updateGame(gameWithCompanyDto2);
+
+        //Fetch from DB...
+        GameWithCompanyDto data = gameService.getGame("World of Warcraft - Wrath of Lich King.");
+
+        logger.info(data.toString());
+
+        //Checking changes in the start of the test are set
+        assertTrue(
+                data.gameDto().isFavourite() == isFavourite &&
+                        data.gameDto().rating().equals(rating)
+        );
+    }
+
+    
 }
