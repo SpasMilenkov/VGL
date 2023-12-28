@@ -166,7 +166,99 @@ public class AppTests {
     }
 
     @Nested
-    class ReviewTests{
+    class GameDetailsTests {
+        @BeforeEach
+        public void setup() {
+            CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
+
+            companyService.saveCompany(companyDto);
+        }
+
+        @Test
+        @Order(1)
+        @DisplayName("Add game details to DB and fetch from DB.")
+        void addAndSaveGameDetailsTest() {
+            gameDetailsService.deleteGameDetails(1L); //Before each test remove already inserted game details...
+
+            //Create entry...
+            GameDetailsDto gameDetailsDto = mockupDataGenerator.generateGameDetailsDto();
+
+            //Save entry...
+            gameDetailsService.createGameDetails(gameDetailsDto);
+
+            //Fetch from DB...
+            GameDetailsWithReviewsDto data = gameDetailsService.getGameDetails(gameDetailsDto.name(), gameDetailsDto.company());
+
+            logger.info(data.toString());
+            assertNotNull(data);
+        }
+
+        @Test
+        @Order(2)
+        @DisplayName("Add game details to DB, update it and fetch from DB.")
+        void updateGameTest() {
+
+            //Create entry...
+            GameDetailsDto gameDetailsDto = mockupDataGenerator.generateGameDetailsDto();
+
+            //Save entry...
+            gameDetailsService.createGameDetails(gameDetailsDto);
+
+            boolean isFavourite = true;
+            Float rating = 3.0f;
+            CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
+
+            //Update entry (Name and company shouldn't change to count as the same game)
+            GameDetailsDto gameDetailsDto2 = new GameDetailsDto(
+                    "World of Warcraft - Wrath of Lich King.",
+                    "best game ever made.",
+                    rating,
+                    GameGenre.RPG,
+                    companyDto,
+                    isFavourite,
+                    "02.04.2000"
+            );
+
+            GameDetailsWithReviewsDto gameDetailsWithReviewsDto = new GameDetailsWithReviewsDto(
+                    gameDetailsDto2,
+                    companyDto,
+                    new ArrayList<>()
+            );
+
+            gameDetailsService.updateGameDetails(gameDetailsWithReviewsDto);
+
+            //Fetch from DB...
+            GameDetailsWithReviewsDto data = gameDetailsService.getGameDetails(gameDetailsDto.name(), gameDetailsDto.company());
+
+            boolean isGameUpdated = data.gameDetailsDto().isFavourite() == isFavourite &&
+                    data.gameDetailsDto().rating().equals(rating);
+
+            //Checking changes in the start of the test are set
+            logger.info(data.toString());
+            assertTrue(isGameUpdated);
+        }
+
+        @Test
+        @Order(3)
+        @DisplayName("Add game details to DB, delete it and try fetch from DB.")
+        void deleteGameTest() {
+
+            //Create entry...
+            GameDetailsDto gameDetailsDto = mockupDataGenerator.generateGameDetailsDto();
+
+            //Save entry...
+            gameDetailsService.createGameDetails(gameDetailsDto);
+
+            //Delete entry...
+            Optional<Long> gameId = gameService.getGameId(gameDetailsDto.name(), gameDetailsDto.company());
+            gameId.ifPresent(gameDetailsService::deleteGameDetails);
+
+            //Try fetch from DB...
+            assertThrows(GameNotFoundException.class, () ->
+                    gameService.getGame(gameDetailsDto.name(), gameDetailsDto.company()));
+        }
+    }
+
 
         @Test
         @Order(1)
