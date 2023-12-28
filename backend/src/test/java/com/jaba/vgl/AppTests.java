@@ -1,5 +1,6 @@
 package com.jaba.vgl;
 
+import com.jaba.vgl.exceptions.CompanyNotFoundException;
 import com.jaba.vgl.exceptions.GameNotFoundException;
 import com.jaba.vgl.exceptions.ReviewNotFoundException;
 import com.jaba.vgl.models.GameGenre;
@@ -133,12 +134,12 @@ public class AppTests {
             gameService.updateGame(gameWithCompanyDto2);
 
             //Fetch from DB...
-            GameWithCompanyDto data = gameService.getGame(gameWithCompanyDto.gameDto().name(), gameWithCompanyDto.companyDto());
+            GameWithCompanyDto fetchedGameDto = gameService.getGame(gameWithCompanyDto.gameDto().name(), gameWithCompanyDto.companyDto());
 
-            logger.info(data.toString());
+            logger.info(fetchedGameDto.toString());
 
-            boolean isGameUpdated = data.gameDto().isFavourite() == isFavourite &&
-                    data.gameDto().rating().equals(rating);
+            boolean isGameUpdated = fetchedGameDto.gameDto().isFavourite() == isFavourite &&
+                    fetchedGameDto.gameDto().rating().equals(rating);
 
             //Checking changes in the start of the test are set
             assertTrue(isGameUpdated);
@@ -187,10 +188,10 @@ public class AppTests {
             gameDetailsService.createGameDetails(gameDetailsDto);
 
             //Fetch from DB...
-            GameDetailsWithReviewsDto data = gameDetailsService.getGameDetails(gameDetailsDto.name(), gameDetailsDto.company());
+            GameDetailsWithReviewsDto fetchedGameDetails = gameDetailsService.getGameDetails(gameDetailsDto.name(), gameDetailsDto.company());
 
-            logger.info(data.toString());
-            assertNotNull(data);
+            logger.info(fetchedGameDetails.toString());
+            assertNotNull(fetchedGameDetails);
         }
 
         @Test
@@ -228,13 +229,13 @@ public class AppTests {
             gameDetailsService.updateGameDetails(gameDetailsWithReviewsDto);
 
             //Fetch from DB...
-            GameDetailsWithReviewsDto data = gameDetailsService.getGameDetails(gameDetailsDto.name(), gameDetailsDto.company());
+            GameDetailsWithReviewsDto fetchedGameDetails = gameDetailsService.getGameDetails(gameDetailsDto.name(), gameDetailsDto.company());
 
-            boolean isGameUpdated = data.gameDetailsDto().isFavourite() == isFavourite &&
-                    data.gameDetailsDto().rating().equals(rating);
+            boolean isGameUpdated = fetchedGameDetails.gameDetailsDto().isFavourite() == isFavourite &&
+                    fetchedGameDetails.gameDetailsDto().rating().equals(rating);
 
             //Checking changes in the start of the test are set
-            logger.info(data.toString());
+            logger.info(fetchedGameDetails.toString());
             assertTrue(isGameUpdated);
         }
 
@@ -281,13 +282,13 @@ public class AppTests {
             reviewService.saveReview(reviewDto);
 
             //Fetch from DB...
-            ReviewDto data = reviewService.getReview(reviewDto.id());
+            ReviewDto fetchedReviewDto = reviewService.getReview(reviewDto.id());
 
-            boolean isSameReview = data.text().equals(reviewDto.text()) &&
-                    data.title().equals(reviewDto.title()) &&
-                    data.rating().equals(reviewDto.rating());
+            boolean isSameReview = fetchedReviewDto.text().equals(reviewDto.text()) &&
+                    fetchedReviewDto.title().equals(reviewDto.title()) &&
+                    fetchedReviewDto.rating().equals(reviewDto.rating());
 
-            logger.info(data.toString());
+            logger.info(fetchedReviewDto.toString());
             assertTrue(isSameReview);
         }
 
@@ -315,13 +316,13 @@ public class AppTests {
             reviewService.updateReview(reviewDto2);
 
             //Fetch from DB...
-            ReviewDto data = reviewService.getReview(reviewDto2.id());
+            ReviewDto fetchedReviewDto = reviewService.getReview(reviewDto2.id());
 
-            boolean isSameReview = data.text().equals(reviewDto2.text()) &&
-                    data.title().equals(reviewDto2.title()) &&
-                    data.rating().equals(reviewDto2.rating());
+            boolean isSameReview = fetchedReviewDto.text().equals(reviewDto2.text()) &&
+                    fetchedReviewDto.title().equals(reviewDto2.title()) &&
+                    fetchedReviewDto.rating().equals(reviewDto2.rating());
 
-            logger.info(data.toString());
+            logger.info(fetchedReviewDto.toString());
             assertTrue(isSameReview);
         }
 
@@ -341,6 +342,81 @@ public class AppTests {
 
             //Try fetch from DB...
             assertThrows(ReviewNotFoundException.class, () -> reviewService.getReview(reviewDto.id()));
+        }
+    }
+
+    @Nested
+    class CompanyTests {
+
+        @BeforeEach
+        public void setup() {
+            // Any setup required before each test (if needed)
+        }
+
+        @Test
+        @Order(1)
+        @DisplayName("Add company to DB and fetch from DB.")
+        void addAndSaveCompanyTest() {
+            // Create entry...
+            CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
+
+            // Save entry...
+            companyService.saveCompany(companyDto);
+
+            // Fetch from DB...
+            CompanyDto fetchedCompanyDto = companyService.getCompany(companyDto.id());
+
+            logger.info(fetchedCompanyDto.toString());
+            assertNotNull(fetchedCompanyDto);
+            assertEquals(companyDto.name(), fetchedCompanyDto.name());
+            assertEquals(companyDto.studio(), fetchedCompanyDto.studio());
+        }
+
+        @Test
+        @Order(2)
+        @DisplayName("Add company to DB, update it and fetch from DB.")
+        void updateCompanyTest() {
+            // Create entry...
+            CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
+
+            // Save entry...
+            companyService.saveCompany(companyDto);
+
+            // Update entry...
+            CompanyDto updatedCompanyDto = new CompanyDto(
+                    companyDto.id(),
+                    "Test Company INC",
+                    "Test Studio",
+                    companyDto.games()
+            );
+
+            companyService.updateCompany(updatedCompanyDto);
+
+            // Fetch from DB...
+            CompanyDto fetchedCompanyDto = companyService.getCompany(companyDto.id());
+            logger.info(fetchedCompanyDto.toString());
+
+            boolean isCompanyUpdated = updatedCompanyDto.name().equals(fetchedCompanyDto.name()) &&
+                    updatedCompanyDto.studio().equals(fetchedCompanyDto.studio());
+
+            assertTrue(isCompanyUpdated);
+        }
+
+        @Test
+        @Order(3)
+        @DisplayName("Add company to DB, delete it and try fetch from DB.")
+        void deleteCompanyTest() {
+            // Create entry...
+            CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
+
+            // Save entry...
+            companyService.saveCompany(companyDto);
+
+            // Delete entry...
+            companyService.deleteCompany(companyDto.id());
+
+            // Try fetch from DB...
+            assertThrows(CompanyNotFoundException.class, () -> companyService.getCompany(companyDto.id()));
         }
     }
 }
