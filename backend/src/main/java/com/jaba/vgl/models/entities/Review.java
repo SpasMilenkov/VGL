@@ -31,7 +31,7 @@ public @Data class Review {
     private Long gameId;
 
     @Column(name = "user_id")
-    @NotNull(message = "Game id must not be empty.")
+    @NotNull(message = "User id must not be empty.")
     private Long userId;
 
     @Column(
