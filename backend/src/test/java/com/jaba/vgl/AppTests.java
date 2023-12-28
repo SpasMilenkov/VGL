@@ -259,6 +259,15 @@ public class AppTests {
         }
     }
 
+    @Nested
+    class ReviewTests {
+        @BeforeEach
+        public void setup() {
+            GameDetailsWithReviewsDto gameDetailsDto = mockupDataGenerator.generateGameDetailsWithReviewDto();
+
+            companyService.saveCompany(gameDetailsDto.companyDto());
+            gameDetailsService.createGameDetails(gameDetailsDto.gameDetailsDto()); //Fixes foreign key missing for adding review in tests...
+        }
 
         @Test
         @Order(1)
@@ -272,13 +281,66 @@ public class AppTests {
             reviewService.saveReview(reviewDto);
 
             //Fetch from DB...
-            ReviewDto data = reviewService.getReview(reviewDto.id()); //TODO: change to name and user?
+            ReviewDto data = reviewService.getReview(reviewDto.id());
 
             boolean isSameReview = data.text().equals(reviewDto.text()) &&
                     data.title().equals(reviewDto.title()) &&
                     data.rating().equals(reviewDto.rating());
 
+            logger.info(data.toString());
             assertTrue(isSameReview);
+        }
+
+        @Test
+        @Order(2)
+        @DisplayName("Add review to DB, update it and fetch from DB.")
+        void updateReviewTest() {
+
+            //Create entry...
+            ReviewDto reviewDto = mockupDataGenerator.generateReviewDto();
+
+            //Save entry...
+            reviewService.saveReview(reviewDto);
+
+            //Update entry (Id and gameId and userId shouldn't change to count as the same review)
+            ReviewDto reviewDto2 = new ReviewDto(
+                    1L,
+                    1L,
+                    1L,
+                    "Bad game. Would NOT recommend",
+                    "Bad graphics.",
+                    1.0f
+            );
+
+            reviewService.updateReview(reviewDto2);
+
+            //Fetch from DB...
+            ReviewDto data = reviewService.getReview(reviewDto2.id());
+
+            boolean isSameReview = data.text().equals(reviewDto2.text()) &&
+                    data.title().equals(reviewDto2.title()) &&
+                    data.rating().equals(reviewDto2.rating());
+
+            logger.info(data.toString());
+            assertTrue(isSameReview);
+        }
+
+        @Test
+        @Order(3)
+        @DisplayName("Add review to DB, delete it and try fetch from DB.")
+        void deleteReviewTest() {
+
+            //Create entry...
+            ReviewDto reviewDto = mockupDataGenerator.generateReviewDto();
+
+            //Save entry...
+            reviewService.saveReview(reviewDto);
+
+            //Delete entry...
+            reviewService.deleteReview(reviewDto.id());
+
+            //Try fetch from DB...
+            assertThrows(ReviewNotFoundException.class, () -> reviewService.getReview(reviewDto.id()));
         }
     }
 }
