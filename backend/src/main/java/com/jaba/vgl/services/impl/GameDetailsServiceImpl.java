@@ -3,7 +3,9 @@ package com.jaba.vgl.services.impl;
 import com.jaba.vgl.exceptions.GameDetailsNotFoundException;
 import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.dto.GameDetailsDto;
+import com.jaba.vgl.models.dto.GameDetailsWithReviewsDto;
 import com.jaba.vgl.models.dto.mapper.GameDetailsDtoMapper;
+import com.jaba.vgl.models.dto.mapper.GameDetailsWithReviewsDtoMapper;
 import com.jaba.vgl.models.entities.GameDetails;
 import com.jaba.vgl.repositories.impl.GameDetailsRepositoryImpl;
 import com.jaba.vgl.services.GameDetailsService;
@@ -11,27 +13,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GameDetailsServiceImpl implements GameDetailsService {
 
     private final GameDetailsRepositoryImpl gameDetailsRepository;
+    private final ReviewServiceImpl reviewService;
     private final GameDetailsDtoMapper gameDetailsDtoMapper;
+    private final GameDetailsWithReviewsDtoMapper gameDetailsWithReviewsDtoMapper;
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public GameDetailsServiceImpl(GameDetailsRepositoryImpl gameDetailsRepository,
+                                  ReviewServiceImpl reviewService,
                                   GameDetailsDtoMapper gameDetailsDtoMapper,
+                                  GameDetailsWithReviewsDtoMapper gameDetailsWithReviewsDtoMapper,
                                   JdbcTemplate jdbcTemplate) {
         this.gameDetailsRepository = gameDetailsRepository;
+        this.reviewService = reviewService;
         this.gameDetailsDtoMapper = gameDetailsDtoMapper;
+        this.gameDetailsWithReviewsDtoMapper = gameDetailsWithReviewsDtoMapper;
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public GameDetailsDto getGameDetails(Long id) {
+    public GameDetailsWithReviewsDto getGameDetails(Long id) {
         return gameDetailsRepository.findGameDetailsById(id)
                 .stream()
-                .map(gameDetailsDtoMapper)
+                .map(gameDetailsWithReviewsDtoMapper)
                 .findFirst()
                 .orElseThrow(
                         () -> new GameDetailsNotFoundException(
@@ -43,10 +53,10 @@ public class GameDetailsServiceImpl implements GameDetailsService {
     }
 
     @Override
-    public GameDetailsDto getGameDetails(String name) {
+    public GameDetailsWithReviewsDto getGameDetails(String name) {
         return gameDetailsRepository.findGameDetailsByName(name)
                 .stream()
-                .map(gameDetailsDtoMapper)
+                .map(gameDetailsWithReviewsDtoMapper)
                 .findFirst()
                 .orElseThrow(
                         () -> new GameDetailsNotFoundException(
@@ -58,10 +68,10 @@ public class GameDetailsServiceImpl implements GameDetailsService {
     }
 
     @Override
-    public GameDetailsDto getGameDetails(String name, CompanyDto companyDto) {
+    public GameDetailsWithReviewsDto getGameDetails(String name, CompanyDto companyDto) {
         return gameDetailsRepository.findGameDetailsByNameAndCompany(name, companyDto.toEntity())
                 .stream()
-                .map(gameDetailsDtoMapper)
+                .map(gameDetailsWithReviewsDtoMapper)
                 .findFirst()
                 .orElseThrow(
                         () -> new GameDetailsNotFoundException(
@@ -74,8 +84,16 @@ public class GameDetailsServiceImpl implements GameDetailsService {
     }
 
     @Override
-    public void updateGameDetails(GameDetailsDto gameDetailsDto) {
-        GameDetails gameDetails = gameDetailsDto.toEntity();
+    public List<GameDetailsWithReviewsDto> getGameDetails() {
+        return gameDetailsRepository.findAll()
+                .stream()
+                .map(gameDetailsWithReviewsDtoMapper)
+                .toList();
+    }
+
+    @Override
+    public void updateGameDetails(GameDetailsWithReviewsDto gameDetailsDto) {
+        GameDetails gameDetails = gameDetailsDto.toEntity(reviewService);
 
         gameDetailsRepository.updateGameDetails(
                 gameDetails.getId(),
@@ -88,6 +106,13 @@ public class GameDetailsServiceImpl implements GameDetailsService {
                 gameDetails.getReleaseDate(),
                 gameDetails.getReviews()
         );
+    }
+
+    @Override
+    public void createGameDetails(GameDetailsWithReviewsDto gameDetailsDto) {
+        GameDetails gameDetails = gameDetailsDto.toEntity(reviewService);
+
+        gameDetailsRepository.save(gameDetails);
     }
 
     @Override
