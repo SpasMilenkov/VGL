@@ -12,13 +12,11 @@ public interface GameService {
 
     GameWithCompanyDto getGame(Long id);
 
-    GameWithCompanyDto getGame(String name);
-
-    Game getGameEntity(String name);
+    Game getGameEntity(String name, CompanyDto companyDto);
 
     GameWithCompanyDto getGame(String name, CompanyDto companyDto);
 
-    Optional<Long> getGameId(String name);
+    Optional<Long> getGameId(String name, CompanyDto companyDto);
 
     List<GameWithCompanyDto> getGamesByGenre(GameGenre genre);
 

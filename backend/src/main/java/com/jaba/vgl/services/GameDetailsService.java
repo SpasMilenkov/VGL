@@ -6,16 +6,17 @@ import com.jaba.vgl.models.dto.GameDetailsWithReviewsDto;
 import com.jaba.vgl.models.entities.Company;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GameDetailsService {
 
     GameDetailsWithReviewsDto getGameDetails(Long id);
 
-    GameDetailsWithReviewsDto getGameDetails(String name);
-
     GameDetailsWithReviewsDto getGameDetails(String name, CompanyDto companyDto);
 
     List<GameDetailsWithReviewsDto> getGameDetails();
+
+    Optional<Long> getGameDetailsId(String name, CompanyDto companyDto);
 
     void updateGameDetails(GameDetailsWithReviewsDto gameDetailsDto);
 

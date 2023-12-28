@@ -6,6 +6,7 @@ import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.dto.GameWithCompanyDto;
 import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
 import com.jaba.vgl.models.dto.mapper.GameWithCompanyDtoMapper;
+import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.impl.GameRepositoryImpl;
 import com.jaba.vgl.services.GameService;
@@ -53,23 +54,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameWithCompanyDto getGame(String name) {
-        return gameRepository.findGameByName(name)
-                .stream()
-                .map(gameWithCompanyDtoMapper)
-                .findFirst()
-                .orElseThrow(
-                        () -> new GameNotFoundException(
-                                String.format("Game with name %s not found.",
-                                        name
-                                )
-                        )
-                );
-    }
+    public Game getGameEntity(String name, CompanyDto companyDto) {
+        Company company = companyDto.toEntity();
 
-    @Override
-    public Game getGameEntity(String name) {
-        return gameRepository.findGameByName(name)
+        return gameRepository.findGameByNameAndCompany(name, company)
                 .stream()
                 .findFirst()
                 .orElseThrow(
@@ -98,8 +86,9 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Optional<Long> getGameId(String name) {
-        return gameRepository.getGameId(name);
+    public Optional<Long> getGameId(String name, CompanyDto companyDto) {
+        Company company = companyDto.toEntity();
+        return gameRepository.getGameId(name, company);
     }
 
     @Override

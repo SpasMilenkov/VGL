@@ -6,14 +6,18 @@ import com.jaba.vgl.models.dto.GameDetailsDto;
 import com.jaba.vgl.models.dto.GameDetailsWithReviewsDto;
 import com.jaba.vgl.models.dto.mapper.GameDetailsDtoMapper;
 import com.jaba.vgl.models.dto.mapper.GameDetailsWithReviewsDtoMapper;
+import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.GameDetails;
 import com.jaba.vgl.repositories.impl.GameDetailsRepositoryImpl;
 import com.jaba.vgl.services.GameDetailsService;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameDetailsServiceImpl implements GameDetailsService {
@@ -23,18 +27,20 @@ public class GameDetailsServiceImpl implements GameDetailsService {
     private final GameDetailsDtoMapper gameDetailsDtoMapper;
     private final GameDetailsWithReviewsDtoMapper gameDetailsWithReviewsDtoMapper;
     private final JdbcTemplate jdbcTemplate;
-
+    private final EntityManager entityManager;
     @Autowired
     public GameDetailsServiceImpl(GameDetailsRepositoryImpl gameDetailsRepository,
                                   ReviewServiceImpl reviewService,
                                   GameDetailsDtoMapper gameDetailsDtoMapper,
                                   GameDetailsWithReviewsDtoMapper gameDetailsWithReviewsDtoMapper,
-                                  JdbcTemplate jdbcTemplate) {
+                                  JdbcTemplate jdbcTemplate,
+                                  EntityManager entityManager) {
         this.gameDetailsRepository = gameDetailsRepository;
         this.reviewService = reviewService;
         this.gameDetailsDtoMapper = gameDetailsDtoMapper;
         this.gameDetailsWithReviewsDtoMapper = gameDetailsWithReviewsDtoMapper;
         this.jdbcTemplate = jdbcTemplate;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -47,21 +53,6 @@ public class GameDetailsServiceImpl implements GameDetailsService {
                         () -> new GameDetailsNotFoundException(
                                 String.format("Game details for game with id %d not found.",
                                         id
-                                )
-                        )
-                );
-    }
-
-    @Override
-    public GameDetailsWithReviewsDto getGameDetails(String name) {
-        return gameDetailsRepository.findGameDetailsByName(name)
-                .stream()
-                .map(gameDetailsWithReviewsDtoMapper)
-                .findFirst()
-                .orElseThrow(
-                        () -> new GameDetailsNotFoundException(
-                                String.format("Game details for game with name %s not found.",
-                                        name
                                 )
                         )
                 );
@@ -92,25 +83,33 @@ public class GameDetailsServiceImpl implements GameDetailsService {
     }
 
     @Override
-    public void updateGameDetails(GameDetailsWithReviewsDto gameDetailsDto) {
-        GameDetails gameDetails = gameDetailsDto.toEntity(reviewService);
+    public Optional<Long> getGameDetailsId(String name, CompanyDto companyDto) {
+        Company company = companyDto.toEntity();
+        return gameDetailsRepository.getGameDetailsId(name, company);
+    }
 
-        gameDetailsRepository.updateGameDetails(
-                gameDetails.getId(),
-                gameDetails.getName(),
-                gameDetails.getDescription(),
-                gameDetails.getRating(),
-                gameDetails.getGenre(),
-                gameDetails.getCompany(),
-                gameDetails.getIsFavourite(),
-                gameDetails.getReleaseDate(),
-                gameDetails.getReviews()
-        );
+    @Override
+    public void updateGameDetails(GameDetailsWithReviewsDto gameDetailsWithReviewsDto) {
+        createGameDetails(gameDetailsWithReviewsDto);
+
+//        GameDetails gameDetails = gameDetailsDto.toEntity(reviewService);
+//
+//        gameDetailsRepository.updateGameDetails(
+//                gameDetails.getId(),
+//                gameDetails.getName(),
+//                gameDetails.getDescription(),
+//                gameDetails.getRating(),
+//                gameDetails.getGenre(),
+//                gameDetails.getCompany(),
+//                gameDetails.getIsFavourite(),
+//                gameDetails.getReleaseDate(),
+//                gameDetails.getReviews()
+//        );
     }
 
     @Override
     public void createGameDetails(GameDetailsWithReviewsDto gameDetailsDto) {
-        GameDetails gameDetails = gameDetailsDto.toEntity(reviewService);
+        GameDetails gameDetails = gameDetailsDto.toEntity(reviewService, this);
 
         gameDetailsRepository.save(gameDetails);
     }
