@@ -155,7 +155,7 @@ public class GameServiceImpl implements GameService {
     public void truncateTable() {
         gameRepository.truncate();
 
-        String sqlStatement = "ALTER SEQUENCE vgl_sequence RESTART WITH 1";
+        String sqlStatement = "ALTER SEQUENCE game_sequence RESTART WITH 1";
         jdbcTemplate.execute(sqlStatement);
     }
 }

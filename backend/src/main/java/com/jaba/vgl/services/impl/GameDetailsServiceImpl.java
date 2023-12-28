@@ -111,7 +111,7 @@ public class GameDetailsServiceImpl implements GameDetailsService {
     public void truncateTable() {
         gameDetailsRepository.truncate();
 
-        String sqlStatement = "ALTER SEQUENCE vgl_sequence RESTART WITH 1";
+        String sqlStatement = "ALTER SEQUENCE game_details_sequence RESTART WITH 1";
         jdbcTemplate.execute(sqlStatement);
     }
 }

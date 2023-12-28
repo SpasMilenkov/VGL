@@ -62,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void truncateTable() {
         reviewRepository.truncate();
 
-        String sqlStatement = "ALTER SEQUENCE vgl_sequence RESTART WITH 1";
+        String sqlStatement = "ALTER SEQUENCE review_sequence RESTART WITH 1";
         jdbcTemplate.execute(sqlStatement);
     }
 }

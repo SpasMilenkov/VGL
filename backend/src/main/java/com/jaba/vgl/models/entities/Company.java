@@ -15,13 +15,13 @@ import java.util.List;
 public @Data class Company {
     @Id
     @SequenceGenerator(
-            name = "vgl_sequence",
-            sequenceName = "vgl_sequence",
+            name = "company_sequence",
+            sequenceName = "company_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "vgl_sequence"
+            generator = "company_sequence"
     )
     @Column(name = "id")
     public Long id;

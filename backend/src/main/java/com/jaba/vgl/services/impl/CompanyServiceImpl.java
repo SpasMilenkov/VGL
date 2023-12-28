@@ -60,7 +60,7 @@ public class CompanyServiceImpl implements CompanyService {
     public void truncateTable() {
         companyRepository.truncate();
 
-        String sqlStatement = "ALTER SEQUENCE vgl_sequence RESTART WITH 1";
+        String sqlStatement = "ALTER SEQUENCE company_sequence RESTART WITH 1";
         jdbcTemplate.execute(sqlStatement);
     }
 }

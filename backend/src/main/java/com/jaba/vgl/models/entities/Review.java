@@ -15,13 +15,13 @@ public @Data class Review {
 
     @Id
     @SequenceGenerator(
-            name = "vgl_sequence",
-            sequenceName = "vgl_sequence",
+            name = "review_sequence",
+            sequenceName = "review_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "vgl_sequence"
+            generator = "review_sequence"
     )
     @Column(name = "review_id")
     private Long id;

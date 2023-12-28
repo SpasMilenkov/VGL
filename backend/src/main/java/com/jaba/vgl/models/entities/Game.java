@@ -18,13 +18,13 @@ public @Data class Game {
 
     @Id
     @SequenceGenerator(
-            name = "vgl_sequence",
-            sequenceName = "vgl_sequence",
+            name = "game_sequence",
+            sequenceName = "game_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "vgl_sequence"
+            generator = "game_sequence"
     )
     @Column(name = "id")
     private Long id;
