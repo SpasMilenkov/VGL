@@ -94,7 +94,7 @@ public class AppTests {
             gameService.createGame(gameWithCompanyDto);
 
             //Fetch from DB...
-            GameWithCompanyDto data = gameService.getGame("World of Warcraft - Wrath of Lich King.");
+            GameWithCompanyDto data = gameService.getGame(gameWithCompanyDto.gameDto().name(), gameWithCompanyDto.companyDto());
 
             logger.info(data.toString());
             assertNotNull(data);
@@ -133,7 +133,7 @@ public class AppTests {
             gameService.updateGame(gameWithCompanyDto2);
 
             //Fetch from DB...
-            GameWithCompanyDto data = gameService.getGame("World of Warcraft - Wrath of Lich King.");
+            GameWithCompanyDto data = gameService.getGame(gameWithCompanyDto.gameDto().name(), gameWithCompanyDto.companyDto());
 
             logger.info(data.toString());
 
@@ -142,6 +142,26 @@ public class AppTests {
 
             //Checking changes in the start of the test are set
             assertTrue(isGameUpdated);
+        }
+
+        @Test
+        @Order(3)
+        @DisplayName("Add game to DB, delete it and try fetch from DB.")
+        void deleteGameTest() {
+
+            //Create entry...
+            GameWithCompanyDto gameWithCompanyDto = mockupDataGenerator.generateGameWithCompanyDto();
+
+            //Save entry...
+            gameService.createGame(gameWithCompanyDto);
+
+            //Delete entry...
+            Optional<Long> gameId = gameService.getGameId(gameWithCompanyDto.gameDto().name(), gameWithCompanyDto.companyDto());
+            gameId.ifPresent(gameService::deleteGame);
+
+            //Try fetch from DB...
+            assertThrows(GameNotFoundException.class, () ->
+                    gameService.getGame(gameWithCompanyDto.gameDto().name(), gameWithCompanyDto.companyDto()));
         }
     }
 
