@@ -24,9 +24,9 @@ public interface ReviewRepositoryImpl extends ReviewRepository, ReviewRepository
             "r.title = :title, " +
             "r.text = :text, " +
             "r.rating = :rating " +
-            "WHERE r.id = :id AND r.userId = :userId")
+            "WHERE r.id = :id")
     @Override
-    void updateReview(Long id, Long gameId, Long userId, String title, String text, Float rating);
+    void updateReview(Long id, Long gameId, String title, String text, Float rating);
 
     @Override
     @Query("SELECT r.id FROM Review r WHERE r.title = ?1")

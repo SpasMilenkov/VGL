@@ -73,7 +73,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void updateReview(ReviewDto reviewDto) {
         Review review = reviewDto.toEntity(this);
 
-        reviewRepository.updateReview(review.getId(), review.getGameId(), review.getUserId(), review.getTitle(), review.getText(), review.getRating());
+        reviewRepository.updateReview(review.getId(), review.getGameId(), review.getTitle(), review.getText(), review.getRating());
     }
 
     @Override

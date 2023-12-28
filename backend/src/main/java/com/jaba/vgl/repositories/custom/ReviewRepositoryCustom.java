@@ -8,5 +8,5 @@ public interface ReviewRepositoryCustom {
 
     Optional<Long> getReviewId(String title);
 
-    void updateReview(Long id, Long gameId, Long userId, String title, String text, Float rating);
+    void updateReview(Long id, Long gameId, String title, String text, Float rating);
 }
