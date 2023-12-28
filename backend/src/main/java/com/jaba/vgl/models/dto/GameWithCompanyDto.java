@@ -16,7 +16,7 @@ public record GameWithCompanyDto(
         CompanyDto companyDto = this.companyDto;
         Game game = new Game();
 
-        Optional<Long> id = gameService.getGameId(gameDto.name());
+        Optional<Long> id = gameService.getGameId(gameDto.name(), companyDto);
         id.ifPresent(game::setId);
 
         game.setCompanyId(companyDto.id());

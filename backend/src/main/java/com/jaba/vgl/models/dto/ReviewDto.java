@@ -17,9 +17,10 @@ public record ReviewDto(
         Review review = new Review();
         ReviewDto dto = this;
 
-        Optional<Long> id = reviewService.getReviewId(dto.title());
-        id.ifPresent(review::setId);
+//        Optional<Long> id = reviewService.getReviewId(dto.title());
+//        id.ifPresent(review::setId);
 
+        review.setId(dto.id);
         review.setGameId(dto.gameId);
         review.setUserId(dto.userId);
         review.setTitle(dto.title);
