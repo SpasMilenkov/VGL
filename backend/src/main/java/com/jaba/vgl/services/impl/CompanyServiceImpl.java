@@ -51,9 +51,11 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void updateCompany(CompanyDto companyDto) {
-        Company company = companyDto.toEntity();
+        saveCompany(companyDto);
 
-        companyRepository.updateCompany(company.getId(), company.getName(), company.getStudio(), company.getGames());
+//        Company company = companyDto.toEntity();
+
+//        companyRepository.updateCompany(company.getId(), company.getName(), company.getStudio(), company.getGames());
     }
 
     @Override
