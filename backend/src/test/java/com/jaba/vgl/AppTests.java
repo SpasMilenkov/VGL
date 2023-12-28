@@ -1,5 +1,7 @@
 package com.jaba.vgl;
 
+import com.jaba.vgl.exceptions.GameNotFoundException;
+import com.jaba.vgl.exceptions.ReviewNotFoundException;
 import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.dto.*;
 import com.jaba.vgl.models.entities.GameDetails;
@@ -16,7 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -55,16 +59,6 @@ public class AppTests {
         this.mockupDataGenerator = mockupDataGenerator;
     }
 
-    @BeforeEach
-    public void setup() {
-        CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
-        companyService.saveCompany(companyDto);
-
-        GameDetailsWithReviewsDto gameDetailsDto = mockupDataGenerator.generateGameDetailsWithReviewDto();
-        gameDetailsService.createGameDetails(gameDetailsDto.gameDetailsDto());
-        reviewService.saveReviews(gameDetailsDto.reviews());
-    }
-
     @AfterEach
     public void tearDown() {
         logger.info("Deleting all DB entries...");
@@ -81,6 +75,12 @@ public class AppTests {
      */
     @Nested
     class GameTests {
+        @BeforeEach
+        public void setup() {
+            CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
+
+            companyService.saveCompany(companyDto);
+        }
 
         @Test
         @Order(1)
