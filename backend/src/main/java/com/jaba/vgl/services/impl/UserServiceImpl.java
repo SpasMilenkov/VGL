@@ -25,7 +25,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepositoryImpl userRepository;
-    private final ReviewRepositoryImpl reviewRepository;
+    private final ReviewServiceImpl reviewService;
     private final ReviewDtoMapper reviewDtoMapper;
     private final GameWithCompanyDtoMapper gameWithCompanyDtoMapper;
     private final JdbcTemplate jdbcTemplate;
@@ -64,14 +64,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserReview(ReviewDto reviewDto) {
-        Review review = reviewDto.toEntity();
-
-        reviewRepository.updateReview(review.getId(), review.getGameId(), review.getTitle(), review.getText(), review.getRating());
+        reviewService.updateReview(reviewDto);
     }
 
     @Override
     public void deleteUserReview(Long reviewId) {
-        reviewRepository.deleteReviewById(reviewId);
+        reviewService.deleteReview(reviewId);
     }
 
     @Override
