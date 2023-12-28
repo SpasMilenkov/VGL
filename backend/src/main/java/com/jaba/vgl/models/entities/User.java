@@ -30,7 +30,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user",
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     private List<Review> reviews;
 

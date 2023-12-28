@@ -1,10 +1,7 @@
 package com.jaba.vgl.models.dto;
 
 import com.jaba.vgl.models.GameGenre;
-import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.models.entities.GameDetails;
-
-import java.util.List;
 
 public record GameDetailsDto(
         String name,
@@ -19,11 +16,7 @@ public record GameDetailsDto(
 
         Boolean isFavourite,
 
-        String releaseDate,
-
-        List<ReviewDto> reviews
-
-//        List<GameDto> moreLikeThisList
+        String releaseDate
 ) {
 
     public GameDetails toEntity() {
@@ -34,14 +27,11 @@ public record GameDetailsDto(
         gameDetails.setDescription(dto.description());
         gameDetails.setRating(dto.rating());
         gameDetails.setGenre(dto.genre());
-        gameDetails.setCompany(dto.company().toEntity());
         gameDetails.setIsFavourite(dto.isFavourite());
         gameDetails.setReleaseDate(dto.releaseDate());
-        gameDetails.setReviews(dto.reviews
-                .stream()
-                .map(ReviewDto::toEntity)
-                .toList()
-        );
+
+        gameDetails.setCompany(dto.company().toEntity());
+        gameDetails.setCompanyId(dto.company().id());
 
         return gameDetails;
     }

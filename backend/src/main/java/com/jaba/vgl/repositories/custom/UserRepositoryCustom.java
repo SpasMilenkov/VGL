@@ -14,4 +14,6 @@ public interface UserRepositoryCustom {
     List<Review> getUserReviews(@Param("userId") Long userId);
 
     Set<Game> getUserGames(@Param("userId") Long userId);
+
+    void truncate();
 }

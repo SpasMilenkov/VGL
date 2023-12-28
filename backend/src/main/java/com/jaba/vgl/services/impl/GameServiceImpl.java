@@ -3,37 +3,46 @@ package com.jaba.vgl.services.impl;
 import com.jaba.vgl.exceptions.GameNotFoundException;
 import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.dto.CompanyDto;
-import com.jaba.vgl.models.dto.GameDto;
-import com.jaba.vgl.models.dto.mapper.CompanyDtoMapper;
+import com.jaba.vgl.models.dto.GameWithCompanyDto;
 import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
+import com.jaba.vgl.models.dto.mapper.GameWithCompanyDtoMapper;
 import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.Game;
-import com.jaba.vgl.repositories.GameRepository;
 import com.jaba.vgl.repositories.impl.GameRepositoryImpl;
 import com.jaba.vgl.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class GameServiceImpl implements GameService {
     private final GameRepositoryImpl gameRepository;
     private final GameDtoMapper gameDtoMapper;
+    private final GameWithCompanyDtoMapper gameWithCompanyDtoMapper;
+    private final JdbcTemplate jdbcTemplate;
+
 
     @Autowired
     public GameServiceImpl(GameRepositoryImpl gameRepository,
-                           GameDtoMapper gameDtoMapper) {
+                           GameDtoMapper gameDtoMapper,
+                           GameWithCompanyDtoMapper gameWithCompanyDtoMapper,
+                           JdbcTemplate jdbcTemplate) {
         this.gameRepository = gameRepository;
         this.gameDtoMapper = gameDtoMapper;
+        this.gameWithCompanyDtoMapper = gameWithCompanyDtoMapper;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public GameDto getGame(Long id) {
+    public GameWithCompanyDto getGame(Long id) {
         return gameRepository.findGameById(id)
                 .stream()
-                .map(gameDtoMapper)
+                .map(gameWithCompanyDtoMapper)
                 .findFirst()
                 .orElseThrow(
                         () -> new GameNotFoundException(
@@ -45,10 +54,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameDto getGame(String name) {
-        return gameRepository.findGameByName(name)
+    public Game getGameEntity(String name, CompanyDto companyDto) {
+        Company company = companyDto.toEntity();
+
+        return gameRepository.findGameByNameAndCompany(name, company)
                 .stream()
-                .map(gameDtoMapper)
                 .findFirst()
                 .orElseThrow(
                         () -> new GameNotFoundException(
@@ -60,10 +70,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameDto getGame(String name, CompanyDto companyDto) {
+    public GameWithCompanyDto getGame(String name, CompanyDto companyDto) {
         return gameRepository.findGameByNameAndCompany(name, companyDto.toEntity())
                 .stream()
-                .map(gameDtoMapper)
+                .map(gameWithCompanyDtoMapper)
                 .findFirst()
                 .orElseThrow(
                         () -> new GameNotFoundException(
@@ -76,10 +86,16 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<GameDto> getGamesByGenre(GameGenre genre) {
+    public Optional<Long> getGameId(String name, CompanyDto companyDto) {
+        Company company = companyDto.toEntity();
+        return gameRepository.getGameId(name, company);
+    }
+
+    @Override
+    public List<GameWithCompanyDto> getGamesByGenre(GameGenre genre) {
         return gameRepository.findGamesByGenre(genre)
                 .map(games -> games.stream()
-                        .map(gameDtoMapper)
+                        .map(gameWithCompanyDtoMapper)
                         .collect(Collectors.toList())
                 )
                 .orElseThrow(
@@ -90,8 +106,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void updateGame(GameDto gameDto) {
-        Game game = gameDto.toEntity();
+    public void updateGame(GameWithCompanyDto gameWithCompanyDto) {
+        Game game = gameWithCompanyDto.toEntity(this);
 
         gameRepository.updateGame(
                 game.getId(),
@@ -106,8 +122,10 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(GameDto gameDto) {
-        Game game = gameDto.toEntity();
+    @Transactional
+    public void createGame(GameWithCompanyDto gameDto) {
+        Game game = gameDto.toEntity(this);
+        game.setCompany(game.getCompany());
 
         gameRepository.save(game);
     }
@@ -125,5 +143,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public void truncateTable() {
         gameRepository.truncate();
+
+        String sqlStatement = "ALTER SEQUENCE game_sequence RESTART WITH 1";
+        jdbcTemplate.execute(sqlStatement);
     }
 }

@@ -27,16 +27,16 @@ public interface GameRepositoryImpl extends GameRepository, GameRepositoryCustom
     Optional<Game> findGameById(Long id);
 
     @Override
-    @Query("SELECT g FROM Game g WHERE g.name = ?1")
-    Optional<Game> findGameByName(String name);
-
-    @Override
     @Query("SELECT g FROM Game g WHERE g.name = ?1 AND g.company = ?2")
     Optional<Game> findGameByNameAndCompany(String name, Company company);
 
     @Override
     @Query("SELECT g FROM Game g WHERE g.genre = ?1")
     Optional<List<Game>> findGamesByGenre(GameGenre genre);
+
+    @Override
+    @Query("SELECT g.id FROM Game g WHERE g.name = ?1 AND g.company = ?2")
+    Optional<Long> getGameId(String name, Company company);
 
     @Transactional
     @Modifying

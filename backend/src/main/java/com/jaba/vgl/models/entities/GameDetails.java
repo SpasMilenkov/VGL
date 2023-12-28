@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -17,13 +19,13 @@ public @Data class GameDetails {
 
     @Id
     @SequenceGenerator(
-            name = "vgl_sequence",
-            sequenceName = "vgl_sequence",
+            name = "game_details_sequence",
+            sequenceName = "game_details_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "vgl_sequence"
+            generator = "game_details_sequence"
     )
     @Column(name = "id")
     private Long id;
@@ -83,8 +85,9 @@ public @Data class GameDetails {
 
     @OneToMany(mappedBy = "gameDetails",
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Review> reviews;
 
     //Uni-directional

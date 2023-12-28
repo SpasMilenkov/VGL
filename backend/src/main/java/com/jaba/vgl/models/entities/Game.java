@@ -1,7 +1,6 @@
 package com.jaba.vgl.models.entities;
 
 import com.jaba.vgl.models.GameGenre;
-import com.jaba.vgl.models.dto.GameDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,13 +17,13 @@ public @Data class Game {
 
     @Id
     @SequenceGenerator(
-            name = "vgl_sequence",
-            sequenceName = "vgl_sequence",
+            name = "game_sequence",
+            sequenceName = "game_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "vgl_sequence"
+            generator = "game_sequence"
     )
     @Column(name = "id")
     private Long id;
@@ -83,7 +82,7 @@ public @Data class Game {
     private String releaseDate; //TODO: change to date? (to discuss date format)
 
     //Bi-directional
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(
             name = "company_id",
             referencedColumnName = "id",

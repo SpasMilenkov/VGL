@@ -1,6 +1,6 @@
 package com.jaba.vgl.services;
 
-import com.jaba.vgl.models.dto.GameDto;
+import com.jaba.vgl.models.dto.GameWithCompanyDto;
 import com.jaba.vgl.models.dto.ReviewDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -12,9 +12,11 @@ public interface UserService {
 
     List<ReviewDto> getUserReviews(Long userId);
 
-    List<GameDto> getUserGames(Long userId);
+    List<GameWithCompanyDto> getUserGames(Long userId);
 
     void updateUserReview(ReviewDto reviewDto);
 
     void deleteUserReview(Long reviewId);
+
+    void truncateTable();
 }
