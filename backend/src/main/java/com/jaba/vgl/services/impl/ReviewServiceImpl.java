@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
@@ -40,10 +43,25 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public Optional<Long> getReviewId(String title) {
+        return reviewRepository.getReviewId(title);
+    }
+
+    @Override
     public void saveReview(ReviewDto reviewDto) {
-        Review review = reviewDto.toEntity();
+        Review review = reviewDto.toEntity(this);
 
         reviewRepository.save(review);
+    }
+
+    @Override
+    public void saveReviews(List<ReviewDto> reviewDtos) {
+        List<Review> reviews = reviewDtos
+                .stream()
+                .map(dto -> dto.toEntity(this))
+                .toList();
+
+        reviewRepository.saveAll(reviews);
     }
 
     @Override
@@ -53,9 +71,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public void updateReview(ReviewDto reviewDto) {
-        Review review = reviewDto.toEntity();
+        Review review = reviewDto.toEntity(this);
 
-        reviewRepository.updateReview(review.getId(), review.getGameId(), review.getTitle(), review.getText(), review.getRating());
+        reviewRepository.updateReview(review.getId(), review.getGameId(), review.getUserId(), review.getTitle(), review.getText(), review.getRating());
     }
 
     @Override

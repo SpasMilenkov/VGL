@@ -1,10 +1,12 @@
 package com.jaba.vgl.repositories.custom;
 
-import com.jaba.vgl.models.GameGenre;
+import java.util.Optional;
 
 public interface ReviewRepositoryCustom {
 
     void truncate();
 
-    void updateReview(Long id, Long gameId, String title, String text, Float rating);
+    Optional<Long> getReviewId(String title);
+
+    void updateReview(Long id, Long gameId, Long userId, String title, String text, Float rating);
 }

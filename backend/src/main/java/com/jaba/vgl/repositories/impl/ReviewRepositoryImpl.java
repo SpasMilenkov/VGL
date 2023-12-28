@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 @Transactional(
         rollbackFor = Exception.class,
@@ -22,9 +24,13 @@ public interface ReviewRepositoryImpl extends ReviewRepository, ReviewRepository
             "r.title = :title, " +
             "r.text = :text, " +
             "r.rating = :rating " +
-            "WHERE r.id = :id")
+            "WHERE r.id = :id AND r.userId = :userId")
     @Override
-    void updateReview(Long id, Long gameId, String title, String text, Float rating);
+    void updateReview(Long id, Long gameId, Long userId, String title, String text, Float rating);
+
+    @Override
+    @Query("SELECT r.id FROM Review r WHERE r.title = ?1")
+    Optional<Long> getReviewId(String title);
 
     @Override
     @Modifying
