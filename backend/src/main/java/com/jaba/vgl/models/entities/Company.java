@@ -44,7 +44,7 @@ public @Data class Company {
 
     @OneToMany(mappedBy = "company",
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            cascade = CascadeType.ALL,
             fetch = FetchType.EAGER)
     public List<Game> games;
 }

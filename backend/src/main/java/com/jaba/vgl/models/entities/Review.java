@@ -57,7 +57,7 @@ public @Data class Review {
     @NotNull(message = "Review rating must not be empty.")
     private Float rating;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(
             name = "game_id",
             referencedColumnName = "id",
