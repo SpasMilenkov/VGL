@@ -27,12 +27,12 @@ public interface GameDetailsRepositoryImpl extends GameDetailsRepository, GameDe
     Optional<GameDetails> findGameDetailsById(Long id);
 
     @Override
-    @Query("SELECT g FROM GameDetails g WHERE g.name = ?1")
-    Optional<GameDetails> findGameDetailsByName(String name);
-
-    @Override
     @Query("SELECT g FROM GameDetails g WHERE g.name = ?1 AND g.company = ?2")
     Optional<GameDetails> findGameDetailsByNameAndCompany(String name, Company company);
+
+    @Override
+    @Query("SELECT g.id FROM GameDetails g WHERE g.name = ?1 AND g.company = ?2")
+    Optional<Long> getGameDetailsId(String name, Company company);
 
     @Transactional
     @Modifying

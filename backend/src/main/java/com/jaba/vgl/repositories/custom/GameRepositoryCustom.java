@@ -10,7 +10,7 @@ public interface GameRepositoryCustom {
 
     void truncate();
 
-    Optional<Long> getGameId(String name);
+    Optional<Long> getGameId(String name, Company company);
 
     void updateGame(Long id, String name, String description, Float rating,
                     GameGenre genre, Company company, Boolean isFavourite, String releaseDate);
