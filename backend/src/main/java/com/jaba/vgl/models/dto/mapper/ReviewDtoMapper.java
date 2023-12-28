@@ -13,6 +13,7 @@ public class ReviewDtoMapper implements Function<Review, ReviewDto> {
         return new ReviewDto(
                 review.getId(),
                 review.getGameId(),
+                review.getUserId(),
                 review.getTitle(),
                 review.getText(),
                 review.getRating()
