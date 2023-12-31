@@ -6,6 +6,7 @@ import lombok.Data;
 public class NewsItemDto {
     private String id;
     private String title;
+    private String url;
     private String author;
     private String contents;
     private String feedLabel;

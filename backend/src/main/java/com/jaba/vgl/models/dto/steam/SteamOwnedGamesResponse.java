@@ -1,5 +1,6 @@
 package com.jaba.vgl.models.dto.steam;
 
+import com.jaba.vgl.models.dto.OwnedGameDto;
 import lombok.Data;
 
 import java.util.List;
@@ -7,5 +8,5 @@ import java.util.List;
 @Data
 public class SteamOwnedGamesResponse {
     private int game_count;
-    private List<SteamGameDto> games;
+    private List<OwnedGameDto> games;
 }

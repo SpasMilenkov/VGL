@@ -7,4 +7,5 @@ public class PlayerSummaryDto {
     private String steamId;
     private String username;
     private String avatarUrl;
+    private String profileurl;
 }

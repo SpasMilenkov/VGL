@@ -1,5 +1,6 @@
 package com.jaba.vgl.models.dto.steam;
 
+import com.jaba.vgl.models.dto.NewsItemDto;
 import lombok.Data;
 
 import java.util.List;
@@ -7,5 +8,5 @@ import java.util.List;
 @Data
 public class SteamNewsResponse {
     private int appid;
-    private List<SteamNewsItemDto> newsitems;
+    private List<NewsItemDto> newsitems;
 }
