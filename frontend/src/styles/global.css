@@ -112,7 +112,7 @@ body {
   background: linear-gradient(90.27deg, #ff5c00 15.76%, #ff9838 100%);
 }
 
-.header-logo{
+.header-logo {
   width: 43px;
   height: 40px;
 }
@@ -254,14 +254,14 @@ body {
   cursor: pointer;
 }
 .login-form-wrapper {
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: 100000;
   width: 100%;
-  height: 100%;
+  height: 100svh;
   background-color: rgba(0, 0, 0, 0.7);
 }
 
