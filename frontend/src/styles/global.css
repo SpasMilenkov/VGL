@@ -2,41 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
-html{
-    background-color: black;
-    font-family: 'Montserrat Variable', sans-serif;
+:root {
+  --color-orange: #ff5c00;
+  --color-black: #1d1d1d;
+  --color-blacker: #1d1d1f;
+  --color-white: #fafafa;
+  --color-gray: #8c8c8c;
 }
 
-#main{
-    display: flex;
-    justify-content: center;
-    width: 100svw;
+html {
+  background-color: black;
+  font-family: "Montserrat Variable", sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Open Sans", "Helvetica Neue", sans-serif;
+}
+body {
+  min-height: 100svh;
 }
 
-.form-input{
-    @apply text-[1rem] font-medium rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 gray-61 bg-gray-32 p-4;
+#landing-main {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100svw;
+  height: 100svh;
 }
 
-.form-button{
-    @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 text-2xl flex justify-center items-center;
+.form-input {
+  @apply text-[1rem] font-medium rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 gray-61 bg-gray-32 p-4 focus:outline focus:outline-[2px] focus:outline-white;
 }
 
-.form-h2{
-    @apply text-4xl font-medium;
+.form-button {
+  @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] 
+  py-[0.9rem] 
+  max-h-[50px] 
+  w-9/12 
+  text-2xl 
+  flex justify-center 
+  items-center 
+  hover:bg-none
+  hover:bg-[#fafafa]
+  hover:text-[#FF5C00]
+  transition-all
+  ease-in-out;
 }
 
-.bg-gray-15{
-    background-color:hsl(0, 0%, 15%);
+.form-h2 {
+  @apply text-4xl font-medium;
 }
 
-.gray-61{
-    color: hsl(0, 0%, 61%);
+.bg-gray-15 {
+  background-color: hsl(0, 0%, 15%);
 }
 
-.white-98{
-    color: hsl(0, 0%, 98%);
+.gray-61 {
+  color: hsl(0, 0%, 61%);
 }
 
-.bg-gray-32{
-    background-color: hsl(0, 0%, 32%)
+.white-98 {
+  color: hsl(0, 0%, 98%);
+}
+
+.bg-gray-32 {
+  background-color: hsl(0, 0%, 32%);
+}
+.bg-white-98 {
+  background-color: hsl(0, 0%, 98%);
+}
+.unselected-button {
+  color: var(--color-white);
+  font-size: 1.25rem;
+  font-weight: 500;
+  width: 80%;
+  padding: 0.7rem 0 1rem 0;
+  max-height: 50px;
+  background: transparent;
+  border-radius: 10px;
+  border: 2px solid var(--color-white);
+  transition: color 0.15s ease-in-out, background 0.15s ease-in-out;
+}
+.unselected-button:hover {
+  background: var(--color-white);
+  color: var(--color-orange);
+  cursor: pointer;
+}
+.login-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  z-index: 100000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
 }
