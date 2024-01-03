@@ -1,10 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import AccessForm from '../components/AccessForm.tsx'
+import Layout from "../layouts/Layout.astro";
+import Landing from "../components/Landing";
 ---
 
 <Layout title="VGL">
-	<main id="main">
-		<AccessForm client:load/>
-	</main>
+  <Landing client:load />
 </Layout>
