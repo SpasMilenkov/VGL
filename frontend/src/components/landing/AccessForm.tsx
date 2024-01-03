@@ -1,19 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   isLoginOn: boolean;
   setState: React.Dispatch<React.SetStateAction<boolean>>;
+  isActive: boolean;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AccessForm: React.FC<Props> = ({ isLoginOn, setState }: Props) => {
+const AccessForm: React.FC<Props> = ({
+  isLoginOn,
+  setState,
+  isActive,
+  setIsActive,
+}: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [steamId, setSteamId] = useState("");
 
-  const handleSubmit = () => {};
+  useEffect(() => {
+    document.body.classList.add("overflow-y-hidden");
+
+    return () => {
+      document.body.classList.remove("overflow-y-hidden");
+    };
+  }, []);
+
+  const handleSubmit = () => {
+    setIsActive(false);
+  };
   return (
-    <div className="login-form-wrapper">
+    <div className={`login-form-wrapper`}>
       <div
         className={`flex justify-center items-center bg-gray-15 white-98 w-[60%] rounded-2xl h-[70%] ${
           !isLoginOn ? "flex-row-reverse" : ""
