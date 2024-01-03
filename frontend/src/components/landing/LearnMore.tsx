@@ -1,4 +1,8 @@
-const LearnMore = () => {
+interface Props {
+  setState: React.Dispatch<React.SetStateAction<boolean>>;
+  setFormIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const LearnMore: React.FC<Props> = ({ setState, setFormIsActive }: Props) => {
   return (
     <section id="section-learn-more">
       <img
@@ -8,7 +12,9 @@ const LearnMore = () => {
       />
 
       <div className="test">
-        <div className="learn-more-title width-max">Collect Discover Connect</div>
+        <div className="learn-more-title width-max">
+          Collect Discover Connect
+        </div>
       </div>
 
       <div className="learn-more-info">
@@ -17,13 +23,19 @@ const LearnMore = () => {
           From nostalgic classics to the latest blockbusters, we've curated a
           treasure trove of gaming experiences for every taste and preference.
         </div>
-        <div className="learn-more-start sign-up">
-          Start your journey &nbsp;<span className="learn-more-arrow"
-            >&#8594;</span>
+        <div
+          onClick={() => {
+            setState(false);
+            setFormIsActive(true);
+          }}
+          className="learn-more-start sign-up"
+        >
+          Start your journey &nbsp;
+          <span className="learn-more-arrow">&#8594;</span>
         </div>
       </div>
     </section>
   );
 };
 
-export default LearnMore
+export default LearnMore;
