@@ -1,0 +1,1 @@
+export type SlideType = 'horizontal' | 'vertical';
