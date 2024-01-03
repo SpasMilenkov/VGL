@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import AccessForm from '../components/AccessForm.tsx'
 ---
 
 <Layout title="VGL">
-	<main>
-		Hello
+	<main id="main">
+		<AccessForm client:load/>
 	</main>
 </Layout>
