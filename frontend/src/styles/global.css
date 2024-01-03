@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html{
+    background-color: black;
+    font-family: 'Montserrat Variable', sans-serif;
+}
+
+#main{
+    display: flex;
+    justify-content: center;
+    width: 100svw;
+}
+
+.form-input{
+    @apply text-[1rem] font-medium rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 gray-61 bg-gray-32 p-4;
+}
+
+.form-button{
+    @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 text-2xl flex justify-center items-center;
+}
+
+.form-h2{
+    @apply text-4xl font-medium;
+}
+
+.bg-gray-15{
+    background-color:hsl(0, 0%, 15%);
+}
+
+.gray-61{
+    color: hsl(0, 0%, 61%);
+}
+
+.white-98{
+    color: hsl(0, 0%, 98%);
+}
+
+.bg-gray-32{
+    background-color: hsl(0, 0%, 32%)
+}
