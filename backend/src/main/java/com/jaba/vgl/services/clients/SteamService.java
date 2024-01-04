@@ -2,11 +2,14 @@ package com.jaba.vgl.services.clients;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jaba.vgl.exceptions.*;
 import com.jaba.vgl.models.dto.GameDescriptionDto;
 import com.jaba.vgl.models.dto.NewsItemDto;
 import com.jaba.vgl.models.dto.OwnedGameDto;
 import com.jaba.vgl.models.dto.PlayerSummaryDto;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.jaba.vgl.repositories.UserRepository;
+import com.jaba.vgl.models.entities.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,148 +19,181 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
+@RequiredArgsConstructor
 public class SteamService {
     @Value("${steam.api.baseurl}")
     private String baseUrl;
 
     @Value("${steam.api.key}")
     private String apiKey;
+
     private final SteamClient steamClient;
     private final SteamStoreClient steamStoreClient;
-    @Autowired
-    public SteamService(SteamClient steamClient, SteamStoreClient steamStoreClient) {
-        this.steamClient = steamClient;
-        this.steamStoreClient = steamStoreClient;
-    }
+    private final UserRepository userRepository;
 
-    public PlayerSummaryDto getPlayerSummary(String steamId) {
+    private final ObjectMapper objectMapper = new ObjectMapper(); // Reuse ObjectMapper instance
+
+    // Fetches player summary information
+    public PlayerSummaryDto getPlayerSummary(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with that email does not exist"));
+
+        String steamId = user.getSteamId();
+        String jsonResponse = steamClient.getPlayerSummary(apiKey, steamId);
+
         try {
-            String jsonResponse = steamClient.getPlayerSummary(apiKey, steamId); // Replace with your actual method
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(jsonResponse);
-
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode playerNode = rootNode.path("response").path("players").get(0);
-            if (playerNode != null) {
-                PlayerSummaryDto playerSummaryDto = new PlayerSummaryDto();
-                playerSummaryDto.setSteamId(playerNode.path("steamid").asText());
-                playerSummaryDto.setUsername(playerNode.path("personaname").asText());
-                playerSummaryDto.setAvatarUrl(playerNode.path("avatar").asText());
-                playerSummaryDto.setProfileurl(playerNode.path("profileurl").asText());
 
-                return playerSummaryDto;
+            if (playerNode == null) {
+                throw new PlayerNotFoundException("Player not found");
             }
-        } catch (IOException e) {
-            // Handle exceptions
-            return null;
-        }
 
-        return null;
+            return createPlayerSummaryDto(playerNode);
+        } catch (IOException e) {
+            throw new PlayerNotFoundException("Error parsing API response", e);
+        }
     }
+
+    // Constructs a PlayerSummaryDto from a JsonNode
+    private PlayerSummaryDto createPlayerSummaryDto(JsonNode playerNode) {
+        PlayerSummaryDto playerSummaryDto = new PlayerSummaryDto();
+        playerSummaryDto.setSteamId(playerNode.path("steamid").asText());
+        playerSummaryDto.setUsername(playerNode.path("personaname").asText());
+        playerSummaryDto.setAvatarUrl(playerNode.path("avatar").asText());
+        playerSummaryDto.setProfileurl(playerNode.path("profileurl").asText());
+        return playerSummaryDto;
+    }
+
+    // Fetches game news
     public List<NewsItemDto> getGameNews(String gameId) {
         List<NewsItemDto> newsItems = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
+
+        String jsonResponse = steamClient.getGameNews(gameId, 10, 300, "json");
 
         try {
-            String jsonResponse = steamClient.getGameNews(gameId, 10, 300, "json");
-            JsonNode rootNode = mapper.readTree(jsonResponse);
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode newsItemsNode = rootNode.path("appnews").path("newsitems");
 
-            if (newsItemsNode.isArray()) {
-                for (JsonNode itemNode : newsItemsNode) {
-                    NewsItemDto newsItem = new NewsItemDto();
-                    newsItem.setId(itemNode.path("gid").asText());
-                    newsItem.setTitle(itemNode.path("title").asText());
-                    newsItem.setUrl(itemNode.path("url").asText());
-                    newsItem.setAuthor(itemNode.path("author").asText());
-                    newsItem.setContents(itemNode.path("contents").asText());
-                    newsItem.setFeedLabel(itemNode.path("feedlabel").asText());
-                    newsItem.setDate(itemNode.path("date").asLong());
-                    newsItem.setFeedName(itemNode.path("feedname").asText());
-                    newsItem.setAppid(itemNode.path("appid").asInt());
-
-                    newsItems.add(newsItem);
-                }
+            if (!newsItemsNode.isArray()) {
+                throw new NewsItemsNotFoundException("News items not found");
             }
-        } catch (IOException e) {
-            // Handle exceptions
-        }
 
-        return newsItems;
+            return StreamSupport.stream(newsItemsNode.spliterator(), false)
+                    .map(this::createNewsItemDto)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new NewsItemsNotFoundException("Error parsing API response", e);
+        }
     }
 
+    // Constructs a NewsItemDto from a JsonNode
+    private NewsItemDto createNewsItemDto(JsonNode itemNode) {
+        NewsItemDto newsItem = new NewsItemDto();
+        newsItem.setId(itemNode.path("gid").asText());
+        newsItem.setTitle(itemNode.path("title").asText());
+        newsItem.setUrl(itemNode.path("url").asText());
+        newsItem.setAuthor(itemNode.path("author").asText());
+        newsItem.setContents(itemNode.path("contents").asText());
+        newsItem.setFeedLabel(itemNode.path("feedlabel").asText());
+        newsItem.setDate(itemNode.path("date").asLong());
+        newsItem.setFeedName(itemNode.path("feedname").asText());
+        newsItem.setAppid(itemNode.path("appid").asInt());
+        return newsItem;
+    }
+
+    // Fetches owned games
     public List<OwnedGameDto> getOwnedGames(String steamId) {
-        List<OwnedGameDto> ownedGames = new ArrayList<>();
-        ObjectMapper mapper = new ObjectMapper();
+        String jsonResponse = steamClient.getOwnedGames(apiKey, steamId, true, "json");
 
         try {
-            String jsonResponse = steamClient.getOwnedGames(apiKey, steamId, true, "json");
-            JsonNode rootNode = mapper.readTree(jsonResponse);
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode gamesNode = rootNode.path("response").path("games");
 
-            if (gamesNode.isArray()) {
-                for (JsonNode gameNode : gamesNode) {
-                    OwnedGameDto gameDto = new OwnedGameDto();
-                    gameDto.setGameId(gameNode.path("appid").asInt());
-                    gameDto.setName(gameNode.path("name").asText());
-                    gameDto.setPlaytimeForever(gameNode.path("playtime_forever").asInt());
-                    //Example url:
-                    //https://cdn.akamai.steamstatic.com/steam/apps/50300/page.bg.jpg
-                    gameDto.setBannerUrl("https://cdn.akamai.steamstatic.com/steam/apps/" + gameDto.getGameId() + "/page.bg.jpg");
-                    //Example url:
-                    //https://cdn.akamai.steamstatic.com/steam/apps/50300/page.bg.jpg
-                    //this one is a fallback in case the above one returns 404 due to inconsistencies on steam's side
-                    gameDto.setHeaderUrl("https://cdn.akamai.steamstatic.com/steam/apps/" + gameDto.getGameId() + "/header.jpg");
-                    ownedGames.add(gameDto);
-                }
+            if (!gamesNode.isArray()) {
+                throw new GamesNotFoundException("Owned games not found");
             }
+
+            return StreamSupport.stream(gamesNode.spliterator(), false)
+                    .map(this::createOwnedGameDto)
+                    .collect(Collectors.toList());
         } catch (IOException e) {
-            // Handle exceptions
+            throw new GamesNotFoundException("Error parsing API response", e);
         }
-        return ownedGames;
     }
 
+    // Constructs an OwnedGameDto from a JsonNode
+    private OwnedGameDto createOwnedGameDto(JsonNode gameNode) {
+        OwnedGameDto gameDto = new OwnedGameDto();
+        gameDto.setGameId(gameNode.path("appid").asInt());
+        gameDto.setName(gameNode.path("name").asText());
+        gameDto.setPlaytimeForever(gameNode.path("playtime_forever").asInt());
+        gameDto.setBannerUrl(constructImageUrl(gameDto.getGameId(), "page.bg.jpg"));
+        gameDto.setHeaderUrl(constructImageUrl(gameDto.getGameId(), "header.jpg"));
+        return gameDto;
+    }
+
+    // Helper method to construct image URLs
+    private String constructImageUrl(int gameId, String imageType) {
+        return String.format("https://cdn.akamai.steamstatic.com/steam/apps/%d/%s", gameId, imageType);
+    }
+
+    // Fetches game descriptions
     public GameDescriptionDto getGameDescription(String gameId) {
-        ObjectMapper mapper = new ObjectMapper();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM, yyyy");
+        String jsonResponse = steamStoreClient.getGameDescription(gameId);
 
         try {
-            String jsonResponse = steamStoreClient.getGameDescription(gameId);
-            JsonNode rootNode = mapper.readTree(jsonResponse);
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
             JsonNode dataNode = rootNode.fields().next().getValue().path("data");
 
-            GameDescriptionDto gameDto = new GameDescriptionDto();
-            gameDto.setGameId(dataNode.path("steam_appid").asInt());
-            gameDto.setName(dataNode.path("name").asText());
-            gameDto.setHeaderUrl(dataNode.path("header_image").asText());
-            gameDto.setBannerUrl(dataNode.path("background_raw").asText());
-            gameDto.setShortDescription(dataNode.path("short_description").asText());
-
-            // Extract genres
-            List<String> genres = new ArrayList<>();
-            if (dataNode.has("genres")) {
-                for (JsonNode genreNode : dataNode.path("genres")) {
-                    genres.add(genreNode.path("description").asText());
-                }
-            }
-            gameDto.setGenres(genres);
-
-            // Parse release date
-            String releaseDateString = dataNode.path("release_date").path("date").asText();
-            try {
-                Date releaseDate = dateFormat.parse(releaseDateString);
-                gameDto.setReleaseDate(releaseDate);
-            } catch (ParseException e) {
-                // Handle parse exception someday
+            if (dataNode.isMissingNode()) {
+                throw new GameDetailsNotFoundException("Details for this game are not available.");
             }
 
-            return gameDto;
+            return createGameDescriptionDto(dataNode);
         } catch (IOException e) {
-            // Handle exceptions
+            throw new GameDetailsNotFoundException("Error parsing API response");
         }
-
-        return null;
     }
 
+    // Constructs a GameDescriptionDto from a JsonNode
+    private GameDescriptionDto createGameDescriptionDto(JsonNode dataNode) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("d MMM, yyyy");
+
+        GameDescriptionDto gameDto = new GameDescriptionDto();
+        gameDto.setGameId(dataNode.path("steam_appid").asInt());
+        gameDto.setName(dataNode.path("name").asText());
+        gameDto.setHeaderUrl(dataNode.path("header_image").asText());
+        gameDto.setBannerUrl(dataNode.path("background_raw").asText());
+        gameDto.setShortDescription(dataNode.path("short_description").asText());
+
+        gameDto.setGenres(extractGenres(dataNode));
+
+        try {
+            String releaseDateString = dataNode.path("release_date").path("date").asText();
+            Date releaseDate = dateFormat.parse(releaseDateString);
+            gameDto.setReleaseDate(releaseDate);
+        } catch (ParseException e) {
+            throw new GameDetailsNotFoundException("Error parsing API response");
+        }
+
+        return gameDto;
+    }
+
+    // Helper method to extract genres from a JsonNode
+    private List<String> extractGenres(JsonNode dataNode) {
+        List<String> genres = new ArrayList<>();
+        if (dataNode.has("genres")) {
+            for (JsonNode genreNode : dataNode.path("genres")) {
+                genres.add(genreNode.path("description").asText());
+            }
+        }
+        return genres;
+    }
 }
+
+
