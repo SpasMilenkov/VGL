@@ -1,7 +1,5 @@
 package com.jaba.vgl.services.clients;
 
-import com.jaba.vgl.models.dto.PlayerSummaryDto;
-import com.jaba.vgl.models.dto.steam.SteamNewsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
