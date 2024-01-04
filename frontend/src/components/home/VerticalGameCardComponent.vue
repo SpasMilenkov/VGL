@@ -23,7 +23,6 @@ const props = defineProps<VerticalGameCardProps>()
 }
 .game-preview{
     max-height: 8.5rem;
-
 }
 
 .game-studio,
