@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "../../axios/axios";
+import { useEffect, useState } from "react";
 
 const registerSchema = z.object({
   name: z.string().trim().min(2, "Username must be at least 2 characters"),
@@ -17,19 +18,41 @@ const registerSchema = z.object({
 type Inputs = z.infer<typeof registerSchema>
 
 const Register = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
+  const [error, setError] = useState('');
+
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<Inputs>({
     resolver: zodResolver(registerSchema)
   });
+
+  const watchName = watch("name");
+  const watchEmail = watch("email");
+  const watchPassword = watch("password");
+  const watchConfirmPassword = watch("confirmPassword");
+  const watchSteamId = watch("steamId");
+
+  useEffect(() =>{
+    setError('');
+  },[watchName, watchEmail, watchPassword, watchConfirmPassword, watchSteamId])
 
   const onSubmit = async (data: Inputs) => {
     const { confirmPassword, ...request} = data;
 
-    const response = await axios.post('auth/register',
+    try {
+      const response = await axios.post('auth/register',
       JSON.stringify(request),
       {
         headers: {'Content-Type': 'application/json'}
       }
     );
+    } catch (error : any) {
+      if(!error?.response){
+        setError('No response');
+      }else if(error.response?.status === 400){
+        setError('An error occurred');
+      }else{
+        setError('Error');
+      }
+    }
   };
 
   return (
@@ -56,6 +79,7 @@ const Register = () => {
       <button className="form-button">
         Sign Up
       </button>
+      <p className="text-orange-600">{error}</p>
     </form>
   )
 }

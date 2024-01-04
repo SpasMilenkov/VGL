@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,17 +12,38 @@ const loginSchema = z.object({
 type Inputs = z.infer<typeof loginSchema>
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
+  const [error, setError] = useState('');
+
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<Inputs>({
     resolver: zodResolver(loginSchema)
   });
 
+  const watchEmail = watch("email");
+  const watchPassword = watch("password");
+
+  useEffect(() =>{
+    setError('');
+  },[watchEmail, watchPassword])
+
   const onSubmit = async (data: Inputs) => {
-    const response = await axios.post('auth/login',
-      JSON.stringify(data),
-      {
-        headers: {'Content-Type': 'application/json'}
+    try {
+      const response = await axios.post('auth/login',
+        JSON.stringify(data),
+        {
+          headers: {'Content-Type': 'application/json'}
+        }
+      );
+    } catch (error : any) {
+      if(!error?.response){
+        setError('No response');
+      }else if(error.response?.status === 400){
+        setError('An error occurred');
+      }else if(error.response?.status === 401){
+        setError('Incorrect email or password');
+      }else{
+        setError('Error');
       }
-    );
+    }
   };
 
   return (
@@ -42,6 +64,7 @@ const Login = () => {
       <button className="form-button">
         Login
       </button>
+      <p className="text-orange-600">{error}</p>
     </form>
   )
 }
