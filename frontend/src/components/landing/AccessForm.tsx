@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 interface Props {
   isLoginOn: boolean;
   setState: React.Dispatch<React.SetStateAction<boolean>>;
-  isActive: boolean;
   setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AccessForm: React.FC<Props> = ({
   isLoginOn,
   setState,
-  isActive,
   setIsActive,
 }: Props) => {
   const [name, setName] = useState("");

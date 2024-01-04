@@ -18,7 +18,6 @@ const Landing = () => {
           <AccessForm
             isLoginOn={selectedForm}
             setState={setSelectedForm}
-            isActive={isFormActive}
             setIsActive={setIsFormActive}
           />
         )}
