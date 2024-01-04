@@ -1,5 +1,5 @@
 <template>
-    <div class="flex w-[22rem] flex-row items-stretch content-center bg-gray-15 rounded-lg gap-5 p-3">
+    <div class="flex w-[22rem] flex-row items-stretch content-center bg-gray-15 rounded-lg gap-5 p-3 h-full">
         <img :src="props.content.imagePath" alt="Game Image" class="w-40 rounded-xl game-preview" />
         <div class="flex gap-2 w-full flex-col items-left justify-between flex-1">
             <h3 class="game-title ">{{ props.content.gameTitle }}</h3>
@@ -23,7 +23,7 @@ const props = defineProps<HorizontalGameCardProps>()
 }
 
 .game-preview {
-    object-fit: fill;
+    object-fit:cover;
 }
 
 .game-studio,
