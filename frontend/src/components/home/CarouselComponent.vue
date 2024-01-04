@@ -1,6 +1,6 @@
 <template>
-    <div class="w-[120rem]">
-        <Carousel :items-to-show="4" :wrap-around="true" v-if="isHorizontal">
+    <div class="carousel">
+        <Carousel :items-to-show="3" :wrap-around="true" v-if="isHorizontal">
             <Slide v-for="(slide, id) in cards" :key="id">
                 <HorizontalGameCardComponent :content="slide"></HorizontalGameCardComponent>
             </Slide>
@@ -9,7 +9,7 @@
                 <Navigation />
             </template>
         </Carousel>
-        <Carousel :items-to-show="4" :wrap-around="true" v-if="!isHorizontal">
+        <Carousel :items-to-show="3" :wrap-around="true" v-if="!isHorizontal">
             <Slide v-for="(slide, id) in cards" :key="id">
                 <VerticalGameCardComponent :content="slide"></VerticalGameCardComponent>
             </Slide>
@@ -31,17 +31,12 @@ import HorizontalGameCardComponent from './HorizontalGameCardComponent.vue';
 import VerticalGameCardComponent from './VerticalGameCardComponent.vue';
 
 import type SmallGameCardContent from '../../interfaces/SmallGameCardContent';
-import type CarouselSlideType from '../../types/CarouselSlideType'
+import type { CarouselSlideType } from '../../types/CarouselSlideType'
 interface CarouselProps {
     cards: SmallGameCardContent[],
     cardType: CarouselSlideType
 }
 
-
-// Define a type for the component map
-type ComponentMap = {
-    [key: string]: ReturnType<typeof defineComponent>;
-};
 const props = defineProps<CarouselProps>();
 const isHorizontal = ref(true)
 onMounted(() => {
@@ -53,6 +48,11 @@ onMounted(() => {
 
 
 <style>
+.carousel {
+    width: 110rem;
+    overflow: hidden;
+}
+
 .carousel__item {
     min-height: 200px;
     width: 100%;
@@ -68,13 +68,30 @@ onMounted(() => {
 
 .carousel__slide {
     padding: 10px;
-
+    width: 30vw;
+    min-width: 25rem;
 }
 
 .carousel__prev,
 .carousel__next {
     box-sizing: content-box;
     color: var(--color-orange);
-    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 1rem;
+}
+
+.carousel__prev:hover,
+.carousel__next:hover {
+    color: var(--color-orange);
+}
+
+@media (max-width: 1250px) {
+    .carousel {
+        width: 70rem;
+    }
+
+    .carousel__slide {
+        width: 100%;
+    }
 }
 </style>
