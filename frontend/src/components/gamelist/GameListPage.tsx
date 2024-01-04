@@ -59,7 +59,9 @@ const GameListPage = () => {
             </div>
           </div>
           <div className="already-played-cards">
-            {data.map(card => <GameListCard {...card}/>)}
+            {data.map((card, index) => 
+              <GameListCard key={index} {...card}/>
+            )}
           </div>
         </section>
       </main>
