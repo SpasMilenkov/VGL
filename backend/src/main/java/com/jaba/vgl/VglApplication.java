@@ -8,7 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -16,6 +15,8 @@ import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import com.jaba.vgl.services.clients.SteamClient;
+import com.jaba.vgl.services.clients.SteamStoreClient;
 
 @SpringBootApplication
 @EnableJpaRepositories(
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 )
 @EnableFeignClients(
 		clients = {
-			//TODO: add steam client...
+			SteamClient.class, SteamStoreClient.class
 		}
 )
 @ConfigurationPropertiesScan
@@ -54,8 +55,8 @@ public class VglApplication  implements CommandLineRunner {
 		if(adminAccount == null){
 			User user = new User();
 			user.setEmail("admin@gmail.com");
-			user.setFirstName("admin");
-			user.setLastName("admin");
+			user.setNickname("admin");
+			user.setSteamId("76561197960435530");
 			user.setPassword(new BCryptPasswordEncoder().encode("string123"));
 			user.setRole(Role.ADMIN);
 			userRepository.save(user);
