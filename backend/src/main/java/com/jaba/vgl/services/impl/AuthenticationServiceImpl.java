@@ -25,19 +25,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
-    public User singUp(RegisterDto registerDto){
+    public User register(RegisterDto registerDto){
         User user = new User();
 
         user.setEmail(registerDto.getEmail());
-        user.setFirstName(registerDto.getFirstName());
-        user.setLastName(registerDto.getLastName());
+        user.setNickname(registerDto.getNickName());
+        user.setSteamId(registerDto.getSteamId());
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
         return userRepository.save(user);
     }
 
-    public JwtAuthenticationResponse signIn(LoginDto loginDto){
+    public JwtAuthenticationResponse login(LoginDto loginDto){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         var user = userRepository.findByEmail(loginDto.getEmail()).orElseThrow(IllegalArgumentException::new);
         var accessToken = jwtService.generateAccessToken(user);
@@ -53,9 +53,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public JwtAuthenticationResponse refreshToken(RefreshTokenDto refreshTokenDto){
-        String userEmail = jwtService.extractUserName(refreshTokenDto.getToken());
 
-        var user = userService.loadUserByRefreshToken(refreshTokenDto.getToken());
+        User user = userService.loadUserByRefreshToken(refreshTokenDto.getToken());
         if(user == null)
             return null;
         if(jwtService.isTokenValid(refreshTokenDto.getToken(), user)){
@@ -72,7 +71,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return null;
     }
     public boolean logout(String token){
-        var user = userService.loadUserByRefreshToken(token);
+        User user = userService.loadUserByRefreshToken(token);
         if(user == null)
             return true;
         user.setRefreshToken(null);
