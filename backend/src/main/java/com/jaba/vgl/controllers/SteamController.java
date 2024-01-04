@@ -4,6 +4,7 @@ import com.jaba.vgl.models.dto.GameDescriptionDto;
 import com.jaba.vgl.models.dto.NewsItemDto;
 import com.jaba.vgl.models.dto.OwnedGameDto;
 import com.jaba.vgl.models.dto.PlayerSummaryDto;
+import com.jaba.vgl.services.UserService;
 import com.jaba.vgl.services.clients.SteamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SteamController {
     private final SteamService steamService;
+    private final UserService userService;
 
     //TODO: Add a check to see if the user has an id linked to their account in the database
     //TODO: Rework the method to get userId so that i can check if the user has a linked id in the database
     @GetMapping("player-summary")
-    public ResponseEntity<PlayerSummaryDto> getUserSummary(@RequestParam String steamId){
-        PlayerSummaryDto result = steamService.getPlayerSummary(steamId);
+    public ResponseEntity<PlayerSummaryDto> getUserSummary(@RequestParam String email){
+        PlayerSummaryDto result = steamService.getPlayerSummary(email);
 
         return ResponseEntity.ok(result);
     }
