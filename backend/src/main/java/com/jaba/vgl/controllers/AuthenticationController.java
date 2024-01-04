@@ -25,11 +25,11 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     @PostMapping("/register")
     public ResponseEntity<User> signUp(@RequestBody RegisterDto registerDto){
-        return ResponseEntity.ok(authenticationService.singUp(registerDto));
+        return ResponseEntity.ok(authenticationService.register(registerDto));
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
-        JwtAuthenticationResponse jwtResponse = authenticationService.signIn(loginDto);
+        JwtAuthenticationResponse jwtResponse = authenticationService.login(loginDto);
 
         // Create and add the access token cookie
         Cookie accessTokenCookie = new Cookie("AccessToken", jwtResponse.getToken());
@@ -106,7 +106,7 @@ public class AuthenticationController {
         if (refreshToken == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No refresh token found");
         }
-        var result = authenticationService.logout(refreshToken);
+        boolean result = authenticationService.logout(refreshToken);
         if(result)
             return ResponseEntity.ok("Logged out successfully");
 
