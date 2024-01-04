@@ -29,7 +29,6 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
         throws ServletException, IOException {
     String accessToken = getCookieValue(request, "AccessToken");
     String refreshToken = getCookieValue(request, "RefreshToken");
-    // Skip JWT check for login and refresh token endpoints
 
     try {
         if (accessToken != null && !jwtService.isTokenExpired(accessToken)) {
@@ -44,14 +43,13 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
             return;
         }
     }
-    catch (Exception e) {
+    catch (ServletException | IOException e) {
         // This catch block can handle ExpiredJwtException and any other JWT related exceptions
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("text/plain");
         response.getWriter().write("Unauthorized: " + e.getMessage());
         return;
     }
-
     filterChain.doFilter(request, response);
 }
 
@@ -78,10 +76,12 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Invalid refresh token, please re-authenticate");
             }
-        } catch (Exception e) {
+        }
+        catch (ServletException | IOException e) {
+            // This catch block can handle ExpiredJwtException and any other JWT related exceptions
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("text/plain");
-            response.getWriter().write("Error processing refresh token: " + e.getMessage());
+            response.getWriter().write("Unauthorized: " + e.getMessage());
         }
     }
 
