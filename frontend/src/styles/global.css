@@ -218,6 +218,20 @@ body {
   @apply text-4xl font-medium;
 }
 
+.login-close:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.login-close {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 24px;
+  right: 24px;
+  transition: transform 0.3s ease-in-out;
+}
+
 .bg-gray-15 {
   background-color: hsl(0, 0%, 15%);
 }
