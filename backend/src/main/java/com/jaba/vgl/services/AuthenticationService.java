@@ -7,8 +7,8 @@ import com.jaba.vgl.models.dto.RegisterDto;
 import com.jaba.vgl.models.entities.User;
 
 public interface AuthenticationService {
-    User singUp(RegisterDto registerDto);
-    JwtAuthenticationResponse signIn(LoginDto signInDto);
+    User register(RegisterDto registerDto);
+    JwtAuthenticationResponse login(LoginDto signInDto);
     JwtAuthenticationResponse refreshToken(RefreshTokenDto refreshTokenDto);
     boolean logout(String token);
 }
