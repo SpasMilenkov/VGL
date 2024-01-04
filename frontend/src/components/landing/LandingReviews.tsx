@@ -39,16 +39,18 @@ const LandingReviews = () => {
     <section id="section-reviews">
       <div className="review-container">
         <div className="reviews-text">20 000+ reviews</div>
-        {data.slice(0, 4).map((card) => (
+        {data.slice(0, 4).map((card, index) => (
           <LandingReviewCard
+            key={index}
             imgUrl={card.imgUrl}
             reviewerName={card.reviewerName}
           ></LandingReviewCard>
         ))}
       </div>
       <div className="review-container">
-        {data.slice(4, 8).map((card) => (
+        {data.slice(4, 8).map((card, index) => (
           <LandingReviewCard
+            key={index}
             imgUrl={card.imgUrl}
             reviewerName={card.reviewerName}
           ></LandingReviewCard>
