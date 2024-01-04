@@ -1,1 +1,1 @@
-export type SlideType = 'horizontal' | 'vertical';
+export type CarouselSlideType = 'horizontal' | 'vertical';
