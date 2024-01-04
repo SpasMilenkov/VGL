@@ -4,10 +4,8 @@ import lombok.Data;
 
 @Data
 public class RegisterDto {
-
-
-    private String firstName;
-    private String lastName;
+    private String nickName;
+    private String steamId;
     private String email;
     private String password;
 
