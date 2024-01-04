@@ -1,10 +1,13 @@
 package com.jaba.vgl.services.impl;
 
 
+import com.jaba.vgl.exceptions.UserNotFoundException;
 import com.jaba.vgl.models.dto.GameWithCompanyDto;
 import com.jaba.vgl.models.dto.ReviewDto;
+import com.jaba.vgl.models.dto.UserDto;
 import com.jaba.vgl.models.dto.mapper.GameWithCompanyDtoMapper;
 import com.jaba.vgl.models.dto.mapper.ReviewDtoMapper;
+import com.jaba.vgl.models.dto.mapper.UserDtoMapper;
 import com.jaba.vgl.models.entities.Review;
 import com.jaba.vgl.repositories.impl.ReviewRepositoryImpl;
 import com.jaba.vgl.repositories.impl.UserRepositoryImpl;
@@ -25,6 +28,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepositoryImpl userRepository;
+    private final UserDtoMapper userDtoMapper;
     private final ReviewServiceImpl reviewService;
     private final ReviewDtoMapper reviewDtoMapper;
     private final GameWithCompanyDtoMapper gameWithCompanyDtoMapper;
@@ -60,6 +64,14 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(gameWithCompanyDtoMapper)
                 .toList();
+    }
+
+    @Override
+    public UserDto updateSteamId(String email, String steamId) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User with this email does not exist"));
+        user.setSteamId(steamId);
+        userRepository.save(user);
+        return userDtoMapper.apply(user);
     }
 
     @Override
