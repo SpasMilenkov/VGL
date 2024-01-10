@@ -19,7 +19,6 @@ html {
 
 body {
   min-height: 100svh;
-  background: linear-gradient(351.22deg, #1a1a1a 55.25%, #2b2b2b 96.61%);
 }
 
 #landing {
@@ -699,7 +698,7 @@ body {
 }
 
 .selected-nav{
-  background-color: #292929;
+  background-color: #1d1d1f;
 }
 
 .selected-nav-prev{
