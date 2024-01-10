@@ -1,17 +1,11 @@
+import type { News } from "../../interfaces/News";
+
 interface Props {
-  newsAuthor: string;
-  newsTitle: string;
-  newsDesc: string;
-  newsTime: string;
+  news: News;
   imgUrl: string;
 }
-const NewsArticleCard: React.FC<Props> = ({
-  newsAuthor,
-  newsTitle,
-  newsDesc,
-  newsTime,
-  imgUrl,
-}: Props) => {
+
+const NewsArticleCard: React.FC<Props> = ({news, imgUrl}) => {
   return (
     <div className="article-card">
       {/* <!-- Article Image --> */}
@@ -19,12 +13,12 @@ const NewsArticleCard: React.FC<Props> = ({
       {/* <!-- Article Info --> */}
       <div className="article-info">
         <div className="article-row1">
-          <div className="article-title">{newsTitle}</div>
+          <div className="article-title">{news.title}</div>
         </div>
-        <div className="article-desc">{newsDesc}</div>
+        <div className="article-desc">{news.description}</div>
         <div className="article-details">
-          <div className="article-author">{newsAuthor}</div>
-          <div className="article-time">{newsTime}</div>
+          <div className="article-author">{news.author}</div>
+          <div className="article-time">{news.date}</div>
         </div>
       </div>
     </div>
