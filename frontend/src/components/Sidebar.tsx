@@ -45,7 +45,7 @@ const Sidebar = () => {
   ]
 
   return (
-    <nav className="w-[6.25rem] h-screen sticky top-0 bg-[#292929]">
+    <nav className="w-[6.25rem] h-screen sticky top-0 bg-[#1d1d1f]">
       <ul className="navbar-nav">
         {links.slice(0, 4).map((link) =>
           <li 
