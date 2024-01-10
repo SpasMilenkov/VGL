@@ -1,28 +1,25 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import type { Game } from '../../interfaces/Game';
+import axios from '../../axios/axios';
 
 interface GameProps {
-  gameId: number,
-  name: string,
-  studio: string,
-  playtimeForever: number,
-  releaseDate: string,
-  bannerUrl: string,
-  headerUrl: string
+  game: Game
+  played: boolean
 }
 
-const GameListCard:React.FC<GameProps> = ({
-  gameId, 
-  name, 
-  studio,
-  playtimeForever, 
-  releaseDate, 
-  bannerUrl, 
-  headerUrl
-}) => {
-  const [imageUrl, setImageUrl] = useState(bannerUrl);
+const GameListCard:React.FC<GameProps> = ({game, played}) => {
+  const [imageUrl, setImageUrl] = useState(game.bannerUrl);
+
+  useEffect(() =>{
+    setImageUrl(game.bannerUrl);
+  }, [game.bannerUrl])
+
+  const handleDelete = async () =>{
+    //await axios.delete('/games/delete');
+  }
 
   const handleImageError = () => {
-    setImageUrl(headerUrl);
+    setImageUrl(game.headerUrl);
   };
 
   return (
@@ -37,18 +34,19 @@ const GameListCard:React.FC<GameProps> = ({
       </div>
       <div className="card-game-info-container">
         <div className="card-game-main-info-container">
-          <div className="card-game-title">{name}</div>
-          <div className="card-game-studio">{studio}</div>
-          <div className="card-game-studio">{playtimeForever}</div>
+          <div className="card-game-title">{game.name}</div>
+          <div className="card-game-studio">{game.studio}</div>
         </div>
-        <div className="card-game-release">{releaseDate}</div>
       </div>
       <div className="card-game-settings">
+        {played &&
         <img
           className="settings-icon"
-          src="src/assets/images/gamelist/icon-settings.png"
+          onClick={handleDelete}
+          src="src/assets/images/landing/close-icon.png"
           alt="Settings Button"
         />
+        }
       </div>
     </div>
   )
