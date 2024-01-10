@@ -654,3 +654,49 @@ body {
 .settings-icon:hover {
   scale: 1.2;
 }
+
+/* Navbar */
+.navbar-nav {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  padding: 0 0 0 0;
+  height: 100%;
+}
+
+.nav-item{
+  background-color: #ff5c00;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0 1.5rem 0;
+  cursor: pointer;
+  width: 100%;
+}
+
+.home-nav-logo{
+  background-color: #ff5c00;
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 0 2.5rem 0;
+  cursor: pointer;
+  width: 100%;
+}
+
+.navbar-icon {
+  transition: transform 0.3s ease-in-out;
+}
+
+.selected-nav{
+  background-color: #292929;
+}
+
+.selected-nav-prev{
+  border-bottom-right-radius: 1.875rem;
+}
+
+.selected-nav-next{
+  border-top-right-radius: 1.875rem;
+}
