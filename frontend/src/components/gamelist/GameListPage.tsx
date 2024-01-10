@@ -1,54 +1,74 @@
+import { useEffect, useState } from "react";
+import axios from "../../axios/axios";
 import GameListCard from "./GameListCard"
+import type { Game } from "../../interfaces/Game";
 
 const GameListPage = () => {
-  const data = [
-    {
-      "gameId": 220,
-      "name": "Half-Life 2",
-      "playtimeForever": 0,
-      "studio": "ayo",
-      "releaseDate": "12.12.1212",
-      "bannerUrl": "https://cdn.akamai.steamstatic.com/steam/apps/220/page.bg.jpg",
-      "headerUrl": "https://cdn.akamai.steamstatic.com/steam/apps/220/header.jpg"
-  },
-  {
-      "gameId": 20900,
-      "name": "The Witcher: Enhanced Edition",
-      "playtimeForever": 0,
-      "studio": "ayo",
-      "releaseDate": "12.12.1212",
-      "bannerUrl": "https://cdn.akamai.steamstatic.com/steam/apps/20900/page.bg.jpg",
-      "headerUrl": "https://cdn.akamai.steamstatic.com/steam/apps/20900/header.jpg"
-  },
-  {
-      "gameId": 17460,
-      "name": "Mass Effect (2007)",
-      "playtimeForever": 0,
-      "studio": "ayo",
-      "releaseDate": "12.12.1212",
-      "bannerUrl": "https://cdn.akamai.steamstatic.com/steam/apps/17460/page.bg.jpg",
-      "headerUrl": "https://cdn.akamai.steamstatic.com/steam/apps/17460/header.jpg"
-  },
-  ]
+  const [games, setGames] = useState<Game[]>([]);
+  const [randomGame, setRandomGame] = useState<Game | null>(null);
+  const [activeButton, setActiveButton] = useState(1);
+  const [isPlayedGames, setIsPlayedGames] = useState(true);
 
+  const fetchAlreadyPlayedGames = async () =>{
+    //const response = (await axios.get('/steam/get-owned-games')).data;
+    //setGames(response);
+    //setRandomGame(response[Math.floor(Math.random()*response.length)]);
+  }
+
+  const fetchToBePlayedGames = async () =>{
+    //const response = await axios.get('/steam/get-owned-games').data;
+    //setGames(response);
+    //setRandomGame(response[Math.floor(Math.random()*response.length)]);
+  }
+
+  useEffect(() =>{
+    if (activeButton === 2) {
+      fetchToBePlayedGames();
+      setIsPlayedGames(true);
+    } else if(activeButton === 1) {
+      fetchAlreadyPlayedGames();
+      setIsPlayedGames(false);
+    }
+  }, [activeButton])
+
+  const handleClick = (btn: number) =>{
+    setActiveButton(btn);
+  }
+  
   return (
     <div className="w-full text-white">
       <main id="main-content">
+        <div className="gamelist-navbar">
+          <ul className="gamelist-nav">
+            <li 
+              onClick={() => handleClick(1)} 
+              className={`gamelist-item ${activeButton === 1 ? "active" : ""}`}>
+                Already Played
+            </li>
+            <li 
+              onClick={() => handleClick(2)} 
+              className={`gamelist-item ${activeButton === 2 ? "active" : ""}`}>
+                To be played
+            </li>
+          </ul>
+        </div>
         <section id="section-already-played">
+          {activeButton === 1 &&
           <div className="already-played-opening">
-            <img
-              className="already-played-img"
-              src="https://cdn.akamai.steamstatic.com/steam/apps/17460/page.bg.jpg"
-              alt="Opening Image"
-            />
+            <video
+              className="already-played-img" 
+              src={randomGame?.trailerUrl}
+              autoPlay muted>
+            </video>
             <div className="opening-overlay"></div>
             <div className="section-opening-container">
-              <div className="section-title">Most Played</div>
+              <div className="section-title">Recently Popular</div>
               <div className="section-update">
-                Last updated: <span className="section-date">7 May 2023</span>
+                <span className="section-date text-[2rem]">{randomGame?.name}</span>
               </div>
             </div>
           </div>
+          }
           <div className="already-played-filter">
             <div className="already-icon-container">
               <img
@@ -59,9 +79,13 @@ const GameListPage = () => {
             </div>
           </div>
           <div className="already-played-cards">
-            {data.map((card, index) => 
-              <GameListCard key={index} {...card}/>
-            )}
+            {games.length > 0 ?
+            games.map((game, index) => 
+            <GameListCard key={index} game={game} played={isPlayedGames}/>
+            )
+            : 
+            <div>No games in list.</div>
+            }
           </div>
         </section>
       </main>
