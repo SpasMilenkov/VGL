@@ -1,6 +1,6 @@
 <template>
-    <div class="w-[120rem]">
-        <Carousel :items-to-show="4" :wrap-around="true" v-if="isHorizontal">
+    <div class="carousel">
+        <Carousel :items-to-show="3" :wrap-around="true" v-if="isHorizontal">
             <Slide v-for="(slide, id) in cards" :key="id">
                 <HorizontalGameCardComponent :content="slide"></HorizontalGameCardComponent>
             </Slide>
@@ -9,7 +9,7 @@
                 <Navigation />
             </template>
         </Carousel>
-        <Carousel :items-to-show="4" :wrap-around="true" v-if="!isHorizontal">
+        <Carousel :items-to-show="3" :wrap-around="true" v-if="!isHorizontal">
             <Slide v-for="(slide, id) in cards" :key="id">
                 <VerticalGameCardComponent :content="slide"></VerticalGameCardComponent>
             </Slide>
@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
 
@@ -31,17 +31,12 @@ import HorizontalGameCardComponent from './HorizontalGameCardComponent.vue';
 import VerticalGameCardComponent from './VerticalGameCardComponent.vue';
 
 import type SmallGameCardContent from '../../interfaces/SmallGameCardContent';
-import type CarouselSlideType from '../../types/CarouselSlideType'
+import type { CarouselSlideType } from '../../types/CarouselSlideType'
 interface CarouselProps {
     cards: SmallGameCardContent[],
     cardType: CarouselSlideType
 }
 
-
-// Define a type for the component map
-type ComponentMap = {
-    [key: string]: ReturnType<typeof defineComponent>;
-};
 const props = defineProps<CarouselProps>();
 const isHorizontal = ref(true)
 onMounted(() => {
@@ -53,9 +48,14 @@ onMounted(() => {
 
 
 <style>
+.carousel {
+    width: 110rem;
+    overflow: hidden;
+}
+
 .carousel__item {
     min-height: 200px;
-    width: 100%;
+    /* width: 100vw; */
     max-width: 30rem;
     background-color: green;
     color: white;
@@ -68,13 +68,19 @@ onMounted(() => {
 
 .carousel__slide {
     padding: 10px;
-
 }
 
 .carousel__prev,
 .carousel__next {
     box-sizing: content-box;
     color: var(--color-orange);
-    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 1rem;
 }
+
+.carousel__prev:hover,
+.carousel__next:hover {
+    color: var(--color-orange);
+}
+
 </style>

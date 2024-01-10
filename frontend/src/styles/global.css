@@ -19,6 +19,7 @@ html {
 
 body {
   min-height: 100svh;
+  background: linear-gradient(351.22deg, #1a1a1a 55.25%, #2b2b2b 96.61%);
 }
 
 #landing {
@@ -67,6 +68,7 @@ body {
   border-radius: 10px;
   transition: 0.15s;
 }
+
 .button-join-us:hover {
   color: var(--color-orange);
   background: var(--color-white);
@@ -84,6 +86,7 @@ body {
   border-radius: 10px;
   transition: 0.15s;
 }
+
 .button-learn-more:hover {
   color: var(--color-orange);
   background: var(--color-white);
@@ -163,10 +166,12 @@ body {
 }
 
 @media (max-width: 840px) {
+
   .header .left-section,
   .header .right-section {
     padding: 0;
   }
+
   .header .title-text {
     display: none;
   }
@@ -186,6 +191,7 @@ body {
   height: 100svh;
   z-index: -1000;
 }
+
 .heropage-background-overlay {
   position: absolute;
   top: 0;
@@ -200,18 +206,7 @@ body {
 }
 
 .form-button {
-  @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] 
-  py-[0.9rem] 
-  max-h-[50px] 
-  w-9/12 
-  text-2xl 
-  flex justify-center 
-  items-center 
-  hover:bg-none
-  hover:bg-[#fafafa]
-  hover:text-[#FF5C00]
-  transition-all
-  ease-in-out;
+  @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 text-2xl flex justify-center items-center hover:bg-none hover:bg-[#fafafa] hover:text-[#FF5C00] transition-all ease-in-out;
 }
 
 .form-h2 {
@@ -247,9 +242,11 @@ body {
 .bg-gray-32 {
   background-color: hsl(0, 0%, 32%);
 }
+
 .bg-white-98 {
   background-color: hsl(0, 0%, 98%);
 }
+
 .unselected-button {
   color: var(--color-white);
   font-size: 1.25rem;
@@ -262,11 +259,13 @@ body {
   border: 2px solid var(--color-white);
   transition: color 0.15s ease-in-out, background 0.15s ease-in-out;
 }
+
 .unselected-button:hover {
   background: var(--color-white);
   color: var(--color-orange);
   cursor: pointer;
 }
+
 .login-form-wrapper {
   display: flex;
   justify-content: center;
@@ -288,18 +287,18 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 .test {
   padding: 5rem 0 0 0;
   max-width: 900px;
   display: flex;
   justify-content: right;
 
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    rgba(255, 92, 0, 0.15) 0%,
-    rgba(255, 92, 0, 0) 100%
-  );
+  background: radial-gradient(50% 50% at 50% 50%,
+      rgba(255, 92, 0, 0.15) 0%,
+      rgba(255, 92, 0, 0) 100%);
 }
+
 .learn-more-background {
   z-index: -1;
   position: absolute;
@@ -309,6 +308,7 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .learn-more-title {
   width: 40%;
   color: var(--color-white);
@@ -319,15 +319,15 @@ body {
   line-height: 3.6875rem;
   text-transform: uppercase;
 }
+
 .learn-more-info {
   padding: 16rem 0 0 0;
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    rgba(255, 92, 0, 0.15) 0%,
-    rgba(255, 92, 0, 0) 100%
-  );
+  background: radial-gradient(50% 50% at 50% 50%,
+      rgba(255, 92, 0, 0.15) 0%,
+      rgba(255, 92, 0, 0) 100%);
   max-width: 900px;
 }
+
 .learn-more-details {
   width: 50%;
   color: rgba(250, 250, 250, 0.7);
@@ -336,6 +336,7 @@ body {
   font-size: 1.25rem;
   line-height: 1.5rem;
 }
+
 .learn-more-start {
   width: fit-content;
   display: flex;
@@ -347,19 +348,25 @@ body {
   line-height: 1.5rem;
   cursor: pointer;
 }
+
 .learn-more-start::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -0.1rem; /* Adjust the position of the underline */
+  bottom: -0.1rem;
+  /* Adjust the position of the underline */
   width: 0;
   height: 1px;
   background-color: var(--color-white);
-  transition: width 0.3s ease; /* Apply the transition effect */
+  transition: width 0.3s ease;
+  /* Apply the transition effect */
 }
+
 .learn-more-start:hover::after {
-  width: 85%; /* Expand the width of the underline on hover */
+  width: 85%;
+  /* Expand the width of the underline on hover */
 }
+
 .learn-more-arrow {
   color: var(--color-orange);
   font-size: 1.57rem;
@@ -376,6 +383,7 @@ body {
   position: relative;
   min-height: 100svh;
 }
+
 .review-container {
   display: flex;
   width: 100%;
@@ -383,18 +391,21 @@ body {
   justify-content: center;
   gap: 4rem;
 }
+
 .review-card {
   position: relative;
   width: 20%;
   max-width: 280px;
   max-height: 350px;
 }
+
 .review-img {
   width: 100%;
   border-radius: 30px;
   max-width: 280px;
   max-height: 350px;
 }
+
 .review-card-text {
   position: absolute;
   bottom: 0;
@@ -406,6 +417,7 @@ body {
   text-align: center;
   border-radius: 0 0 30px 30px;
 }
+
 .reviews-text {
   color: var(--color-white);
   font-weight: 600;
@@ -423,11 +435,9 @@ body {
 
 /* Blurred Background Effect */
 .glass {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0)
-  );
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0));
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -441,14 +451,13 @@ body {
   position: relative;
   min-height: 100svh;
 }
+
 /* General */
 .becomepart-background-overlay {
-  background: linear-gradient(
-    180deg,
-    #1d1d1f 0.05%,
-    rgba(29, 29, 31, 0.3) 49.51%,
-    #1d1d1f 100%
-  );
+  background: linear-gradient(180deg,
+      #1d1d1f 0.05%,
+      rgba(29, 29, 31, 0.3) 49.51%,
+      #1d1d1f 100%);
   position: absolute;
   top: 0;
   width: 100%;

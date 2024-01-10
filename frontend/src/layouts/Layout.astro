@@ -7,6 +7,8 @@ const { title } = Astro.props;
 
 import "@fontsource-variable/montserrat";
 import "../styles/global.css";
+import SidebarComponent from "../components/home/SidebarComponent.vue";
+import HeaderComponent from "../components/home/HeaderComponent.vue";
 ---
 
 <!doctype html>
@@ -19,7 +21,17 @@ import "../styles/global.css";
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body>
-    <slot />
+  <body class="body flex">
+    <SidebarComponent client:load />
+    <div class="w-full">
+      <HeaderComponent client:load />
+      <slot />
+    </div>
   </body>
 </html>
+
+<style scoped>
+  .body {
+    min-height: 100svh;
+  }
+</style>

@@ -1,5 +1,5 @@
 export default interface SmallGameCardContent{
-    id: number,
+    id: string,
     imagePath: string,
     gameTitle: string,
     gameStudio: string,
