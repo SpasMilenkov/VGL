@@ -12,7 +12,6 @@
 <script setup lang='ts'>
 import type { HeroGameCardContent } from '../../interfaces/HeroGameCardContent';
 
-
 interface HeroGameCardProps {
     content: HeroGameCardContent
 }
