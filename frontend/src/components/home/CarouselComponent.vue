@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
 
@@ -55,7 +55,7 @@ onMounted(() => {
 
 .carousel__item {
     min-height: 200px;
-    width: 100%;
+    /* width: 100vw; */
     max-width: 30rem;
     background-color: green;
     color: white;
@@ -68,8 +68,6 @@ onMounted(() => {
 
 .carousel__slide {
     padding: 10px;
-    width: 30vw;
-    min-width: 25rem;
 }
 
 .carousel__prev,
@@ -85,13 +83,4 @@ onMounted(() => {
     color: var(--color-orange);
 }
 
-@media (max-width: 1250px) {
-    .carousel {
-        width: 70rem;
-    }
-
-    .carousel__slide {
-        width: 100%;
-    }
-}
 </style>
