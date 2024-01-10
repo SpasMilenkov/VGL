@@ -49,7 +49,7 @@ public interface GameRepositoryImpl extends GameRepository, GameRepositoryCustom
             "g.isFavourite = :isFavourite, " +
             "g.releaseDate = :releaseDate " +
             "WHERE g.id = :id")
-    void updateGame(Long id, String name, String description, Float rating,
+    void updateGame(Long id, String name, String description, Integer rating,
                     GameGenre genre, Company company, Boolean isFavourite, String releaseDate);
 
     @Override

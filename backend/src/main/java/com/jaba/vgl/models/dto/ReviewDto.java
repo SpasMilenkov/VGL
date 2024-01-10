@@ -11,7 +11,7 @@ public record ReviewDto(
         Long userId, //TODO: migrate to UserDto
         String title,
         String text,
-        Float rating
+        Integer rating
 ) {
     public Review toEntity(ReviewServiceImpl reviewService) {
         Review review = new Review();

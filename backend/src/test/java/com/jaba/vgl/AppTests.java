@@ -114,7 +114,7 @@ public class AppTests {
             gameService.createGame(gameWithCompanyDto);
 
             boolean isFavourite = true;
-            Float rating = 3.0f;
+            Integer rating = 3;
 
             //Update entry (Name and company shouldn't change to count as the same game)
             GameDto gameDto2 = new GameDto(
@@ -206,7 +206,7 @@ public class AppTests {
             gameDetailsService.createGameDetails(gameDetailsDto);
 
             boolean isFavourite = true;
-            Float rating = 3.0f;
+            Integer rating = 3;
             CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
 
             //Update entry (Name and company shouldn't change to count as the same game)

@@ -6,7 +6,7 @@ import com.jaba.vgl.models.entities.Game;
 public record GameDto(
         String name,
         String description,
-        Float rating,
+        Integer rating,
         GameGenre genre,
         Boolean isFavourite,
         String releaseDate

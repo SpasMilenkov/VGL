@@ -13,6 +13,6 @@ public interface GameDetailsRepositoryCustom {
 
     Optional<Long> getGameDetailsId(String name, Company company);
 
-    void updateGameDetails(Long id, String name, String description, Float rating,
+    void updateGameDetails(Long id, String name, String description, Integer rating,
                            GameGenre genre, Company company, Boolean isFavourite, String releaseDate, List<Review> reviews);
 }

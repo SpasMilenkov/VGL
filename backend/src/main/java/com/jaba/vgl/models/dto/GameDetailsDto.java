@@ -8,7 +8,7 @@ public record GameDetailsDto(
 
         String description,
 
-        Float rating,
+        Integer rating,
 
         GameGenre genre,
 

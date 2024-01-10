@@ -12,6 +12,6 @@ public interface GameRepositoryCustom {
 
     Optional<Long> getGameId(String name, Company company);
 
-    void updateGame(Long id, String name, String description, Float rating,
+    void updateGame(Long id, String name, String description, Integer rating,
                     GameGenre genre, Company company, Boolean isFavourite, String releaseDate);
 }
