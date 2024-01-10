@@ -2,6 +2,8 @@ package com.jaba.vgl.models.entities;
 
 import com.jaba.vgl.models.GameGenre;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -51,7 +53,9 @@ public @Data class GameDetails {
             nullable = false
     )
     @NotNull(message = "Description must not be empty.")
-    private Float rating;
+    @Min(value = 0 , message = "Value should be greater then then equal to 0")
+    @Max(value = 5 , message = "Value should be less then then equal to 5")
+    private Integer rating;
 
     @Column(
             name = "genre",
