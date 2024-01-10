@@ -7,8 +7,9 @@ const { title } = Astro.props;
 
 import "@fontsource-variable/montserrat";
 import "../styles/global.css";
-import SidebarComponent from "../components/home/SidebarComponent.vue";
+
 import HeaderComponent from "../components/home/HeaderComponent.vue";
+import Sidebar from "../components/Sidebar";
 ---
 
 <!doctype html>
@@ -22,7 +23,7 @@ import HeaderComponent from "../components/home/HeaderComponent.vue";
     <title>{title}</title>
   </head>
   <body class="body flex">
-    <SidebarComponent client:load />
+    <Sidebar client:load/>
     <div class="w-full">
       <HeaderComponent client:load />
       <slot />
