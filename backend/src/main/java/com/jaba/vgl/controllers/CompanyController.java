@@ -27,4 +27,21 @@ public class CompanyController {
         companyService.saveCompany(companyDto);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Integer> deleteCompany(@PathVariable Long id) {
+        return ResponseEntity.ok(companyService.deleteCompany(id));
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> updateCompany(@RequestBody CompanyDto companyDto) {
+        companyService.updateCompany(companyDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/truncate")
+    public ResponseEntity<Void> truncateTable() {
+        companyService.truncateTable();
+        return ResponseEntity.ok().build();
+    }
 }
