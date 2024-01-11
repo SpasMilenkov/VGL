@@ -3,8 +3,6 @@ package com.jaba.vgl.models.dto;
 import com.jaba.vgl.models.entities.Review;
 import com.jaba.vgl.services.impl.ReviewServiceImpl;
 
-import java.util.Optional;
-
 public record ReviewDto(
         Long id,
         Long gameId,
@@ -18,10 +16,6 @@ public record ReviewDto(
         Review review = new Review();
         ReviewDto dto = this;
 
-//        Optional<Long> id = reviewService.getReviewId(dto.title());
-//        id.ifPresent(review::setId);
-
-        review.setId(dto.id);
         review.setGameId(dto.gameId);
         review.setUserId(dto.userId);
         review.setSteamId(dto.steamId);
