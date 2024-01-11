@@ -561,6 +561,14 @@ body {
   font-size: 3rem;
   text-transform: uppercase;
 }
+.gamelist-title {
+  color: var(--color-orange);
+
+  font-weight: 400;
+  font-size: 2.8rem;
+  text-transform: uppercase;
+}
+
 .section-update {
   color: #8c8c8c;
   font-style: normal;
