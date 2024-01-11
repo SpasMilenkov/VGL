@@ -1,6 +1,6 @@
 <template>
     <div class="carousel">
-        <Carousel :items-to-show="3" :wrap-around="false">
+        <Carousel :items-to-show="3" :wrap-around="true">
             <Slide v-for="(slide, id) in cardsToPrint" :key="id">
                 <div class="flex flex-col justify-start p-4 gap-4">
                     <div class="flex">

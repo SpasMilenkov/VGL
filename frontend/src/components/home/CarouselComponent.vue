@@ -1,6 +1,6 @@
 <template>
     <div class="carousel">
-        <Carousel :items-to-show="3" :wrap-around="true" v-if="isHorizontal">
+        <Carousel snap-align="start" :items-to-show="4" :wrap-around="true" v-if="isHorizontal">
             <Slide v-for="(slide, id) in cards" :key="id">
                 <HorizontalGameCardComponent :content="slide"></HorizontalGameCardComponent>
             </Slide>
@@ -9,7 +9,7 @@
                 <Navigation />
             </template>
         </Carousel>
-        <Carousel :items-to-show="3" :wrap-around="true" v-if="!isHorizontal">
+        <Carousel snap-align="start"  :items-to-show="4" :wrap-around="true" v-if="!isHorizontal">
             <Slide v-for="(slide, id) in cards" :key="id">
                 <VerticalGameCardComponent :content="slide"></VerticalGameCardComponent>
             </Slide>
@@ -49,12 +49,13 @@ onMounted(() => {
 
 <style>
 .carousel {
-    width: 110rem;
+    width: 107rem;
     overflow: hidden;
 }
 
 .carousel__item {
     min-height: 200px;
+    width: 80%;
     /* width: 100vw; */
     max-width: 30rem;
     background-color: green;
@@ -70,12 +71,26 @@ onMounted(() => {
     padding: 10px;
 }
 
-.carousel__prev,
+.carousel__prev{
+    box-sizing: content-box;
+    color: var(--color-orange);
+    width: 35px;
+    display: flex;
+    justify-content: flex-start;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 1rem;
+    margin: 0;
+}
+
 .carousel__next {
     box-sizing: content-box;
     color: var(--color-orange);
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 1rem;
+    width: 35px;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
 }
 
 .carousel__prev:hover,
