@@ -10,9 +10,11 @@ import java.util.function.Function;
 public class GameDtoMapper implements Function<Game, GameDto> {
     @Override
     public GameDto apply(Game game) {
+        // Assuming GameDto has an id, name, and steamId fields
         return new GameDto(
                 game.getName(),
-                game.getReleaseDate()
+                game.getId(),
+                game.getSteamId()
         );
     }
 }

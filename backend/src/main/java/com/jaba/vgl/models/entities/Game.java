@@ -6,13 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity(name = "Game")
 @Table(name = "game_table")
 @NoArgsConstructor
 @AllArgsConstructor
-public @Data class Game {
+@Data
+public class Game {
 
     @Id
     @SequenceGenerator(
@@ -36,34 +39,42 @@ public @Data class Game {
     private String name;
 
     @Column(
-            name = "company_id",
-            nullable = false
+            name = "steam_id",
+            nullable = false,
+            columnDefinition = "TEXT"
     )
-    @NotNull(message = "Company id must not be empty.")
-    private Long companyId;
-
+    @NotNull(message = "Name must not be empty.")
+    private Long steamId;
     @Column(
             name = "release_date",
             nullable = false,
             columnDefinition = "TEXT"
     )
-    @NotNull(message = "Release date must not be empty.")
-    private String releaseDate;
+    @NotNull(message = "Name must not be empty.")
+    private Date releaseDate;
 
-    //Bi-directional
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(
-            name = "company_id",
-            referencedColumnName = "id",
+    @Column(
+            name = "stduio_name",
             nullable = false,
-            insertable = false,
-            updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "company_id_fk"
-            )
+            columnDefinition = "TEXT"
     )
-    private Company company;
+    @NotNull(message = "Name must not be empty.")
+    private String studioName;
 
     @ManyToMany(mappedBy = "games")
     Set<User> users;
+
+    @OneToMany(
+            mappedBy = "game",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Achievement> achievements;
+
+    @ManyToMany
+    @JoinTable(
+            name = "wish_game_table", // This table will contain the association between wishes and games
+            joinColumns = @JoinColumn(name = "wish_id"), // Column for wish
+            inverseJoinColumns = @JoinColumn(name = "game_id")) // Column for game
+    private Set<Wish> wishes;
 }

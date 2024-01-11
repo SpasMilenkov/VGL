@@ -4,14 +4,14 @@ import com.jaba.vgl.models.entities.Game;
 
 public record GameDto(
         String name,
-        String releaseDate
+        Long userId,
+        Long steamId
 ) {
     public Game toEntity() {
         Game game = new Game();
         GameDto dto = this;
 
         game.setName(dto.name());
-        game.setReleaseDate(dto.releaseDate());
 
         return game;
     }

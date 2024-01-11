@@ -67,19 +67,6 @@ public @Data class Review {
     @Max(value = 5 , message = "Value should be less then then equal to 5")
     private Integer rating;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(
-            name = "game_id",
-            referencedColumnName = "id",
-            nullable = false,
-            insertable = false,
-            updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "game_id_fk"
-            )
-    )
-    private GameDetails gameDetails;
-
     @ManyToOne
     @JoinColumn(
             name = "user_id",
