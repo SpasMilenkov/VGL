@@ -43,7 +43,7 @@ public class ReviewController {
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<Void> saveReviews(@RequestBody List<ReviewDto> reviewDtos) {
+    public ResponseEntity<Void> saveReviews(@RequestBody  List<ReviewDto> reviewDtos) {
         reviewService.saveReviews(reviewDtos);
         return ResponseEntity.ok().build();
     }

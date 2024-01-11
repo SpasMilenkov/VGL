@@ -1,6 +1,5 @@
 package com.jaba.vgl.repositories.impl;
 
-import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.GameRepository;
 import com.jaba.vgl.repositories.custom.GameRepositoryCustom;
@@ -25,33 +24,12 @@ public interface GameRepositoryImpl extends GameRepository, GameRepositoryCustom
     Optional<Game> findGameById(Long id);
 
     @Override
-    @Query("SELECT g FROM Game g WHERE g.name = ?1 AND g.company = ?2")
-    Optional<Game> findGameByNameAndCompany(String name, Company company);
-
-
-    @Override
-    @Query("SELECT g.id FROM Game g WHERE g.name = ?1 AND g.company = ?2")
-    Optional<Long> getGameId(String name, Company company);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE Game g SET " +
-            "g.name = :name, " +
-            "g.company = :company, " +
-            "g.releaseDate = :releaseDate " +
-            "WHERE g.id = :id")
-    void updateGame(Long id, String name, Company company, String releaseDate);
-
-    @Override
     @Modifying
     @Query("DELETE FROM Game g WHERE g.id = ?1")
     int deleteGameById(Long id);
 
-
-    @Override
-    @Modifying
-    @Query("DELETE FROM Game g WHERE g.name = ?1 AND g.company = ?2")
-    int deleteGameByNameAndCompany(String name, Company company);
+    @Query("SELECT g FROM Game g WHERE g.id IN :ids")
+    List<Game> findByGameIds(List<Long> ids);
 
     @Override
     @Modifying
