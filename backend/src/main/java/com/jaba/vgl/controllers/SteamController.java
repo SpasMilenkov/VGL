@@ -22,8 +22,6 @@ public class SteamController {
     private final SteamService steamService;
     private final UserService userService;
 
-    //TODO: Add a check to see if the user has an id linked to their account in the database
-    //TODO: Rework the method to get userId so that i can check if the user has a linked id in the database
     @GetMapping("player-summary")
     public ResponseEntity<PlayerSummaryDto> getUserSummary(@RequestParam String email){
         PlayerSummaryDto result = steamService.getPlayerSummary(email);
@@ -37,8 +35,8 @@ public class SteamController {
         return ResponseEntity.ok(gameDescription);
     }
     @GetMapping("game-news")
-    public ResponseEntity<List<NewsItemDto>> getGameNews(@RequestParam String gameId){
-        List<NewsItemDto> gameNews = steamService.getGameNews(gameId);
+    public ResponseEntity<List<NewsItemDto>> getGameNews(@RequestParam String steamId){
+        List<NewsItemDto> gameNews = steamService.getGameNews(steamId);
 
         return ResponseEntity.ok(gameNews);
     }
