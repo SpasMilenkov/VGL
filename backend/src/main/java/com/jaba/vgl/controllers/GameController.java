@@ -53,5 +53,19 @@ public class GameController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Integer> deleteGame(@PathVariable Long id) {
+        return ResponseEntity.ok(gameService.deleteGame(id));
+    }
 
+    @DeleteMapping
+    public ResponseEntity<Integer> deleteGame(@RequestParam String name, @RequestBody CompanyDto companyDto) {
+        return ResponseEntity.ok(gameService.deleteGame(name, companyDto));
+    }
+
+    @PostMapping("/truncate")
+    public ResponseEntity<Void> truncateTable() {
+        gameService.truncateTable();
+        return ResponseEntity.ok().build();
+    }
 }
