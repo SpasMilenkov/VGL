@@ -33,6 +33,8 @@ const Login = () => {
           headers: {'Content-Type': 'application/json'}
         }
       );
+
+      window.location.href="/home";
     } catch (error : any) {
       if(!error?.response){
         setError('No response');
