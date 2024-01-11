@@ -23,7 +23,10 @@ public class GameController {
     public ResponseEntity<Game> createGame(@RequestBody Game game) {
         return ResponseEntity.ok(gameService.saveGame(game));
     }
-    //Get all games by IDS (misho remembers what that means I don't)
+    @GetMapping("/by-ids")
+    public ResponseEntity<List<Game>> getGamesByIds(@RequestParam List<Long> ids) {
+        return ResponseEntity.ok(gameService.getGamesByIds(ids));
+    }
     @DeleteMapping("/{id}")
     public void deleteGame(@PathVariable Long id) {
         gameService.deleteGame(id);

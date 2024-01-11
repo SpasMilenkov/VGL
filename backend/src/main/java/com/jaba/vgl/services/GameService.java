@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface GameService {
     Game saveGame(Game game);
-    List<Game> getGameByIds(List<Long> ids) ;
+    List<Game> getGamesByIds(List<Long> ids) ;
     void deleteGame(Long id);
     void truncateTable();
 }
