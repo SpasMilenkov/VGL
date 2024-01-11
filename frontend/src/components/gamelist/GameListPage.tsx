@@ -6,60 +6,52 @@ import type { Game } from "../../interfaces/Game";
 const GameListPage = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [randomGame, setRandomGame] = useState<Game | null>(null);
-  const [activeButton, setActiveButton] = useState(1);
-  const [isPlayedGames, setIsPlayedGames] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchAlreadyPlayedGames = async () =>{
-    //const response = (await axios.get('/steam/get-owned-games')).data;
-    //setGames(response);
-    //setRandomGame(response[Math.floor(Math.random()*response.length)]);
-  }
+  const fetchGames = async () =>{
+    const response = await axios.get('/steam/get-owned-games',
+    {
+      params: 
+      {
+        steamId: "76561199089642482" 
+      }
+    });
 
-  const fetchToBePlayedGames = async () =>{
-    //const response = await axios.get('/steam/get-owned-games').data;
-    //setGames(response);
-    //setRandomGame(response[Math.floor(Math.random()*response.length)]);
+    const data = response.data;
+
+    setGames(data);
+    setIsLoading(false);
+    setRandomGame(data[Math.floor(Math.random()*data.length)]);
   }
 
   useEffect(() =>{
-    if (activeButton === 2) {
-      fetchToBePlayedGames();
-      setIsPlayedGames(true);
-    } else if(activeButton === 1) {
-      fetchAlreadyPlayedGames();
-      setIsPlayedGames(false);
-    }
-  }, [activeButton])
+    fetchGames();
+  }, [])
 
-  const handleClick = (btn: number) =>{
-    setActiveButton(btn);
-  }
   
   return (
     <div className="w-full text-white">
       <main id="main-content">
         <div className="gamelist-navbar">
-          <ul className="gamelist-nav">
-            <li 
-              onClick={() => handleClick(1)} 
-              className={`gamelist-item ${activeButton === 1 ? "active" : ""}`}>
-                Already Played
-            </li>
-            <li 
-              onClick={() => handleClick(2)} 
-              className={`gamelist-item ${activeButton === 2 ? "active" : ""}`}>
-                To be played
-            </li>
-          </ul>
+          <h1 className="gamelist-title">
+            Game List
+          </h1>
         </div>
         <section id="section-already-played">
-          {activeButton === 1 &&
           <div className="already-played-opening">
+            {randomGame?.trailerUrl ? 
             <video
               className="already-played-img" 
               src={randomGame?.trailerUrl}
               autoPlay muted>
             </video>
+            :
+            randomGame?.bannerUrl 
+            ? 
+            <img src={randomGame?.bannerUrl} alt="GameBanner" />
+            :
+            <img src={randomGame?.headerUrl} alt="GameHeader" />
+            }
             <div className="opening-overlay"></div>
             <div className="section-opening-container">
               <div className="section-title">Recently Popular</div>
@@ -68,7 +60,6 @@ const GameListPage = () => {
               </div>
             </div>
           </div>
-          }
           <div className="already-played-filter">
             <div className="already-icon-container">
               <img
@@ -79,9 +70,12 @@ const GameListPage = () => {
             </div>
           </div>
           <div className="already-played-cards">
-            {games.length > 0 ?
+            {isLoading ? 
+            <span className="loader"></span> 
+            :
+            games.length > 0 ?
             games.map((game, index) => 
-            <GameListCard key={index} game={game} played={isPlayedGames}/>
+            <GameListCard key={index} game={game}/>
             )
             : 
             <div>No games in list.</div>
