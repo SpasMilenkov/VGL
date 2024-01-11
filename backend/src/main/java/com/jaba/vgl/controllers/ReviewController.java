@@ -41,4 +41,21 @@ public class ReviewController {
         reviewService.saveReview(reviewDto);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<Void> saveReviews(@RequestBody List<ReviewDto> reviewDtos) {
+        reviewService.saveReviews(reviewDtos);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Integer> deleteReview(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.deleteReview(id));
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> updateReview(@RequestBody ReviewDto reviewDto) {
+        reviewService.updateReview(reviewDto);
+        return ResponseEntity.ok().build();
+    }
 }
