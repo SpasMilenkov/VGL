@@ -7,8 +7,9 @@ const ReviewsList = () => {
   const [reviews, setReviews] = useState<ReviewContent[]>([]);
 
   const fetchNews = async () =>{
-    //const responseData = (await axios.get('')).data;
-    //setReviews(responseData);
+    const userId = localStorage.getItem('userId');
+    const responseData = (await axios.get(`/reviews/reviews-by-user-id/${userId}`)).data;
+    setReviews(responseData);
   }
 
   useEffect(() => {
@@ -17,7 +18,7 @@ const ReviewsList = () => {
 
   return (
     <div id="section-latest">
-      <div className="section-title">Latest</div>
+      <div className="section-title">My Reviews</div>
       {reviews?.map((review, index) =>
         <ReviewCard key={index} review={review}/>
       )}
