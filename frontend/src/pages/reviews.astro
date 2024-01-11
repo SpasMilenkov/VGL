@@ -1,49 +1,10 @@
 ---
-import CarouselComponent from "../components/home/CarouselComponent.vue";
 import ReviewsList from "../components/reviews/ReviewsList";
 import Layout from "../layouts/Layout.astro";
-
-const slides = [
-  {
-    id: "1",
-    imagePath: "src/assets/images/zelda.png",
-    gameTitle: `mesho 1`,
-    gameStudio: "mesho games",
-    releaseDate: "Remember bro",
-  },
-
-  {
-    id: "2",
-    imagePath: "src/assets/images/cyberpunk.png",
-    gameTitle: `mesho 2`,
-    gameStudio: "mesho games",
-    releaseDate: "Remember br",
-  },
-
-  {
-    id: "3",
-    imagePath: "src/assets/images/zelda.png",
-    gameTitle: `mesho 3`,
-    gameStudio: "mesho games",
-    releaseDate: "Remember bro",
-  },
-];
 ---
 
 <Layout title="VGL">
   <section class="carousel-section">
-    <h1 class="section-title pl-16 pt-16">Popular Player Reviews</h1>
-    <div class="flex justify-center items-center">
-      <CarouselComponent
-        client:load
-        cards={slides}
-        cardType="vertical"
-      />
-    </div>
-    <ReviewsList client:load/>
+    <ReviewsList client:load />
   </section>
 </Layout>
-
-<style scoped>
-  
-</style>
