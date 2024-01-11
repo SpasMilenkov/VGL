@@ -77,7 +77,7 @@ public class SteamService {
         Stream<String> newsDtos = getOwnedGames(steamId)
                 .stream()
                 .map(g -> steamClient.getGameNews(String.valueOf(g.getGameId()), 3, 300, "json"))
-                .limit(15);
+                .limit(5);
 
         List<JsonNode> newsItemsNodes = newsDtos
                 .map(this::parseJson)
