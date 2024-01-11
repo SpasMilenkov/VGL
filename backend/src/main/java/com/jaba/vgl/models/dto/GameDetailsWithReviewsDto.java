@@ -1,6 +1,5 @@
 package com.jaba.vgl.models.dto;
 
-import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.entities.GameDetails;
 import com.jaba.vgl.services.impl.GameDetailsServiceImpl;
 import com.jaba.vgl.services.impl.ReviewServiceImpl;
@@ -27,10 +26,6 @@ public record GameDetailsWithReviewsDto(
 
         gameDetails.setName(gameDetailsDto.name());
         gameDetails.setDescription(gameDetailsDto.description());
-        gameDetails.setRating(gameDetailsDto.rating());
-        gameDetails.setGenre(gameDetailsDto.genre());
-        gameDetails.setIsFavourite(gameDetailsDto.isFavourite());
-        gameDetails.setReleaseDate(gameDetailsDto.releaseDate());
 
         gameDetails.setCompany(companyDto.toEntity());
         gameDetails.setCompanyId(companyDto.id());

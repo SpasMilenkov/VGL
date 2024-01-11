@@ -7,8 +7,9 @@ import java.util.Optional;
 
 public record ReviewDto(
         Long id,
-        Long gameId, //TODO: migrate to GameDetailsDto?
-        Long userId, //TODO: migrate to UserDto
+        Long gameId,
+        Long userId,
+        String steamId,
         String title,
         String text,
         Integer rating
@@ -23,6 +24,7 @@ public record ReviewDto(
         review.setId(dto.id);
         review.setGameId(dto.gameId);
         review.setUserId(dto.userId);
+        review.setSteamId(dto.steamId);
         review.setTitle(dto.title);
         review.setText(dto.text);
         review.setRating(dto.rating);

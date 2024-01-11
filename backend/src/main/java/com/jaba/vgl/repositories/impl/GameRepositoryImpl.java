@@ -1,7 +1,5 @@
 package com.jaba.vgl.repositories.impl;
 
-import com.jaba.vgl.models.GameGenre;
-import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.entities.Company;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.repositories.GameRepository;
@@ -30,9 +28,6 @@ public interface GameRepositoryImpl extends GameRepository, GameRepositoryCustom
     @Query("SELECT g FROM Game g WHERE g.name = ?1 AND g.company = ?2")
     Optional<Game> findGameByNameAndCompany(String name, Company company);
 
-    @Override
-    @Query("SELECT g FROM Game g WHERE g.genre = ?1")
-    Optional<List<Game>> findGamesByGenre(GameGenre genre);
 
     @Override
     @Query("SELECT g.id FROM Game g WHERE g.name = ?1 AND g.company = ?2")
@@ -42,15 +37,10 @@ public interface GameRepositoryImpl extends GameRepository, GameRepositoryCustom
     @Modifying
     @Query("UPDATE Game g SET " +
             "g.name = :name, " +
-            "g.description = :description, " +
-            "g.rating = :rating, " +
-            "g.genre = :genre, " +
             "g.company = :company, " +
-            "g.isFavourite = :isFavourite, " +
             "g.releaseDate = :releaseDate " +
             "WHERE g.id = :id")
-    void updateGame(Long id, String name, String description, Integer rating,
-                    GameGenre genre, Company company, Boolean isFavourite, String releaseDate);
+    void updateGame(Long id, String name, Company company, String releaseDate);
 
     @Override
     @Modifying

@@ -1,7 +1,5 @@
 package com.jaba.vgl.models.dto;
 
-import com.jaba.vgl.models.GameGenre;
-import com.jaba.vgl.models.dto.mapper.CompanyDtoMapper;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.services.impl.GameServiceImpl;
 
@@ -23,10 +21,6 @@ public record GameWithCompanyDto(
         game.setCompany(companyDto.toEntity());
 
         game.setName(gameDto.name());
-        game.setDescription(gameDto.description());
-        game.setRating(gameDto.rating());
-        game.setGenre(gameDto.genre());
-        game.setIsFavourite(gameDto.isFavourite());
         game.setReleaseDate(gameDto.releaseDate());
 
         return game;

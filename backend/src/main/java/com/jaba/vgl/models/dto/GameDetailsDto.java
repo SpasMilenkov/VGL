@@ -1,6 +1,5 @@
 package com.jaba.vgl.models.dto;
 
-import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.entities.GameDetails;
 
 public record GameDetailsDto(
@@ -8,15 +7,7 @@ public record GameDetailsDto(
 
         String description,
 
-        Integer rating,
-
-        GameGenre genre,
-
-        CompanyDto company,
-
-        Boolean isFavourite,
-
-        String releaseDate
+        CompanyDto company
 ) {
 
     public GameDetails toEntity() {
@@ -25,10 +16,6 @@ public record GameDetailsDto(
 
         gameDetails.setName(dto.name());
         gameDetails.setDescription(dto.description());
-        gameDetails.setRating(dto.rating());
-        gameDetails.setGenre(dto.genre());
-        gameDetails.setIsFavourite(dto.isFavourite());
-        gameDetails.setReleaseDate(dto.releaseDate());
 
         gameDetails.setCompany(dto.company().toEntity());
         gameDetails.setCompanyId(dto.company().id());

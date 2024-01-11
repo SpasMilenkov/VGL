@@ -7,8 +7,7 @@ import java.util.List;
 public record CompanyDto(
         Long id,
         String name,
-        String studio,
-        List<GameDto> games
+        String studio
 ) {
     public Company toEntity() {
         Company company = new Company();
@@ -17,11 +16,6 @@ public record CompanyDto(
         company.setId(id);
         company.setName(dto.name);
         company.setStudio(dto.studio);
-        company.setGames(dto.games
-                .stream()
-                .map(GameDto::toEntity)
-                .toList()
-        );
 
         return company;
     }

@@ -14,6 +14,7 @@ public class ReviewDtoMapper implements Function<Review, ReviewDto> {
                 review.getId(),
                 review.getGameId(),
                 review.getUserId(),
+                review.getSteamId(),
                 review.getTitle(),
                 review.getText(),
                 review.getRating()

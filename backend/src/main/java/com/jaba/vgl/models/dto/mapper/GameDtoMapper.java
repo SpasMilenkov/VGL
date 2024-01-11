@@ -12,10 +12,6 @@ public class GameDtoMapper implements Function<Game, GameDto> {
     public GameDto apply(Game game) {
         return new GameDto(
                 game.getName(),
-                game.getDescription(),
-                game.getRating(),
-                game.getGenre(),
-                game.getIsFavourite(),
                 game.getReleaseDate()
         );
     }

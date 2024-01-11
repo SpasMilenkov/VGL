@@ -51,7 +51,13 @@ public @Data class Review {
     )
     @NotNull(message = "Review text must not be empty.")
     private String text;
-
+    @Column(
+            name = "steam_id",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    @NotNull(message = "Review text must not be empty.")
+    private String steamId;
     @Column(
             name = "review_rating",
             nullable = false

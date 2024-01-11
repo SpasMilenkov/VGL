@@ -3,9 +3,7 @@ package com.jaba.vgl;
 import com.jaba.vgl.exceptions.CompanyNotFoundException;
 import com.jaba.vgl.exceptions.GameNotFoundException;
 import com.jaba.vgl.exceptions.ReviewNotFoundException;
-import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.dto.*;
-import com.jaba.vgl.models.entities.GameDetails;
 import com.jaba.vgl.resources.DatabaseSetupExtension;
 import com.jaba.vgl.resources.TestConfiguration;
 import com.jaba.vgl.services.impl.*;
@@ -20,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,50 +99,6 @@ public class AppTests {
         }
 
         @Test
-        @Order(2)
-        @DisplayName("Add game to DB, update it and fetch from DB.")
-        void updateGameTest() {
-
-            //Create entry...
-            GameWithCompanyDto gameWithCompanyDto = mockupDataGenerator.generateGameWithCompanyDto();
-            CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
-
-            //Save entry...
-            gameService.createGame(gameWithCompanyDto);
-
-            boolean isFavourite = true;
-            Integer rating = 3;
-
-            //Update entry (Name and company shouldn't change to count as the same game)
-            GameDto gameDto2 = new GameDto(
-                    "World of Warcraft - Wrath of Lich King.",
-                    "meh game.",
-                    rating,
-                    GameGenre.RPG,
-                    isFavourite,
-                    "02.04.2000"
-            );
-
-            GameWithCompanyDto gameWithCompanyDto2 = new GameWithCompanyDto(
-                    gameDto2,
-                    companyDto
-            );
-
-            gameService.updateGame(gameWithCompanyDto2);
-
-            //Fetch from DB...
-            GameWithCompanyDto fetchedGameDto = gameService.getGame(gameWithCompanyDto.gameDto().name(), gameWithCompanyDto.companyDto());
-
-            logger.info(fetchedGameDto.toString());
-
-            boolean isGameUpdated = fetchedGameDto.gameDto().isFavourite() == isFavourite &&
-                    fetchedGameDto.gameDto().rating().equals(rating);
-
-            //Checking changes in the start of the test are set
-            assertTrue(isGameUpdated);
-        }
-
-        @Test
         @Order(3)
         @DisplayName("Add game to DB, delete it and try fetch from DB.")
         void deleteGameTest() {
@@ -192,51 +145,6 @@ public class AppTests {
 
             logger.info(fetchedGameDetails.toString());
             assertNotNull(fetchedGameDetails);
-        }
-
-        @Test
-        @Order(2)
-        @DisplayName("Add game details to DB, update it and fetch from DB.")
-        void updateGameTest() {
-
-            //Create entry...
-            GameDetailsDto gameDetailsDto = mockupDataGenerator.generateGameDetailsDto();
-
-            //Save entry...
-            gameDetailsService.createGameDetails(gameDetailsDto);
-
-            boolean isFavourite = true;
-            Integer rating = 3;
-            CompanyDto companyDto = mockupDataGenerator.generateCompanyDto();
-
-            //Update entry (Name and company shouldn't change to count as the same game)
-            GameDetailsDto gameDetailsDto2 = new GameDetailsDto(
-                    "World of Warcraft - Wrath of Lich King.",
-                    "best game ever made.",
-                    rating,
-                    GameGenre.RPG,
-                    companyDto,
-                    isFavourite,
-                    "02.04.2000"
-            );
-
-            GameDetailsWithReviewsDto gameDetailsWithReviewsDto = new GameDetailsWithReviewsDto(
-                    gameDetailsDto2,
-                    companyDto,
-                    new ArrayList<>()
-            );
-
-            gameDetailsService.updateGameDetails(gameDetailsWithReviewsDto);
-
-            //Fetch from DB...
-            GameDetailsWithReviewsDto fetchedGameDetails = gameDetailsService.getGameDetails(gameDetailsDto.name(), gameDetailsDto.company());
-
-            boolean isGameUpdated = fetchedGameDetails.gameDetailsDto().isFavourite() == isFavourite &&
-                    fetchedGameDetails.gameDetailsDto().rating().equals(rating);
-
-            //Checking changes in the start of the test are set
-            logger.info(fetchedGameDetails.toString());
-            assertTrue(isGameUpdated);
         }
 
         @Test
@@ -308,9 +216,10 @@ public class AppTests {
                     1L,
                     1L,
                     1L,
+                    "1",
                     "Bad game. Would NOT recommend",
                     "Bad graphics.",
-                    1.0f
+                    1
             );
 
             reviewService.updateReview(reviewDto2);
@@ -386,8 +295,7 @@ public class AppTests {
             CompanyDto updatedCompanyDto = new CompanyDto(
                     companyDto.id(),
                     "Test Company INC",
-                    "Test Studio",
-                    companyDto.games()
+                    "Test Studio"
             );
 
             companyService.updateCompany(updatedCompanyDto);

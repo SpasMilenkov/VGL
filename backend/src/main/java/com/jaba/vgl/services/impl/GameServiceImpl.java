@@ -1,7 +1,6 @@
 package com.jaba.vgl.services.impl;
 
 import com.jaba.vgl.exceptions.GameNotFoundException;
-import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.dto.GameWithCompanyDto;
 import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
@@ -92,31 +91,13 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<GameWithCompanyDto> getGamesByGenre(GameGenre genre) {
-        return gameRepository.findGamesByGenre(genre)
-                .map(games -> games.stream()
-                        .map(gameWithCompanyDtoMapper)
-                        .collect(Collectors.toList())
-                )
-                .orElseThrow(
-                        () -> new GameNotFoundException(
-                                String.format("No games with genre %s were found.", genre)
-                        )
-                );
-    }
-
-    @Override
     public void updateGame(GameWithCompanyDto gameWithCompanyDto) {
         Game game = gameWithCompanyDto.toEntity(this);
 
         gameRepository.updateGame(
                 game.getId(),
                 game.getName(),
-                game.getDescription(),
-                game.getRating(),
-                game.getGenre(),
                 game.getCompany(),
-                game.getIsFavourite(),
                 game.getReleaseDate()
         );
     }

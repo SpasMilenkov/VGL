@@ -1,6 +1,5 @@
 package com.jaba.vgl.services;
 
-import com.jaba.vgl.models.GameGenre;
 import com.jaba.vgl.models.dto.CompanyDto;
 import com.jaba.vgl.models.dto.GameWithCompanyDto;
 import com.jaba.vgl.models.entities.Game;
@@ -18,7 +17,6 @@ public interface GameService {
 
     Optional<Long> getGameId(String name, CompanyDto companyDto);
 
-    List<GameWithCompanyDto> getGamesByGenre(GameGenre genre);
 
     void updateGame(GameWithCompanyDto game);
 

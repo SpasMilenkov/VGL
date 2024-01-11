@@ -24,11 +24,7 @@ public class CompanyDtoMapper implements Function<Company, CompanyDto> {
         return new CompanyDto(
                 company.getId(),
                 company.getName(),
-                company.getStudio(),
-                company.getGames()
-                        .stream()
-                        .map(gameDtoMapper)
-                        .toList()
+                company.getStudio()
         );
     }
 }

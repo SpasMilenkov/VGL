@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+
     @PostMapping("/register")
     public ResponseEntity<User> signUp(@RequestBody RegisterDto registerDto){
         return ResponseEntity.ok(authenticationService.register(registerDto));
     }
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+    public ResponseEntity<Integer> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
         JwtAuthenticationResponse jwtResponse = authenticationService.login(loginDto);
 
         // Create and add the access token cookie
@@ -45,7 +46,7 @@ public class AuthenticationController {
         refreshTokenCookie.setPath("/"); // The path on which the cookie will be available
         response.addCookie(refreshTokenCookie);
 
-        return ResponseEntity.ok("User logged in successfully");
+        return ResponseEntity.ok(jwtResponse.getUserId());
     }
 
     @PostMapping("/refresh")
