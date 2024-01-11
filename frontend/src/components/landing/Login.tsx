@@ -34,7 +34,9 @@ const Login = () => {
         }
       );
 
+      localStorage.setItem('userId', response.data);
       window.location.href="/home";
+
     } catch (error : any) {
       if(!error?.response){
         setError('No response');
