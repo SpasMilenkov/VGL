@@ -5,7 +5,7 @@ import axios from "../../axios/axios";
 import { useEffect, useState } from "react";
 
 const registerSchema = z.object({
-  name: z.string().trim().min(2, "Username must be at least 2 characters"),
+  nickName: z.string().trim().min(2, "Username must be at least 2 characters"),
   email: z.string().email().trim(),
   steamId: z.string().min(1, "SteamID is required"),
   password: z.string().min(4, "Password must be at least 4 characters"),
@@ -24,7 +24,7 @@ const Register = () => {
     resolver: zodResolver(registerSchema)
   });
 
-  const watchName = watch("name");
+  const watchName = watch("nickName");
   const watchEmail = watch("email");
   const watchPassword = watch("password");
   const watchConfirmPassword = watch("confirmPassword");
@@ -65,8 +65,8 @@ const Register = () => {
       <h2 className="form-h2 white-98">
         Register
       </h2>
-      <input className="form-input" type="text" placeholder="Name" {...register("name")}/>
-      <p className="text-orange-600">{errors.name?.message}</p>
+      <input className="form-input" type="text" placeholder="Name" {...register("nickName")}/>
+      <p className="text-orange-600">{errors.nickName?.message}</p>
       <input className="form-input" type="email" placeholder="Email" {...register("email")}/>
       <p className="text-orange-600">{errors.email?.message}</p>
       <input className="form-input" type="password" placeholder="Password" {...register("password")}/>
