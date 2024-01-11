@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "../../axios/axios";
 import GameListCard from "./GameListCard"
 import type { Game } from "../../interfaces/Game";
+import ReviewForm from "./ReviewForm";
 
 const GameListPage = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [randomGame, setRandomGame] = useState<Game | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [gameId, setGameId] = useState<number>(-1);
+  const [gameName, setGameName] = useState<string>('');
 
   const fetchGames = async () =>{
     const response = await axios.get('/steam/get-owned-games',
@@ -27,11 +31,13 @@ const GameListPage = () => {
   useEffect(() =>{
     fetchGames();
   }, [])
-
   
   return (
-    <div className="w-full text-white">
+    <div className="w-full text-white relative">
       <main id="main-content">
+        {isModalOpen &&
+          <ReviewForm gameId={gameId} gameName={gameName} setIsModalOpen={setIsModalOpen}/>
+        }
         <div className="gamelist-navbar">
           <h1 className="gamelist-title">
             Game List
@@ -48,9 +54,15 @@ const GameListPage = () => {
             :
             randomGame?.bannerUrl 
             ? 
-            <img src={randomGame?.bannerUrl} alt="GameBanner" />
+            <img 
+              className="already-played-img" 
+              src={randomGame?.headerUrl} 
+              alt="GameHeader" />
             :
-            <img src={randomGame?.headerUrl} alt="GameHeader" />
+            <img 
+              className="already-played-img" 
+              src={randomGame?.bannerUrl} 
+              alt="GameBanner" />
             }
             <div className="opening-overlay"></div>
             <div className="section-opening-container">
@@ -75,7 +87,12 @@ const GameListPage = () => {
             :
             games.length > 0 ?
             games.map((game, index) => 
-            <GameListCard key={index} game={game}/>
+            <GameListCard 
+              key={index} 
+              game={game} 
+              setGameId={setGameId}
+              setGameName={setGameName}
+              setIsModalOpen={setIsModalOpen}/>
             )
             : 
             <div>No games in list.</div>

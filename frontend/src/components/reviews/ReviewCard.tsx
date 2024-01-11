@@ -12,7 +12,7 @@ const ReviewCard:React.FC<Props> = ({review}) => {
         <div className="latest-img-container">
           <img
             className="latest-image text-white"
-            src={review.gameCover}
+            src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${review.gameId}/header.jpg`}
             alt="Game Review Image"
           />
           <div className="latest-overlay"></div>
@@ -26,13 +26,13 @@ const ReviewCard:React.FC<Props> = ({review}) => {
             <img key={index} className='w-5' src='src/assets/icons/star.svg'/>
           )}
           </div>
-          <div className="latest-game-name">{review.gameName}</div>
+          <div className="latest-game-name">{review.title}</div>
         </div>
       </div>
       <div className="card-right-section">
         <div className="latest-review-container">
           <div className="latest-review">
-            {review.content}
+            {review.text}
           </div>
         </div>
         <div className="review-info">
