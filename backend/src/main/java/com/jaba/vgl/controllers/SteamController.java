@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SteamController {
     private final SteamService steamService;
-    private final UserService userService;
+
 
     @GetMapping("player-summary")
     public ResponseEntity<PlayerSummaryDto> getUserSummary(@RequestParam String email){
