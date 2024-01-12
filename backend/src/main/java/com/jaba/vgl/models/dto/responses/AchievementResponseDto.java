@@ -1,11 +1,7 @@
 package com.jaba.vgl.models.dto.responses;
 
-import jakarta.annotation.Nullable;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.ByteArrayInputStream;
-
 public record AchievementResponseDto(
+        Long id,
         String userName,
         String gameTitle,
         String title,

@@ -16,6 +16,7 @@ public class AchievementResponseDtoMapper implements Function<Achievement, Achie
 
         // Now create the DTO with the data retrieved from the Achievement entity and its related entities.
         return new AchievementResponseDto(
+                achievement.getId(),
                 userName,
                 gameTitle,
                 achievement.getTitle(),
