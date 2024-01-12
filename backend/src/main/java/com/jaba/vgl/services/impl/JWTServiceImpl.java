@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 @Service
 public class JWTServiceImpl implements JWTService {
-    private static final long ACCESS_TOKEN_VALIDITY = 1000 * 60; //one minute
+    private static final long ACCESS_TOKEN_VALIDITY = 1000 * 60 * 60; //one minute
     private static final long REFRESH_TOKEN_VALIDITY = 1000 * 60 * 60 * 24; // 24 hours
 
     @Override
