@@ -41,7 +41,8 @@ public class ApiExceptionHandler {
             UserNotFoundException.class,
             GamesNotFoundException.class,
             PlayerNotFoundException.class,
-            NewsItemsNotFoundException.class
+            NewsItemsNotFoundException.class,
+            UserAlreadyExistsException.class
     })
     public ResponseEntity<Object> handleNotFoundException(RuntimeException e) {
 
