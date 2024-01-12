@@ -21,11 +21,6 @@ public interface UserRepositoryImpl extends UserRepository, UserRepositoryCustom
     @Query("SELECT r FROM Review r WHERE r.user.id = :userId")
     List<Review> getUserReviews(@Param("userId") Long userId);
 
-
-    @Override
-    @Query("SELECT u.games FROM User u WHERE u.id = :userId")
-    Set<Game> getUserGames(@Param("userId") Long userId);
-
     @Override
     @Modifying
     @Query(value = "TRUNCATE TABLE Users RESTART IDENTITY CASCADE", nativeQuery = true)

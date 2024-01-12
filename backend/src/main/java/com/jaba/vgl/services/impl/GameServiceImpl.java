@@ -1,31 +1,36 @@
 package com.jaba.vgl.services.impl;
 
-import com.jaba.vgl.exceptions.GameNotFoundException;
+
+import com.jaba.vgl.models.dto.GameDto;
+import com.jaba.vgl.models.dto.OwnedGameDto;
 import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
+import com.jaba.vgl.models.dto.mapper.OwnedGameDtoMapper;
 import com.jaba.vgl.models.entities.Game;
+import com.jaba.vgl.models.entities.User;
 import com.jaba.vgl.repositories.impl.GameRepositoryImpl;
 import com.jaba.vgl.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GameServiceImpl implements GameService {
     private final GameRepositoryImpl gameRepository;
+    private final OwnedGameDtoMapper ownedGameDtoMapper;
     private final GameDtoMapper gameDtoMapper;
+    private final Random random = new Random();
     private final JdbcTemplate jdbcTemplate;
 
 
     @Autowired
     public GameServiceImpl(GameRepositoryImpl gameRepository,
+                           OwnedGameDtoMapper ownedGameDtoMapper,
                            GameDtoMapper gameDtoMapper,
                            JdbcTemplate jdbcTemplate) {
         this.gameRepository = gameRepository;
+        this.ownedGameDtoMapper = ownedGameDtoMapper;
         this.gameDtoMapper = gameDtoMapper;
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -37,8 +42,37 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<Game> getGamesByIds(List<Long> ids) {
-        return gameRepository.findByGameIds(ids);
+    public void saveGamesBulk(List<OwnedGameDto> gameDtoList, User user) {
+        List<Game> processedGames = new ArrayList<>();
+
+        for (OwnedGameDto gameDto : gameDtoList) {
+            Game game = gameRepository.findBySteamId((long)gameDto.getGameId())
+                    .orElseGet(() -> ownedGameDtoMapper.apply(gameDto));
+
+            game.getUsers().add(user);
+            processedGames.add(game);
+        }
+
+        gameRepository.saveAll(processedGames);
+    }
+
+    @Override
+    public List<GameDto> getGamesByIds() {
+        int numberOfGames = 30;
+        long totalGames = gameRepository.count();
+        Set<Long> randomIds = new HashSet<>();
+
+        while (randomIds.size() < numberOfGames) {
+            long randomId = Math.abs(random.nextLong()) % totalGames + 1;
+            randomIds.add(randomId);
+        }
+
+        return gameRepository
+                .findAllById(randomIds)
+                .stream()
+                .filter(g -> g.getSteamId() != 0)
+                .map(gameDtoMapper)
+                .toList();
     }
 
 

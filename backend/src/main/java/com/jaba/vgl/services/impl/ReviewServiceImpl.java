@@ -49,6 +49,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<ReviewDto> getReviewsByGameId(Long id) {
+        return reviewRepository.getAllByGameId(id)
+                .stream()
+                .map(reviewDtoMapper)
+                .toList();
+    }
+
+    @Override
     public Optional<Long> getReviewId(String title) {
         return reviewRepository.getReviewId(title);
     }
@@ -57,7 +65,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void saveReview(ReviewDto reviewDto) {
         Review review = reviewDto.toEntity(this);
 
-        review.setGame(gameRepository.findById(reviewDto.gameId()).get());
+        review.setGame(gameRepository.findBySteamId(reviewDto.gameId()).get());
         review.setUser(userRepository.findById(reviewDto.userId()).get());
 
         reviewRepository.save(review);

@@ -14,11 +14,12 @@ const GameListPage = () => {
   const [modalType, setModalType] = useState<string>('');
 
   const fetchGames = async () =>{
+    const steamId = localStorage.getItem('steamId')
     const response = await axios.get('/steam/get-owned-games',
     {
       params: 
       {
-        steamId: "76561199089642482" 
+        steamId: steamId
       }
     });
 
@@ -50,7 +51,8 @@ const GameListPage = () => {
             <video
               className="already-played-img" 
               src={randomGame?.trailerUrl}
-              autoPlay muted>
+              autoPlay muted
+              loop>
             </video>
             :
             randomGame?.bannerUrl 

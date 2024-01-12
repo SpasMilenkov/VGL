@@ -1,21 +1,31 @@
 <template>
     <div class="slide rounded-lg ">
-        <img class="slide-img h-full w-full rounded-3xl" :src="content.imageUrl" alt="Minecraft">
+        <img class="slide-img h-full w-full rounded-3xl"
+         :src="imgBanner"
+         :alt="content.name"
+         @error="changeSrc"
+         width="500" height="300"
+         >
         <div class="slide-overlay p-4 w-full h-full flex flex-col-reverse">
             <div class="slide-info flex flex-col w-full items-start">
-                <div class="slide-title">{{ content.gameTitle }}</div>
-                <div class="slide-dev">{{ content.gameStudio }}</div>
+                <div class="slide-title">{{ content.name }}</div>
+                <div class="slide-dev">{{ content.studio }}</div>
             </div>
         </div>
     </div>
 </template>
 <script setup lang='ts'>
-import type { HeroGameCardContent } from '../../interfaces/HeroGameCardContent';
+import { ref } from 'vue';
+import type CardContent from '../../interfaces/CardContent';
 
 interface HeroGameCardProps {
-    content: HeroGameCardContent
+    content: CardContent
 }
-defineProps<HeroGameCardProps>()
+const props = defineProps<HeroGameCardProps>()
+const imgBanner = ref(`https://cdn.akamai.steamstatic.com/steam/apps/${props.content.steamId}/page.bg.jpg?t=1642515862`)
+const changeSrc = () => {
+    imgBanner.value = `https://cdn.cloudflare.steamstatic.com/steam/apps/${props.content.steamId}/header.jpg`
+}
 </script>
 <style scoped>
 .slide {

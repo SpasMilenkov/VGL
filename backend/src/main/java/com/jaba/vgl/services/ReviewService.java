@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface ReviewService {
 
     ReviewDto getReview(Long id);
+    List<ReviewDto> getReviewsByGameId(Long id);
 
     Optional<Long> getReviewId(String title);
 

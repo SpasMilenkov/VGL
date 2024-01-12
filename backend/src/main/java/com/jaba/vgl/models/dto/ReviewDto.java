@@ -8,6 +8,7 @@ public record ReviewDto(
         Long gameId,
         Long userId,
         String steamId,
+        String author,
         String title,
         String text,
         Integer rating

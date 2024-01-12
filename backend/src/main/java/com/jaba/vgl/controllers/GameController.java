@@ -1,5 +1,6 @@
 package com.jaba.vgl.controllers;
 
+import com.jaba.vgl.models.dto.GameDto;
 import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/games")
+@RequestMapping("api/v1/games")
 public class GameController {
 
     private final GameService gameService;
@@ -23,9 +24,9 @@ public class GameController {
     public ResponseEntity<Game> createGame(@RequestBody Game game) {
         return ResponseEntity.ok(gameService.saveGame(game));
     }
-    @GetMapping("/by-ids")
-    public ResponseEntity<List<Game>> getGamesByIds(@RequestParam List<Long> ids) {
-        return ResponseEntity.ok(gameService.getGamesByIds(ids));
+    @GetMapping("/random")
+    public ResponseEntity<List<GameDto>> getGamesByIds() {
+        return ResponseEntity.ok(gameService.getGamesByIds());
     }
     @DeleteMapping("/{id}")
     public void deleteGame(@PathVariable Long id) {

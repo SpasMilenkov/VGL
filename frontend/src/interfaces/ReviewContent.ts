@@ -3,5 +3,6 @@ export default interface ReviewContent{
     author: string,
     rating: number,
     title: string,
-    gameId: number
+    gameId: number,
+    steamId: number
 }

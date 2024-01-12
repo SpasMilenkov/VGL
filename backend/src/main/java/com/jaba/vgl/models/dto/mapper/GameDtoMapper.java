@@ -14,7 +14,9 @@ public class GameDtoMapper implements Function<Game, GameDto> {
         return new GameDto(
                 game.getName(),
                 game.getId(),
-                game.getSteamId()
+                game.getSteamId(),
+                game.getReleaseDate(),
+                game.getStudioName()
         );
     }
 }

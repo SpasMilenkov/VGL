@@ -42,7 +42,7 @@ const Sidebar = () => {
     {
       id: 5,
       to: "/achievements",
-      icon: "src/assets/icons/trophy-icon.png"
+      icon: "src/assets/icons/trophy-icon.svg"
     },
     {
       to: "/gamelist",

@@ -40,15 +40,13 @@ public class Game {
 
     @Column(
             name = "steam_id",
-            nullable = false,
-            columnDefinition = "TEXT"
+            nullable = false
     )
     @NotNull(message = "Name must not be empty.")
     private Long steamId;
     @Column(
             name = "release_date",
-            nullable = false,
-            columnDefinition = "TEXT"
+            nullable = false
     )
     @NotNull(message = "Name must not be empty.")
     private Date releaseDate;
@@ -61,7 +59,11 @@ public class Game {
     @NotNull(message = "Name must not be empty.")
     private String studioName;
 
-    @ManyToMany(mappedBy = "games")
+    @ManyToMany
+    @JoinTable(
+            name = "user_game_table", // This table will contain the association between wishes and games
+            joinColumns = @JoinColumn(name = "game_id"), // Column for wish
+            inverseJoinColumns = @JoinColumn(name = "user_id")) // Column for game
     Set<User> users;
 
     @ManyToMany

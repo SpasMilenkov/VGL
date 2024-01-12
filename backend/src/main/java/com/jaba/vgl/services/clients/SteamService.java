@@ -142,10 +142,16 @@ public class SteamService {
 
     // Constructs an OwnedGameDto from a JsonNode
     private OwnedGameDto createOwnedGameDto(JsonNode gameNode) {
+
         OwnedGameDto gameDto = new OwnedGameDto();
         gameDto.setGameId(gameNode.path("steam_appid").asInt());
         gameDto.setName(gameNode.path("name").asText());
-        gameDto.setStudio(gameNode.path("developers").get(0).asText());
+        try {
+            gameDto.setStudio(gameNode.path("developers").get(0).asText());
+        }catch (NullPointerException e){
+            gameDto.setStudio("Studio data not provided by Steam");
+        }
+
         gameDto.setTrailerUrl(extractMovieWebmMaxLink(gameNode.path("movies")));
         gameDto.setBannerUrl(constructImageUrl(gameDto.getGameId(), "page.bg.jpg"));
         gameDto.setHeaderUrl(constructImageUrl(gameDto.getGameId(), "header.jpg"));

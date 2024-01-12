@@ -1,10 +1,12 @@
 package com.jaba.vgl.services.impl;
 
+import com.jaba.vgl.exceptions.GameNotFoundException;
 import com.jaba.vgl.exceptions.UserNotFoundException;
 import com.jaba.vgl.models.dto.mapper.AchievementRequestDtoMapper;
 import com.jaba.vgl.models.dto.mapper.AchievementResponseDtoMapper;
 import com.jaba.vgl.models.dto.responses.AchievementResponseDto;
 import com.jaba.vgl.models.entities.Achievement;
+import com.jaba.vgl.models.entities.Game;
 import com.jaba.vgl.models.entities.User;
 import com.jaba.vgl.repositories.GameRepository;
 import com.jaba.vgl.repositories.UserRepository;
@@ -30,12 +32,13 @@ public class AchievementServiceImpl implements AchievementService {
 
     @Override
     public Achievement createAchievement(AchievementRequestDto dto) {
+        Game game = gameRepository.findBySteamId(dto.gameId()).orElseThrow(() -> new GameNotFoundException("Game not foound for review"));
         User user = userRepository.findById(dto.userId())
                 .orElseThrow(() -> new UserNotFoundException("User with that id does not exist"));
         Achievement achievement =  achievementRequestMapper
                 .mapAchievementRequestDtoToAchievement(dto, user);
 
-        achievement.setGame(gameRepository.findById(dto.gameId()).get());
+        achievement.setGame(gameRepository.findBySteamId(dto.gameId()).get());
 
         return achievementRepository.save(achievement);
     }

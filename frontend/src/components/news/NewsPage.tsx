@@ -8,11 +8,12 @@ const NewsPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchNews = async () =>{
+    const steamId = localStorage.getItem('steamId')
     const response = await axios.get('/steam/game-news',
       {
         params: 
         {
-          steamId: "76561199089642482" 
+          steamId: steamId
         }
       }
     );

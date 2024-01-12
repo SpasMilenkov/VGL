@@ -34,7 +34,8 @@ const Login = () => {
         }
       );
 
-      localStorage.setItem('userId', response.data);
+      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('steamId', response.data.steamId)
       window.location.href="/home";
 
     } catch (error : any) {

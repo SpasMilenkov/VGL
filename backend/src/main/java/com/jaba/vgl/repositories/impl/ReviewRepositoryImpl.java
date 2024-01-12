@@ -28,6 +28,8 @@ public interface ReviewRepositoryImpl extends ReviewRepository, ReviewRepository
     @Override
     void updateReview(Long id, Long gameId, String title, String text, Integer rating);
 
+
+
     @Override
     @Query("SELECT r.id FROM Review r WHERE r.title = ?1")
     Optional<Long> getReviewId(String title);

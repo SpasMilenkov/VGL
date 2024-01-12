@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface GameRepository extends JpaRepository<Game, Long>{
     Optional<Game> findGameById(Long id);
 
-    List<Game> findByGameIds(List<Long> ids);
+    List<Game> findByIdIn(List<Long> ids);
     int deleteGameById(Long id);
+
+    Optional<Game> findBySteamId(Long gameId);
 }

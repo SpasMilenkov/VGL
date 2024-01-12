@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,20 +27,7 @@ public class User implements UserDetails {
     private String refreshToken;
     private Role role;
 
-    //TODO: many to many with games entity
 
-    @OneToMany(mappedBy = "user",
-            orphanRemoval = true,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
-    private List<Review> reviews;
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_games_table",
-            joinColumns = @JoinColumn(name = "game_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    Set<Game> games;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

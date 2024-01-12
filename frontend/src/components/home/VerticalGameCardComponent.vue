@@ -1,12 +1,12 @@
 <template>
     <div
         class="card vertical-card flex w-[22rem] h-[20rem] flex-col items-stretch content-center bg-gray-15 rounded-lg gap-5 p-3">
-        <img :src="props.content.imagePath" alt="Game Image" class="game-preview w-full rounded-xl" />
+        <img :src="imgUrl" alt="Game Image" class="game-preview w-full rounded-xl" />
         <div class="flex gap-2 flex-col items-start justify-between flex-1">
-            <h3 class="game-title ">{{ props.content.gameTitle }}</h3>
+            <h3 class="game-title ">{{ content.name }}</h3>
             <div class="flex justify-between w-full">
-                <h4 class="game-studio">{{ props.content.gameStudio }}</h4>
-                <h4 class="release-date">{{ props.content.releaseDate }}</h4>
+                <h4 class="game-studio">{{ content.studio }}</h4>
+                <h4 class="release-date">{{ content.releaseDate }}</h4>
             </div>
         </div>
         <img src="../../assets/icons/icon-game-add.png" alt="Card Icon" class="card-icon">
@@ -15,11 +15,13 @@
 </template>
 
 <script setup lang='ts'>
-import type SmallGameCardContent from '../../interfaces/SmallGameCardContent';
+import { ref } from 'vue';
+import type CardContent from '../../interfaces/CardContent';
 interface VerticalGameCardProps {
-    content: SmallGameCardContent
+    content: CardContent
 }
 const props = defineProps<VerticalGameCardProps>()
+const imgUrl = ref(`https://cdn.cloudflare.steamstatic.com/steam/apps/${props.content.steamId}/header.jpg`)
 </script>
 <style scoped>
 .card {

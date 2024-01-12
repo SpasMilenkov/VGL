@@ -41,7 +41,7 @@ public class Achievement {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 }
