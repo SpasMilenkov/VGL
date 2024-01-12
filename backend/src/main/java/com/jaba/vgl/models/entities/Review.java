@@ -28,9 +28,13 @@ public @Data class Review {
     @Column(name = "review_id")
     private Long id;
 
-    @Column(name = "game_id")
+    @Column(name = "gamee_id")
     @NotNull(message = "Game id must not be empty.")
     private Long gameId;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 
     @Column(name = "user_id")
     @NotNull(message = "User id must not be empty.")
