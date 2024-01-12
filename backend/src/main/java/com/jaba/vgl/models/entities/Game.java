@@ -64,13 +64,6 @@ public class Game {
     @ManyToMany(mappedBy = "games")
     Set<User> users;
 
-    @OneToMany(
-            mappedBy = "game",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Achievement> achievements;
-
     @ManyToMany
     @JoinTable(
             name = "wish_game_table", // This table will contain the association between wishes and games

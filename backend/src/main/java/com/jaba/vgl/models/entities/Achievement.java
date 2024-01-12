@@ -37,7 +37,7 @@ public class Achievement {
     @Column(columnDefinition = "BYTEA")
     private byte[] imageData;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "game_id")
     private Game game;
 
