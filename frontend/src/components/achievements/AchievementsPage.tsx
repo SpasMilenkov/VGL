@@ -4,22 +4,11 @@ import AchivementCard from "./AchivementCard";
 import axios from "../../axios/axios";
 
 const AchievementsPage = () => {
-  const [achievements, setAchievements] = useState<Achivement[]>([]);
-
-  const data = [
-    {
-      username: "neshto",
-      title: "title",
-      description: "descr",
-      difficulty: "diff",
-      gameTitle: "game",
-      image: undefined
-    }
-  ]
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
 
   const fetchAchievements = async () =>{
-    //const response = (await axios.get('/achievements')).data;
-    setAchievements(data);
+    const response = (await axios.get('/achievements/all')).data;
+    setAchievements(response);
   }
 
   useEffect(() =>{
@@ -32,8 +21,8 @@ const AchievementsPage = () => {
         Achievements
       </h1>
       {achievements.length > 0 ?
-      achievements.map(achievement =>
-      <AchivementCard achievement={achievement}/>
+      achievements.map((achievement, index) =>
+      <AchivementCard key={index} achievement={achievement}/>
       )
       :
       <div className="text-white">No achievements added.</div>
