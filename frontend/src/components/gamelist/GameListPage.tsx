@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../../axios/axios";
 import GameListCard from "./GameListCard"
 import type { Game } from "../../interfaces/Game";
-import ReviewForm from "./ReviewForm";
+import Modal from "./Modal";
 
 const GameListPage = () => {
   const [games, setGames] = useState<Game[]>([]);
@@ -11,6 +11,7 @@ const GameListPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [gameId, setGameId] = useState<number>(-1);
   const [gameName, setGameName] = useState<string>('');
+  const [modalType, setModalType] = useState<string>('');
 
   const fetchGames = async () =>{
     const response = await axios.get('/steam/get-owned-games',
@@ -36,7 +37,7 @@ const GameListPage = () => {
     <div className="w-full text-white relative">
       <main id="main-content">
         {isModalOpen &&
-          <ReviewForm gameId={gameId} gameName={gameName} setIsModalOpen={setIsModalOpen}/>
+          <Modal gameId={gameId} gameName={gameName} modalType={modalType} setIsModalOpen={setIsModalOpen}/>
         }
         <div className="gamelist-navbar">
           <h1 className="gamelist-title">
@@ -92,7 +93,8 @@ const GameListPage = () => {
               game={game} 
               setGameId={setGameId}
               setGameName={setGameName}
-              setIsModalOpen={setIsModalOpen}/>
+              setIsModalOpen={setIsModalOpen}
+              setModalType={setModalType}/>
             )
             : 
             <div>No games in list.</div>

@@ -29,7 +29,6 @@ const Modal:React.FC<Props> = ({gameId, gameName, setIsModalOpen, modalType}) =>
     const file = e.target.files[0];
     setImage(file);
     setImageName(file.name);
-    console.log(file);
   };
 
   const onSubmit = async () =>{
@@ -51,22 +50,20 @@ const Modal:React.FC<Props> = ({gameId, gameName, setIsModalOpen, modalType}) =>
 
     if(modalType === 'achievement'){
       const requestData = new FormData();
-      requestData.append('title', title);
-      requestData.append('description', text);
+      requestData.append('gameId', gameId);
       requestData.append('userId', userId);
+      requestData.append('Description', text);  
       requestData.append('difficulty', selectedDifficulty);
-      requestData.append('gameName', gameName);
+      requestData.append('title', title);
 
       if(image !== null){
         requestData.append('image', image);
       }
 
-      console.log(requestData);
-
-      //await axios.post('/reviews', requestData);
+      await axios.post('/achievements/create', requestData);
     }
 
-    //handelModalOpen();
+    handelModalOpen();
   }
 
   return (

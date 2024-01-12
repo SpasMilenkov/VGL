@@ -6,9 +6,10 @@ interface GameProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setGameId: React.Dispatch<React.SetStateAction<number>>;
   setGameName: React.Dispatch<React.SetStateAction<string>>;
+  setModalType: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const GameListCard:React.FC<GameProps> = ({game, setGameId, setGameName, setIsModalOpen}) => {
+const GameListCard:React.FC<GameProps> = ({game, setGameId, setGameName, setIsModalOpen, setModalType}) => {
   const [imageUrl, setImageUrl] = useState(game.bannerUrl);
 
   useEffect(() =>{
@@ -19,10 +20,11 @@ const GameListCard:React.FC<GameProps> = ({game, setGameId, setGameName, setIsMo
     setImageUrl(game.headerUrl);
   };
 
-  const handleModalOpen = () =>{
+  const handleModalOpen = (modalType: string) =>{
     setIsModalOpen(true);
     setGameId(game.gameId);
     setGameName(game.name);
+    setModalType(modalType);
     document.body.classList.add("overflow-y-hidden");
   }
 
@@ -44,9 +46,16 @@ const GameListCard:React.FC<GameProps> = ({game, setGameId, setGameName, setIsMo
       </div>
       <img 
         title='Add Review'
-        onClick={handleModalOpen}
+        onClick={() => handleModalOpen('review')}
         className='w-[2rem] h-[2rem] cursor-pointer absolute right-6 top-6' 
         src="src/assets/icons/review-icon.svg" 
+        alt="ReviewIcon" />
+
+      <img 
+        title='Add Trophy'
+        onClick={() => handleModalOpen('achievement')}
+        className='w-[2rem] h-[2rem] cursor-pointer absolute right-6 top-20' 
+        src="src/assets/icons/trophy-icon.png" 
         alt="ReviewIcon" />
     </div>
   )
