@@ -53,6 +53,9 @@ To get started with VGL, follow these steps:
 ![Home modal](https://github.com/SpasMilenkov/VGL/blob/34-connect-frontend-to-backend/screenshots/home-modal.png)
 ![Home carousels](https://github.com/SpasMilenkov/VGL/blob/34-connect-frontend-to-backend/screenshots/home2.png)
 ![Game list trailer](https://github.com/SpasMilenkov/VGL/blob/34-connect-frontend-to-backend/screenshots/game-list.png)
+
+**(^^ the header at the top is the actual trailer (gotta say because it took way too long to get working))**
+
 ![Game list list](https://github.com/SpasMilenkov/VGL/blob/34-connect-frontend-to-backend/screenshots/game-list2.png)
 ![Review modal](https://github.com/SpasMilenkov/VGL/blob/34-connect-frontend-to-backend/screenshots/review-modal.png)
 ![Achievement modal](https://github.com/SpasMilenkov/VGL/blob/34-connect-frontend-to-backend/screenshots/achievement-modal.png)
