@@ -63,7 +63,7 @@ public class GameServiceImpl implements GameService {
         Set<Long> randomIds = new HashSet<>();
 
         while (randomIds.size() < numberOfGames) {
-            long randomId = Math.abs(random.nextLong()) % totalGames + 1;
+            long randomId = Math.abs(random.nextLong()) % (totalGames + 1);
             randomIds.add(randomId);
         }
 
