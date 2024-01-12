@@ -1,15 +1,14 @@
 package com.jaba.vgl.controllers;
 
+import com.jaba.vgl.models.dto.WishDto;
 import com.jaba.vgl.models.entities.Wish;
 import com.jaba.vgl.services.WishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/wishes")
+@RequestMapping("/api/v1/wishes")
 public class WishController {
 
     private final WishService wishService;
@@ -20,7 +19,7 @@ public class WishController {
     }
 
     @PostMapping
-    public ResponseEntity<Wish> createWish(@RequestBody Wish wish) {
+    public ResponseEntity<WishDto> createWish(@RequestBody WishDto wish) {
         return ResponseEntity.ok(wishService.saveWish(wish));
     }
 
@@ -29,13 +28,8 @@ public class WishController {
         return ResponseEntity.ok(wishService.getWishById(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Wish> updateWish(@PathVariable Long id, @RequestBody Wish wish) {
-        return ResponseEntity.ok(wishService.saveWish(wish));
-    }
-    //Endpoint that returns all wishes for a current game
-    @DeleteMapping("/{id}")
-    public void deleteWish(@PathVariable Long id) {
-        wishService.deleteWish(id);
+    @DeleteMapping("/delete")
+    public void deleteWish(@RequestParam Long userId, @RequestParam Long gameId) {
+        wishService.deleteWish(userId, gameId);
     }
 }
