@@ -1,14 +1,14 @@
 package com.jaba.vgl.services.impl;
 
+import com.jaba.vgl.exceptions.UserAlreadyExistsException;
 import com.jaba.vgl.models.Role;
-import com.jaba.vgl.models.dto.JwtAuthenticationResponse;
-import com.jaba.vgl.models.dto.RefreshTokenDto;
-import com.jaba.vgl.models.dto.LoginDto;
-import com.jaba.vgl.models.dto.RegisterDto;
+import com.jaba.vgl.models.dto.*;
 import com.jaba.vgl.models.entities.User;
 import com.jaba.vgl.repositories.UserRepository;
 import com.jaba.vgl.services.AuthenticationService;
+import com.jaba.vgl.services.GameService;
 import com.jaba.vgl.services.JWTService;
+import com.jaba.vgl.services.clients.SteamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,19 +26,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
-    public User singUp(RegisterDto registerDto){
+    private final SteamService steamService;
+    private final GameService gameService;
+    public User register(RegisterDto registerDto){
+        if(userRepository.findByEmail(registerDto.getEmail()).isPresent()){
+            throw new UserAlreadyExistsException("User already exists.");
+        }
+        
         User user = new User();
 
         user.setEmail(registerDto.getEmail());
-        user.setFirstName(registerDto.getFirstName());
-        user.setLastName(registerDto.getLastName());
+        user.setNickname(registerDto.getNickName());
+        user.setSteamId(registerDto.getSteamId());
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        List<OwnedGameDto> gameLibrary =  steamService.getOwnedGames(user.getSteamId());
+        gameService.saveGamesBulk(gameLibrary, user);
+        return user;
     }
 
-    public JwtAuthenticationResponse signIn(LoginDto loginDto){
+    public JwtAuthenticationResponse login(LoginDto loginDto){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         var user = userRepository.findByEmail(loginDto.getEmail()).orElseThrow(IllegalArgumentException::new);
         var accessToken = jwtService.generateAccessToken(user);
@@ -48,14 +59,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         jwtAuthenticationResponse.setToken(accessToken);
         jwtAuthenticationResponse.setRefreshToken(refreshToken);
-
+        jwtAuthenticationResponse.setUserId(user.getId());
+        jwtAuthenticationResponse.setSteamId(user.getSteamId());
         return jwtAuthenticationResponse;
     }
 
     public JwtAuthenticationResponse refreshToken(RefreshTokenDto refreshTokenDto){
-        String userEmail = jwtService.extractUserName(refreshTokenDto.getToken());
 
-        var user = userService.loadUserByRefreshToken(refreshTokenDto.getToken());
+        User user = userService.loadUserByRefreshToken(refreshTokenDto.getToken());
         if(user == null)
             return null;
         if(jwtService.isTokenValid(refreshTokenDto.getToken(), user)){
@@ -72,7 +83,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return null;
     }
     public boolean logout(String token){
-        var user = userService.loadUserByRefreshToken(token);
+        User user = userService.loadUserByRefreshToken(token);
         if(user == null)
             return true;
         user.setRefreshToken(null);

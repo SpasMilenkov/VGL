@@ -1,16 +1,15 @@
 package com.jaba.vgl.services.impl;
 
 
-import com.jaba.vgl.models.dto.GameDto;
+import com.jaba.vgl.exceptions.UserNotFoundException;
 import com.jaba.vgl.models.dto.ReviewDto;
-import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
+import com.jaba.vgl.models.dto.UserDto;
 import com.jaba.vgl.models.dto.mapper.ReviewDtoMapper;
-import com.jaba.vgl.models.entities.Review;
-import com.jaba.vgl.repositories.UserRepository;
-import com.jaba.vgl.repositories.impl.ReviewRepositoryImpl;
+import com.jaba.vgl.models.dto.mapper.UserDtoMapper;
 import com.jaba.vgl.repositories.impl.UserRepositoryImpl;
 import com.jaba.vgl.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,9 +24,10 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepositoryImpl userRepository;
-    private final ReviewRepositoryImpl reviewRepository;
+    private final UserDtoMapper userDtoMapper;
+    private final ReviewServiceImpl reviewService;
     private final ReviewDtoMapper reviewDtoMapper;
-    private final GameDtoMapper gameDtoMapper;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public UserDetailsService userDetailsService() {
@@ -53,23 +53,30 @@ public class UserServiceImpl implements UserService {
                 .toList();
     }
 
+
     @Override
-    public List<GameDto> getUserGames(Long userId) {
-        return userRepository.getUserGames(userId)
-                .stream()
-                .map(gameDtoMapper)
-                .toList();
+    public UserDto updateSteamId(String email, String steamId) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User with this email does not exist"));
+        user.setSteamId(steamId);
+        userRepository.save(user);
+        return userDtoMapper.apply(user);
     }
 
     @Override
     public void updateUserReview(ReviewDto reviewDto) {
-        Review review = reviewDto.toEntity();
-
-        reviewRepository.updateReview(review.getId(), review.getGameId(), review.getTitle(), review.getText(), review.getRating());
+        reviewService.updateReview(reviewDto);
     }
 
     @Override
     public void deleteUserReview(Long reviewId) {
-        reviewRepository.deleteReviewById(reviewId);
+        reviewService.deleteReview(reviewId);
+    }
+
+    @Override
+    public void truncateTable() {
+        userRepository.truncate();
+
+        String sqlStatement = "ALTER SEQUENCE vgl_sequence RESTART WITH 1";
+        jdbcTemplate.execute(sqlStatement);
     }
 }

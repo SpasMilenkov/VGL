@@ -6,6 +6,7 @@ import com.jaba.vgl.models.entities.Review;
 import com.jaba.vgl.repositories.UserRepository;
 import com.jaba.vgl.repositories.custom.UserRepositoryCustom;
 import feign.Param;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -20,8 +21,8 @@ public interface UserRepositoryImpl extends UserRepository, UserRepositoryCustom
     @Query("SELECT r FROM Review r WHERE r.user.id = :userId")
     List<Review> getUserReviews(@Param("userId") Long userId);
 
-
     @Override
-    @Query("SELECT u.games FROM User u WHERE u.id = :userId")
-    Set<Game> getUserGames(@Param("userId") Long userId);
+    @Modifying
+    @Query(value = "TRUNCATE TABLE Users RESTART IDENTITY CASCADE", nativeQuery = true)
+    void truncate();
 }

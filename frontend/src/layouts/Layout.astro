@@ -1,0 +1,38 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+import "@fontsource-variable/montserrat";
+import "../styles/global.css";
+
+import HeaderComponent from "../components/home/HeaderComponent.vue";
+import Sidebar from "../components/Sidebar";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="body flex">
+    <Sidebar client:load/>
+    <div class="w-full">
+      <HeaderComponent client:load />
+      <slot />
+    </div>
+  </body>
+</html>
+
+<style scoped>
+  .body {
+    min-height: 100svh;
+  }
+</style>

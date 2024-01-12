@@ -1,0 +1,10 @@
+---
+import ReviewsList from "../components/reviews/ReviewsList";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="VGL">
+  <section class="carousel-section">
+    <ReviewsList client:load />
+  </section>
+</Layout>
