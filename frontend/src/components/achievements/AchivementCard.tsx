@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import type { Achievement } from "../../interfaces/Achievement"
+import axios from "../../axios/axios";
 
 interface AchievementProps{
   achievement: Achievement
@@ -9,12 +10,12 @@ const AchivementCard:React.FC<AchievementProps> = ({achievement}) => {
   const [icon, setIcon] = useState<Blob | undefined>(undefined);
 
   const fetchIcon = async () =>{
-    //const response = (await axios.get('/achievements')).data;
-    //setAchievements(response.data);
+    const response = (await axios.get(`/achievements/${achievement.id}/image`, { responseType: 'blob'})).data;
+    setIcon(response);
   }
 
   useEffect(() =>{
-    //fetchIcon();
+    fetchIcon();
   }, [])
 
   return (
@@ -23,7 +24,7 @@ const AchivementCard:React.FC<AchievementProps> = ({achievement}) => {
         <div className="latest-img-container">
           <img
             className="latest-image text-white"
-            // src={URL.createObjectURL(icon)}
+            src={icon ? URL.createObjectURL(icon) : ""}
             alt="Achievement Icon"
           />
           <div className="latest-overlay"></div>
@@ -37,6 +38,7 @@ const AchivementCard:React.FC<AchievementProps> = ({achievement}) => {
         </div>
         <div className="review-info">
           <div className="review-name">{achievement.difficulty}</div>
+          <div className="review-name">{achievement.description}</div>
           <div className="review-name">{achievement.gameTitle}</div>
           <div className="review-name">{achievement.username}</div>
         </div>
