@@ -1,7 +1,8 @@
 export default interface ReviewContent{
-    content: string,
+    text: string,
     author: string,
     rating: number,
-    gameName?: string,
-    gameCover?: string
+    title: string,
+    gameId: number,
+    steamId: number
 }

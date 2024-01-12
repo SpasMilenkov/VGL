@@ -2,64 +2,71 @@ import { useEffect, useState } from "react";
 import axios from "../../axios/axios";
 import GameListCard from "./GameListCard"
 import type { Game } from "../../interfaces/Game";
+import Modal from "./Modal";
 
 const GameListPage = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [randomGame, setRandomGame] = useState<Game | null>(null);
-  const [activeButton, setActiveButton] = useState(1);
-  const [isPlayedGames, setIsPlayedGames] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [gameId, setGameId] = useState<number>(-1);
+  const [gameName, setGameName] = useState<string>('');
+  const [modalType, setModalType] = useState<string>('');
 
-  const fetchAlreadyPlayedGames = async () =>{
-    //const response = (await axios.get('/steam/get-owned-games')).data;
-    //setGames(response);
-    //setRandomGame(response[Math.floor(Math.random()*response.length)]);
-  }
+  const fetchGames = async () =>{
+    const steamId = localStorage.getItem('steamId')
+    const response = await axios.get('/steam/get-owned-games',
+    {
+      params: 
+      {
+        steamId: steamId
+      }
+    });
 
-  const fetchToBePlayedGames = async () =>{
-    //const response = await axios.get('/steam/get-owned-games').data;
-    //setGames(response);
-    //setRandomGame(response[Math.floor(Math.random()*response.length)]);
+    const data = response.data;
+
+    setGames(data);
+    setIsLoading(false);
+    setRandomGame(data[Math.floor(Math.random()*data.length)]);
   }
 
   useEffect(() =>{
-    if (activeButton === 2) {
-      fetchToBePlayedGames();
-      setIsPlayedGames(true);
-    } else if(activeButton === 1) {
-      fetchAlreadyPlayedGames();
-      setIsPlayedGames(false);
-    }
-  }, [activeButton])
-
-  const handleClick = (btn: number) =>{
-    setActiveButton(btn);
-  }
+    fetchGames();
+  }, [])
   
   return (
-    <div className="w-full text-white">
+    <div className="w-full text-white relative">
       <main id="main-content">
+        {isModalOpen &&
+          <Modal gameId={gameId} gameName={gameName} modalType={modalType} setIsModalOpen={setIsModalOpen}/>
+        }
         <div className="gamelist-navbar">
-          <ul className="gamelist-nav">
-            <li 
-              onClick={() => handleClick(1)} 
-              className={`gamelist-item ${activeButton === 1 ? "active" : ""}`}>
-                Already Played
-            </li>
-            <li 
-              onClick={() => handleClick(2)} 
-              className={`gamelist-item ${activeButton === 2 ? "active" : ""}`}>
-                To be played
-            </li>
-          </ul>
+          <h1 className="gamelist-title">
+            Game List
+          </h1>
         </div>
         <section id="section-already-played">
-          {activeButton === 1 &&
           <div className="already-played-opening">
+            {randomGame?.trailerUrl ? 
             <video
               className="already-played-img" 
               src={randomGame?.trailerUrl}
-              autoPlay muted>
+              autoPlay muted
+              loop>
             </video>
+            :
+            randomGame?.bannerUrl 
+            ? 
+            <img 
+              className="already-played-img" 
+              src={randomGame?.headerUrl} 
+              alt="GameHeader" />
+            :
+            <img 
+              className="already-played-img" 
+              src={randomGame?.bannerUrl} 
+              alt="GameBanner" />
+            }
             <div className="opening-overlay"></div>
             <div className="section-opening-container">
               <div className="section-title">Recently Popular</div>
@@ -68,7 +75,6 @@ const GameListPage = () => {
               </div>
             </div>
           </div>
-          }
           <div className="already-played-filter">
             <div className="already-icon-container">
               <img
@@ -79,9 +85,18 @@ const GameListPage = () => {
             </div>
           </div>
           <div className="already-played-cards">
-            {games.length > 0 ?
+            {isLoading ? 
+            <span className="loader"></span> 
+            :
+            games.length > 0 ?
             games.map((game, index) => 
-            <GameListCard key={index} game={game} played={isPlayedGames}/>
+            <GameListCard 
+              key={index} 
+              game={game} 
+              setGameId={setGameId}
+              setGameName={setGameName}
+              setIsModalOpen={setIsModalOpen}
+              setModalType={setModalType}/>
             )
             : 
             <div>No games in list.</div>

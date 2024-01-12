@@ -1,13 +1,13 @@
 <template>
     <div
         class="horizontal-card flex w-[22rem] h-[17.5rem] flex-row items-stretch content-center bg-gray-15 rounded-lg gap-5 p-3">
-        <img :src="props.content.imagePath" alt="Game Image" class="w-40 rounded-xl game-preview" />
+        <img :src="imgUrl" alt="Game Image" class="w-40 rounded-xl game-preview" />
         <div class="flex gap-2 w-full flex-col items-start justify-between flex-1">
             <div class="flex items-start flex-col">
-                <h3 class="game-title ">{{ props.content.gameTitle }}</h3>
-                <h4 class="game-studio">{{ props.content.gameStudio }}</h4>
+                <h3 class="game-title ">{{ content.name }}</h3>
+                <h4 class="game-studio">{{ content.studio }}</h4>
             </div>
-            <h4 class="release-date">{{ props.content.releaseDate }}</h4>
+            <h4 class="release-date">{{ content.releaseDate }}</h4>
         </div>
         <div class="card-mask"></div>
         <img src="../../assets/icons/icon-game-add.png" alt="Card Icon" class="card-icon">
@@ -15,11 +15,13 @@
 </template>
 
 <script setup lang='ts'>
-import type SmallGameCardContent from '../../interfaces/SmallGameCardContent';
+import { ref } from 'vue';
+import type CardContent from '../../interfaces/CardContent';
 interface HorizontalGameCardProps {
-    content: SmallGameCardContent
+    content: CardContent
 }
 const props = defineProps<HorizontalGameCardProps>()
+const imgUrl = ref(`https://cdn.cloudflare.steamstatic.com/steam/apps/${props.content.steamId}/header.jpg`)
 </script>
 <style scoped>
 .horizontal-card {
@@ -42,7 +44,7 @@ const props = defineProps<HorizontalGameCardProps>()
 }
 
 .game-preview {
-    object-fit: cover;
+    object-fit:cover;
 }
 
 .game-studio,

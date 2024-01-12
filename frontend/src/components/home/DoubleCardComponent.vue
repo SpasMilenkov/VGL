@@ -1,6 +1,6 @@
 <template>
     <div class="carousel">
-        <Carousel :items-to-show="3" :wrap-around="false">
+        <Carousel :items-to-show="3" :wrap-around="true">
             <Slide v-for="(slide, id) in cardsToPrint" :key="id">
                 <div class="flex flex-col justify-start p-4 gap-4">
                     <div class="flex">
@@ -25,40 +25,39 @@
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import 'vue3-carousel/dist/carousel.css';
 
-// Import dynamic components
 import HorizontalGameCardComponent from './HorizontalGameCardComponent.vue';
-
-import type SmallGameCardContent from '../../interfaces/SmallGameCardContent';
 import { onMounted, ref, type Ref } from 'vue';
-interface CarouselProps {
-    cards: SmallGameCardContent[]
-}
+import type CardContent from '../../interfaces/CardContent';
+import axios from "../../axios/axios";
 
 interface CardPair {
     topCard: {
         num: string,
-        content: SmallGameCardContent
+        content: CardContent
     },
     bottomCard?: {
         num: string,
-        content: SmallGameCardContent
+        content: CardContent
     }
 }
 
-const props = defineProps<CarouselProps>();
 const cardsToPrint: Ref<CardPair[]> = ref([])
-onMounted(() => {
-    for (let i = 0; i < props.cards.length; i++) {
-        const card = props.cards[i];
+const cards = ref()
+onMounted(async () => {
+    cards.value = (await axios.get("/games/random")).data
+
+    console.log(cards.value)
+    for (let i = 0; i < cards.value.length; i++) {
+        const card = cards.value[i];
         let cardPair: CardPair = {
             topCard: {
                 num:`${i + 1}.`,
                 content: card
             },
         }
-        if (i < props.cards.length - 1) {
+        if (i < cards.value.length - 1) {
             i++;
-            const nextCard = props.cards[i]
+            const nextCard = cards.value[i]
 
             cardPair.bottomCard = {
                 num: `${i + 1}.`,

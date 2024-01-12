@@ -19,7 +19,6 @@ html {
 
 body {
   min-height: 100svh;
-  background: linear-gradient(351.22deg, #1a1a1a 55.25%, #2b2b2b 96.61%);
 }
 
 #landing {
@@ -205,8 +204,16 @@ body {
   @apply text-[1rem] font-medium rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 gray-61 bg-gray-32 p-4 focus:outline focus:outline-[2px] focus:outline-white;
 }
 
+.form-textarea {
+  @apply text-[1rem] font-medium rounded-[10px] py-[0.9rem] h-[15rem] overflow-y-scroll resize-none w-9/12 gray-61 bg-gray-32 p-4 focus:outline focus:outline-[2px] focus:outline-white;
+}
+
 .form-button {
   @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 text-2xl flex justify-center items-center hover:bg-none hover:bg-[#fafafa] hover:text-[#FF5C00] transition-all ease-in-out;
+}
+
+.form-button-review {
+  @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] py-[0.9rem] max-h-[50px] w-2/6 text-2xl flex justify-center items-center hover:bg-none hover:bg-[#fafafa] hover:text-[#FF5C00] transition-all ease-in-out;
 }
 
 .form-h2 {
@@ -562,6 +569,14 @@ body {
   font-size: 3rem;
   text-transform: uppercase;
 }
+.gamelist-title {
+  color: var(--color-orange);
+
+  font-weight: 400;
+  font-size: 2.8rem;
+  text-transform: uppercase;
+}
+
 .section-update {
   color: #8c8c8c;
   font-style: normal;
@@ -699,7 +714,7 @@ body {
 }
 
 .selected-nav{
-  background-color: #292929;
+  background-color: #1d1d1f;
 }
 
 .selected-nav-prev{
@@ -829,6 +844,10 @@ body {
   border-radius: 30px;
   object-fit: cover;
 }
+.article-card-link{
+  max-width: 550px;
+  max-height: 350px;
+}
 .article-info {
   width: 100%;
   display: flex;
@@ -872,3 +891,214 @@ body {
 .article-settings:hover {
   scale: 1.2;
 }
+
+.section-title {
+  font-weight: 500;
+  font-size: 1.5rem;
+  margin-right: auto;
+  color: var(--color-orange);
+}
+/* Review Card Section */
+#section-latest {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 3rem 4rem 4rem 4rem;
+}
+.latest-card {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  height: 20%;
+  height: 250px;
+  background: rgba(111, 111, 111, 0.18);
+  border-radius: 10px;
+}
+.card-left-section,
+.card-right-section {
+  position: relative;
+  padding: 1rem;
+}
+.latest-img-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+.latest-image {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 10px;
+}
+.latest-overlay {
+  position: absolute;
+  border-radius: 10px;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.627083) 69.36%
+  );
+  height: 100%;
+  width: 100%;
+}
+.latest-game-info {
+  position: absolute;
+  bottom: 0;
+  padding: 0 0 2rem 1rem;
+}
+.latest-game-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.latest-game-name {
+  color: var(--color-white);
+  font-weight: 500;
+  font-size: 2rem;
+}
+.game-rating {
+  display: flex;
+  gap: 0.6rem;
+}
+.card-right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+.card-left-section {
+  width: 50%;
+}
+.latest-review-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.latest-review {
+  color: var(--color-white);
+  font-weight: 500;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
+  max-width: 80%;
+}
+.latest-settings {
+  box-sizing: content-box;
+  padding: 0.5rem 1rem 0 0;
+  max-width: 5px;
+  max-height: 30px;
+  cursor: pointer;
+  transition: scale 0.3s ease-in-out;
+}
+.latest-settings:hover {
+  scale: 1.2;
+}
+.review-info {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.review-name {
+  color: var(--color-gray);
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+.review-time {
+  color: var(--color-gray);
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+/* Popular Reviews Section */
+#section-reviews {
+  /* padding: 3rem 0 0 4rem; */
+  position: relative;
+}
+#section-reviews .arrow-button--left,
+#section-reviews .arrow-button--right {
+  top: 50%;
+}
+.reviews-carousel {
+  position: relative;
+  list-style: none;
+  display: flex;
+  gap: 3rem;
+  padding: 2rem 0 0 0;
+  margin: 0;
+  overflow: hidden;
+  scroll-behavior: smooth;
+}
+.reviews-carousel .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(111, 111, 111, 0.18);
+  border-radius: 10px;
+  width: 25%;
+  min-width: 350px;
+  max-width: 350px;
+  max-height: 250px;
+  padding: 1rem;
+  gap: 1rem;
+  cursor: pointer;
+}
+.reviews-carousel .card-game-img {
+  height: 65%;
+  object-fit: cover;
+  object-position: center 60%;
+  border-radius: 10px;
+}
+.reviews-carousel .card-game-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+.reviews-carousel .card-game-title {
+  width: 100%;
+  color: var(--color-white);
+  font-weight: 500;
+  font-size: 1.25rem;
+}
+.reviews-carousel .card-game-combinedinfo {
+  display: flex;
+  justify-content: space-between;
+}
+.reviews-carousel .card-game-reviewer,
+.reviews-carousel .card-game-review {
+  color: var(--color-gray);
+  font-weight: 300;
+  font-size: 1rem;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  background: linear-gradient(0deg, rgba(255, 61, 0, 0.2) 33%, #ff3d00 100%);
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #263238;
+}
+@keyframes rotation {
+  0% { transform: rotate(0deg) }
+  100% { transform: rotate(360deg)}
+} 

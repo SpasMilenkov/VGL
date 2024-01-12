@@ -9,7 +9,10 @@ const NewsArticleCard: React.FC<Props> = ({news, imgUrl}) => {
   return (
     <div className="article-card">
       {/* <!-- Article Image --> */}
-      <img className="article-card-img" src={imgUrl} alt="Article Image" />
+      <a className="article-card-link" href={news.url}>
+        <img className="article-card-img" src={imgUrl} alt="Article Image" />
+      </a>
+      
       {/* <!-- Article Info --> */}
       <div className="article-info">
         <div className="article-row1">
@@ -18,7 +21,6 @@ const NewsArticleCard: React.FC<Props> = ({news, imgUrl}) => {
         <div className="article-desc">{news.description}</div>
         <div className="article-details">
           <div className="article-author">{news.author}</div>
-          <div className="article-time">{news.date}</div>
         </div>
       </div>
     </div>

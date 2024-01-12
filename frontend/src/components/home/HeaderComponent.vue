@@ -1,5 +1,8 @@
 <template>
-    <div class="home-header h-[5rem] w-full flex justify-end items-center p-8">
+    <div class="home-header h-[5rem] w-full flex justify-end items-center p-8 gap-8">
+        <a href="/gamelist">
+            <img class="w-11 profile-header-icon-container" src="../../assets/icons/list-icon.svg" alt="ListIcon">
+        </a>
         <img :src="imgUrl" alt="Profile operation" class="w-14 h-14 profile-header-icon-container">
     </div>
 </template>
@@ -9,7 +12,6 @@ const imgUrl = "src/assets/images/pfp.webp"
 
 
 </script>
-
 
 <style scoped>
 .home-header {

@@ -1,26 +1,24 @@
 package com.jaba.vgl.models.dto;
 
-import com.jaba.vgl.models.GameGenre;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jaba.vgl.models.entities.Game;
+
+import java.util.Date;
 
 public record GameDto(
         String name,
-        String description,
-        Integer rating,
-        GameGenre genre,
-        Boolean isFavourite,
-        String releaseDate
+        Long userId,
+        Long steamId,
+        @JsonFormat(pattern="yyyy")
+        Date releaseDate,
+        String studioName
+
 ) {
     public Game toEntity() {
         Game game = new Game();
         GameDto dto = this;
 
         game.setName(dto.name());
-        game.setDescription(dto.description());
-        game.setRating(dto.rating());
-        game.setGenre(dto.genre());
-        game.setIsFavourite(dto.isFavourite());
-        game.setReleaseDate(dto.releaseDate());
 
         return game;
     }

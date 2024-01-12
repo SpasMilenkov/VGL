@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,8 +16,7 @@ import java.util.Optional;
         rollbackFor = Exception.class,
         propagation = Propagation.REQUIRED
 )
-public interface ReviewRepositoryImpl extends ReviewRepository, ReviewRepositoryCustom { //TODO: wire with used and fetch all users reviews
-
+public interface ReviewRepositoryImpl extends ReviewRepository, ReviewRepositoryCustom {
     @Transactional
     @Modifying
     @Query("UPDATE Review r SET " +
@@ -27,6 +27,8 @@ public interface ReviewRepositoryImpl extends ReviewRepository, ReviewRepository
             "WHERE r.id = :id")
     @Override
     void updateReview(Long id, Long gameId, String title, String text, Integer rating);
+
+
 
     @Override
     @Query("SELECT r.id FROM Review r WHERE r.title = ?1")

@@ -1,143 +1,85 @@
 package com.jaba.vgl.services.impl;
 
-import com.jaba.vgl.exceptions.GameNotFoundException;
-import com.jaba.vgl.models.GameGenre;
-import com.jaba.vgl.models.dto.CompanyDto;
-import com.jaba.vgl.models.dto.GameWithCompanyDto;
+
+import com.jaba.vgl.models.dto.GameDto;
+import com.jaba.vgl.models.dto.OwnedGameDto;
 import com.jaba.vgl.models.dto.mapper.GameDtoMapper;
-import com.jaba.vgl.models.dto.mapper.GameWithCompanyDtoMapper;
-import com.jaba.vgl.models.entities.Company;
+import com.jaba.vgl.models.dto.mapper.OwnedGameDtoMapper;
 import com.jaba.vgl.models.entities.Game;
+import com.jaba.vgl.models.entities.User;
 import com.jaba.vgl.repositories.impl.GameRepositoryImpl;
 import com.jaba.vgl.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class GameServiceImpl implements GameService {
     private final GameRepositoryImpl gameRepository;
+    private final OwnedGameDtoMapper ownedGameDtoMapper;
     private final GameDtoMapper gameDtoMapper;
-    private final GameWithCompanyDtoMapper gameWithCompanyDtoMapper;
+    private final Random random = new Random();
     private final JdbcTemplate jdbcTemplate;
 
 
     @Autowired
     public GameServiceImpl(GameRepositoryImpl gameRepository,
+                           OwnedGameDtoMapper ownedGameDtoMapper,
                            GameDtoMapper gameDtoMapper,
-                           GameWithCompanyDtoMapper gameWithCompanyDtoMapper,
                            JdbcTemplate jdbcTemplate) {
         this.gameRepository = gameRepository;
+        this.ownedGameDtoMapper = ownedGameDtoMapper;
         this.gameDtoMapper = gameDtoMapper;
-        this.gameWithCompanyDtoMapper = gameWithCompanyDtoMapper;
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public GameWithCompanyDto getGame(Long id) {
-        return gameRepository.findGameById(id)
+    public Game saveGame(Game game) {
+        // Save the game entity to the database
+        return gameRepository.save(game);
+    }
+
+    @Override
+    public void saveGamesBulk(List<OwnedGameDto> gameDtoList, User user) {
+        List<Game> processedGames = new ArrayList<>();
+
+        for (OwnedGameDto gameDto : gameDtoList) {
+            Game game = gameRepository.findBySteamId((long)gameDto.getGameId())
+                    .orElseGet(() -> ownedGameDtoMapper.apply(gameDto));
+
+            game.getUsers().add(user);
+            processedGames.add(game);
+        }
+
+        gameRepository.saveAll(processedGames);
+    }
+
+    @Override
+    public List<GameDto> getGamesByIds() {
+        int numberOfGames = 30;
+        long totalGames = gameRepository.count();
+        Set<Long> randomIds = new HashSet<>();
+
+        while (randomIds.size() < numberOfGames) {
+            long randomId = Math.abs(random.nextLong()) % (totalGames + 1);
+            randomIds.add(randomId);
+        }
+
+        return gameRepository
+                .findAllById(randomIds)
                 .stream()
-                .map(gameWithCompanyDtoMapper)
-                .findFirst()
-                .orElseThrow(
-                        () -> new GameNotFoundException(
-                                String.format("Game with id %d not found.",
-                                        id
-                                )
-                        )
-                );
+                .filter(g -> g.getSteamId() != 0)
+                .map(gameDtoMapper)
+                .toList();
     }
 
-    @Override
-    public Game getGameEntity(String name, CompanyDto companyDto) {
-        Company company = companyDto.toEntity();
-
-        return gameRepository.findGameByNameAndCompany(name, company)
-                .stream()
-                .findFirst()
-                .orElseThrow(
-                        () -> new GameNotFoundException(
-                                String.format("Game with name %s not found.",
-                                        name
-                                )
-                        )
-                );
-    }
 
     @Override
-    public GameWithCompanyDto getGame(String name, CompanyDto companyDto) {
-        return gameRepository.findGameByNameAndCompany(name, companyDto.toEntity())
-                .stream()
-                .map(gameWithCompanyDtoMapper)
-                .findFirst()
-                .orElseThrow(
-                        () -> new GameNotFoundException(
-                                String.format("Game with name %s and company %s not found.",
-                                        name,
-                                        companyDto
-                                )
-                        )
-                );
-    }
-
-    @Override
-    public Optional<Long> getGameId(String name, CompanyDto companyDto) {
-        Company company = companyDto.toEntity();
-        return gameRepository.getGameId(name, company);
-    }
-
-    @Override
-    public List<GameWithCompanyDto> getGamesByGenre(GameGenre genre) {
-        return gameRepository.findGamesByGenre(genre)
-                .map(games -> games.stream()
-                        .map(gameWithCompanyDtoMapper)
-                        .collect(Collectors.toList())
-                )
-                .orElseThrow(
-                        () -> new GameNotFoundException(
-                                String.format("No games with genre %s were found.", genre)
-                        )
-                );
-    }
-
-    @Override
-    public void updateGame(GameWithCompanyDto gameWithCompanyDto) {
-        Game game = gameWithCompanyDto.toEntity(this);
-
-        gameRepository.updateGame(
-                game.getId(),
-                game.getName(),
-                game.getDescription(),
-                game.getRating(),
-                game.getGenre(),
-                game.getCompany(),
-                game.getIsFavourite(),
-                game.getReleaseDate()
-        );
-    }
-
-    @Override
-    @Transactional
-    public void createGame(GameWithCompanyDto gameDto) {
-        Game game = gameDto.toEntity(this);
-        game.setCompany(game.getCompany());
-
-        gameRepository.save(game);
-    }
-
-    @Override
-    public int deleteGame(Long id) {
-        return gameRepository.deleteGameById(id);
-    }
-
-    @Override
-    public int deleteGame(String name, CompanyDto companyDto) {
-        return gameRepository.deleteGameByNameAndCompany(name, companyDto.toEntity());
+    public void deleteGame(Long id) {
+        // Delete the game entity by its ID
+        gameRepository.deleteById(id);
     }
 
     @Override

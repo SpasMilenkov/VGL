@@ -33,6 +33,11 @@ const Login = () => {
           headers: {'Content-Type': 'application/json'}
         }
       );
+
+      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('steamId', response.data.steamId)
+      window.location.href="/home";
+
     } catch (error : any) {
       if(!error?.response){
         setError('No response');

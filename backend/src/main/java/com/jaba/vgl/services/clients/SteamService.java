@@ -1,5 +1,6 @@
 package com.jaba.vgl.services.clients;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jaba.vgl.exceptions.*;
@@ -19,7 +20,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -65,44 +68,39 @@ public class SteamService {
         playerSummaryDto.setSteamId(playerNode.path("steamid").asText());
         playerSummaryDto.setUsername(playerNode.path("personaname").asText());
         playerSummaryDto.setAvatarUrl(playerNode.path("avatar").asText());
-        playerSummaryDto.setProfileurl(playerNode.path("profileurl").asText());
         return playerSummaryDto;
     }
 
     // Fetches game news
-    public List<NewsItemDto> getGameNews(String gameId) {
-        List<NewsItemDto> newsItems = new ArrayList<>();
+    public List<NewsItemDto> getGameNews(String steamId) {
 
-        String jsonResponse = steamClient.getGameNews(gameId, 10, 300, "json");
+        Stream<String> newsDtos = getOwnedGames(steamId)
+                .stream()
+                .map(g -> steamClient.getGameNews(String.valueOf(g.getGameId()), 3, 300, "json"))
+                .limit(5);
 
-        try {
-            JsonNode rootNode = objectMapper.readTree(jsonResponse);
-            JsonNode newsItemsNode = rootNode.path("appnews").path("newsitems");
+        List<JsonNode> newsItemsNodes = newsDtos
+                .map(this::parseJson)
+                .map(rootNode -> rootNode.path("appnews").path("newsitems"))
+                .toList();
 
-            if (!newsItemsNode.isArray()) {
-                throw new NewsItemsNotFoundException("News items not found");
-            }
-
-            return StreamSupport.stream(newsItemsNode.spliterator(), false)
-                    .map(this::createNewsItemDto)
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new NewsItemsNotFoundException("Error parsing API response", e);
-        }
+        return newsItemsNodes.stream()
+                .flatMap(newsItemsNode ->
+                        StreamSupport.stream(newsItemsNode.spliterator(), false)
+                )
+                .map(this::createNewsItemDto)
+                .collect(Collectors.toList());
     }
 
     // Constructs a NewsItemDto from a JsonNode
     private NewsItemDto createNewsItemDto(JsonNode itemNode) {
         NewsItemDto newsItem = new NewsItemDto();
-        newsItem.setId(itemNode.path("gid").asText());
+        newsItem.setAppid(itemNode.path("appid").asInt());
         newsItem.setTitle(itemNode.path("title").asText());
         newsItem.setUrl(itemNode.path("url").asText());
         newsItem.setAuthor(itemNode.path("author").asText());
         newsItem.setContents(itemNode.path("contents").asText());
-        newsItem.setFeedLabel(itemNode.path("feedlabel").asText());
-        newsItem.setDate(itemNode.path("date").asLong());
-        newsItem.setFeedName(itemNode.path("feedname").asText());
-        newsItem.setAppid(itemNode.path("appid").asInt());
+
         return newsItem;
     }
 
@@ -117,10 +115,26 @@ public class SteamService {
             if (!gamesNode.isArray()) {
                 throw new GamesNotFoundException("Owned games not found");
             }
+            List<String> gameDescriptions = StreamSupport.stream(gamesNode.spliterator(), false)
+                    .map(this::getGameId)
+                    .map(i -> steamStoreClient.getGameDescription(String.valueOf(i)))
+                    .toList();
+            List<OwnedGameDto> dtos = new ArrayList<>();
+            for (String gameDescription : gameDescriptions) {
+                JsonNode n = objectMapper.readTree(gameDescription);
+                JsonNode data = n.fields().next().getValue().path("data");
+                OwnedGameDto ownedGameDto = createOwnedGameDto(data);
+                dtos.add(ownedGameDto);
+            }
+            return dtos;
+//                    .map(g -> getGameDescription(String.valueOf(g)));
+//                    .map(this::createOwnedGameDto)
 
-            return StreamSupport.stream(gamesNode.spliterator(), false)
-                    .map(this::createOwnedGameDto)
-                    .collect(Collectors.toList());
+//            gameDescriptionJson.map(g -> )
+
+//            return StreamSupport.stream(gamesNode.spliterator(), false)
+//                    .map(this::createOwnedGameDto)
+//                    .collect(Collectors.toList());
         } catch (IOException e) {
             throw new GamesNotFoundException("Error parsing API response", e);
         }
@@ -128,10 +142,17 @@ public class SteamService {
 
     // Constructs an OwnedGameDto from a JsonNode
     private OwnedGameDto createOwnedGameDto(JsonNode gameNode) {
+
         OwnedGameDto gameDto = new OwnedGameDto();
-        gameDto.setGameId(gameNode.path("appid").asInt());
+        gameDto.setGameId(gameNode.path("steam_appid").asInt());
         gameDto.setName(gameNode.path("name").asText());
-        gameDto.setPlaytimeForever(gameNode.path("playtime_forever").asInt());
+        try {
+            gameDto.setStudio(gameNode.path("developers").get(0).asText());
+        }catch (NullPointerException e){
+            gameDto.setStudio("Studio data not provided by Steam");
+        }
+
+        gameDto.setTrailerUrl(extractMovieWebmMaxLink(gameNode.path("movies")));
         gameDto.setBannerUrl(constructImageUrl(gameDto.getGameId(), "page.bg.jpg"));
         gameDto.setHeaderUrl(constructImageUrl(gameDto.getGameId(), "header.jpg"));
         return gameDto;
@@ -167,6 +188,7 @@ public class SteamService {
         GameDescriptionDto gameDto = new GameDescriptionDto();
         gameDto.setGameId(dataNode.path("steam_appid").asInt());
         gameDto.setName(dataNode.path("name").asText());
+        gameDto.setStudio(dataNode.path("developers").get(0).asText());
         gameDto.setHeaderUrl(dataNode.path("header_image").asText());
         gameDto.setBannerUrl(dataNode.path("background_raw").asText());
         gameDto.setShortDescription(dataNode.path("short_description").asText());
@@ -193,6 +215,30 @@ public class SteamService {
             }
         }
         return genres;
+    }
+    private JsonNode parseJson(String jsonString) {
+        try {
+            return objectMapper.readTree(jsonString);
+        } catch (IOException e) {
+            return objectMapper.nullNode();
+        }
+    }
+
+    private int getGameId(JsonNode gameNode){
+        return gameNode.path("appid").asInt();
+    }
+    public String extractMovieWebmMaxLink(JsonNode moviesNode) {
+        JsonNode firstMovieNode = moviesNode.get(0);
+        if(firstMovieNode == null)
+            return null;
+        JsonNode webmNode = firstMovieNode.path("webm");
+        JsonNode maxLinkNode = webmNode.path("max");
+
+        if (maxLinkNode.isTextual()) {
+            return maxLinkNode.asText();
+        } else {
+            throw new IllegalArgumentException("The 'max' link is not found or not a text node");
+        }
     }
 }
 

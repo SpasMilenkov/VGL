@@ -28,9 +28,13 @@ public @Data class Review {
     @Column(name = "review_id")
     private Long id;
 
-    @Column(name = "game_id")
+    @Column(name = "gamee_id")
     @NotNull(message = "Game id must not be empty.")
     private Long gameId;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 
     @Column(name = "user_id")
     @NotNull(message = "User id must not be empty.")
@@ -51,7 +55,13 @@ public @Data class Review {
     )
     @NotNull(message = "Review text must not be empty.")
     private String text;
-
+    @Column(
+            name = "steam_id",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    @NotNull(message = "Review text must not be empty.")
+    private String steamId;
     @Column(
             name = "review_rating",
             nullable = false
@@ -60,19 +70,6 @@ public @Data class Review {
     @Min(value = 0 , message = "Value should be greater then then equal to 0")
     @Max(value = 5 , message = "Value should be less then then equal to 5")
     private Integer rating;
-
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(
-            name = "game_id",
-            referencedColumnName = "id",
-            nullable = false,
-            insertable = false,
-            updatable = false,
-            foreignKey = @ForeignKey(
-                    name = "game_id_fk"
-            )
-    )
-    private GameDetails gameDetails;
 
     @ManyToOne
     @JoinColumn(

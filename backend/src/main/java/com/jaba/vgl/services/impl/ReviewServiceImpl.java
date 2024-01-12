@@ -4,6 +4,8 @@ import com.jaba.vgl.exceptions.ReviewNotFoundException;
 import com.jaba.vgl.models.dto.ReviewDto;
 import com.jaba.vgl.models.dto.mapper.ReviewDtoMapper;
 import com.jaba.vgl.models.entities.Review;
+import com.jaba.vgl.repositories.GameRepository;
+import com.jaba.vgl.repositories.UserRepository;
 import com.jaba.vgl.repositories.impl.ReviewRepositoryImpl;
 import com.jaba.vgl.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +19,19 @@ import java.util.Optional;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepositoryImpl reviewRepository;
+    private final GameRepository gameRepository;
+    private final UserRepository userRepository;
     private final ReviewDtoMapper reviewDtoMapper;
     private final JdbcTemplate jdbcTemplate;
 
 
     @Autowired
     public ReviewServiceImpl(ReviewRepositoryImpl reviewRepository,
-                             ReviewDtoMapper reviewDtoMapper,
+                             GameRepository gameRepository, UserRepository userRepository, ReviewDtoMapper reviewDtoMapper,
                              JdbcTemplate jdbcTemplate) {
         this.reviewRepository = reviewRepository;
+        this.gameRepository = gameRepository;
+        this.userRepository = userRepository;
         this.reviewDtoMapper = reviewDtoMapper;
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -43,6 +49,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<ReviewDto> getReviewsByGameId(Long id) {
+        return reviewRepository.getAllByGameId(id)
+                .stream()
+                .map(reviewDtoMapper)
+                .toList();
+    }
+
+    @Override
     public Optional<Long> getReviewId(String title) {
         return reviewRepository.getReviewId(title);
     }
@@ -50,6 +64,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void saveReview(ReviewDto reviewDto) {
         Review review = reviewDto.toEntity(this);
+
+        review.setGame(gameRepository.findBySteamId(reviewDto.gameId()).get());
+        review.setUser(userRepository.findById(reviewDto.userId()).get());
 
         reviewRepository.save(review);
     }
@@ -73,7 +90,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void updateReview(ReviewDto reviewDto) {
         Review review = reviewDto.toEntity(this);
 
-        reviewRepository.updateReview(review.getId(), review.getGameId(), review.getTitle(), review.getText(), review.getRating());
+        reviewRepository.updateReview(review.getId(), review.getGame().getId(), review.getTitle(), review.getText(), review.getRating());
     }
 
     @Override

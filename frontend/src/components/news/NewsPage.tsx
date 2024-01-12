@@ -5,10 +5,21 @@ import axios from "../../axios/axios";
 
 const NewsPage = () => {
   const [news, setNews] = useState<News[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchNews = async () =>{
-    //const response = await axios.get('/steam/game-news');
-    //setNews(response.data);
+    const steamId = localStorage.getItem('steamId')
+    const response = await axios.get('/steam/game-news',
+      {
+        params: 
+        {
+          steamId: steamId
+        }
+      }
+    );
+
+    setIsLoading(false);
+    setNews(response.data);
   }
 
   useEffect(() =>{
@@ -20,7 +31,10 @@ const NewsPage = () => {
       <main id="main-content">
         <section id="latest-section">
           <div className="section-title">Latest</div>
-          {news.length > 0 ?
+          {isLoading ? 
+          <span className="loader"></span> 
+          :
+          news.length > 0 ?
           news?.map((news, index) => (
           <NewsArticleCard
             key={index}

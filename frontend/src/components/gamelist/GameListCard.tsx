@@ -1,29 +1,35 @@
 import { useEffect, useState } from 'react'
 import type { Game } from '../../interfaces/Game';
-import axios from '../../axios/axios';
 
 interface GameProps {
   game: Game
-  played: boolean
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setGameId: React.Dispatch<React.SetStateAction<number>>;
+  setGameName: React.Dispatch<React.SetStateAction<string>>;
+  setModalType: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const GameListCard:React.FC<GameProps> = ({game, played}) => {
+const GameListCard:React.FC<GameProps> = ({game, setGameId, setGameName, setIsModalOpen, setModalType}) => {
   const [imageUrl, setImageUrl] = useState(game.bannerUrl);
 
   useEffect(() =>{
     setImageUrl(game.bannerUrl);
   }, [game.bannerUrl])
 
-  const handleDelete = async () =>{
-    //await axios.delete('/games/delete');
-  }
-
   const handleImageError = () => {
     setImageUrl(game.headerUrl);
   };
 
+  const handleModalOpen = (modalType: string) =>{
+    setIsModalOpen(true);
+    setGameId(game.gameId);
+    setGameName(game.name);
+    setModalType(modalType);
+    document.body.classList.add("overflow-y-hidden");
+  }
+
   return (
-    <div className="card">
+    <div className="card relative">
       <div className="card-game-container">
         <img
           className="card-game-cover"
@@ -38,16 +44,19 @@ const GameListCard:React.FC<GameProps> = ({game, played}) => {
           <div className="card-game-studio">{game.studio}</div>
         </div>
       </div>
-      <div className="card-game-settings">
-        {played &&
-        <img
-          className="settings-icon"
-          onClick={handleDelete}
-          src="src/assets/images/landing/close-icon.png"
-          alt="Settings Button"
-        />
-        }
-      </div>
+      <img 
+        title='Add Review'
+        onClick={() => handleModalOpen('review')}
+        className='w-[2rem] h-[2rem] cursor-pointer absolute right-6 top-6' 
+        src="src/assets/icons/review-icon.svg" 
+        alt="ReviewIcon" />
+
+      <img 
+        title='Add Trophy'
+        onClick={() => handleModalOpen('achievement')}
+        className='w-[2rem] h-[2rem] cursor-pointer absolute right-6 top-20' 
+        src="src/assets/icons/trophy-icon.png" 
+        alt="ReviewIcon" />
     </div>
   )
 }
