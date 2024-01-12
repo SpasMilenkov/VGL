@@ -40,6 +40,11 @@ const Sidebar = () => {
       icon: "src/assets/images/misc/navbar-news.png"
     },
     {
+      id: 5,
+      to: "/achievements",
+      icon: "src/assets/icons/trophy-icon.png"
+    },
+    {
       to: "/gamelist",
     },
   ]
@@ -47,7 +52,7 @@ const Sidebar = () => {
   return (
     <nav className="w-[6.25rem] h-screen sticky top-0 bg-[#1d1d1f] min-w-[6.25rem]">
       <ul className="navbar-nav">
-        {links.slice(0, 4).map((link) =>
+        {links.slice(0, 5).map((link) =>
           <li 
             key={link.id}
             className={`nav-item 
@@ -63,7 +68,7 @@ const Sidebar = () => {
             </a>
           </li>
         )}
-        <div className={`bg-[#ff5c00] w-full h-full ${nextIndex === 5 ? 'selected-nav-next' : ""}`}></div>
+        <div className={`bg-[#ff5c00] w-full h-full ${nextIndex === 6 ? 'selected-nav-next' : ""}`}></div>
       </ul>
     </nav>
   )
