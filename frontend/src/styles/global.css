@@ -204,8 +204,16 @@ body {
   @apply text-[1rem] font-medium rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 gray-61 bg-gray-32 p-4 focus:outline focus:outline-[2px] focus:outline-white;
 }
 
+.form-textarea {
+  @apply text-[1rem] font-medium rounded-[10px] py-[0.9rem] h-[15rem] overflow-y-scroll resize-none w-9/12 gray-61 bg-gray-32 p-4 focus:outline focus:outline-[2px] focus:outline-white;
+}
+
 .form-button {
   @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] py-[0.9rem] max-h-[50px] w-9/12 text-2xl flex justify-center items-center hover:bg-none hover:bg-[#fafafa] hover:text-[#FF5C00] transition-all ease-in-out;
+}
+
+.form-button-review {
+  @apply bg-gradient-to-tr from-[#FF5C00] to-[#FF9838] rounded-[10px] py-[0.9rem] max-h-[50px] w-2/6 text-2xl flex justify-center items-center hover:bg-none hover:bg-[#fafafa] hover:text-[#FF5C00] transition-all ease-in-out;
 }
 
 .form-h2 {
