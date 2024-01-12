@@ -1,5 +1,6 @@
 package com.jaba.vgl.services.impl;
 
+import com.jaba.vgl.exceptions.UserAlreadyExistsException;
 import com.jaba.vgl.models.Role;
 import com.jaba.vgl.models.dto.*;
 import com.jaba.vgl.models.entities.User;
@@ -28,6 +29,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final SteamService steamService;
     private final GameService gameService;
     public User register(RegisterDto registerDto){
+        if(userRepository.findByEmail(registerDto.getEmail()).isPresent()){
+            throw new UserAlreadyExistsException("User already exists.");
+        }
+        
         User user = new User();
 
         user.setEmail(registerDto.getEmail());
@@ -55,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         jwtAuthenticationResponse.setToken(accessToken);
         jwtAuthenticationResponse.setRefreshToken(refreshToken);
         jwtAuthenticationResponse.setUserId(user.getId());
-        jwtAuthenticationResponse.setSteamId(Long.valueOf(user.getSteamId()));
+        jwtAuthenticationResponse.setSteamId(user.getSteamId());
         return jwtAuthenticationResponse;
     }
 

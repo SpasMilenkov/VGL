@@ -1,7 +1,7 @@
 package com.jaba.vgl.models.dto.responses;
 
 public record LoginResponseDto(
-        Long steamId,
+        String steamId,
         Integer userId
 ) {
 }

@@ -7,5 +7,5 @@ public class JwtAuthenticationResponse {
     private String token;
     private String refreshToken;
     private Integer userId;
-    private Long steamId;
+    private String steamId;
 }
