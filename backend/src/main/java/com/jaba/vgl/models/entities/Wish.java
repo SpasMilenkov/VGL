@@ -30,7 +30,10 @@ public class Wish {
     private Date dateAdded;
 
     @ManyToOne
-    @JoinColumn(name = "game_id", referencedColumnName = "id")
+    @JoinTable(
+            name = "wish_game_table",
+            joinColumns = @JoinColumn(name = "wish_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id"))
     private Game game;
 
     @ManyToOne

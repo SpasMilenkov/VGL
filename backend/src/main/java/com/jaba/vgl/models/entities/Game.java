@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity(name = "Game")
@@ -61,15 +60,8 @@ public class Game {
 
     @ManyToMany
     @JoinTable(
-            name = "user_game_table", // This table will contain the association between wishes and games
-            joinColumns = @JoinColumn(name = "game_id"), // Column for wish
-            inverseJoinColumns = @JoinColumn(name = "user_id")) // Column for game
+            name = "user_game_table",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     Set<User> users;
-
-    @ManyToMany
-    @JoinTable(
-            name = "wish_game_table", // This table will contain the association between wishes and games
-            joinColumns = @JoinColumn(name = "wish_id"), // Column for wish
-            inverseJoinColumns = @JoinColumn(name = "game_id")) // Column for game
-    private Set<Wish> wishes;
 }
